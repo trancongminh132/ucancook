@@ -1,0 +1,103 @@
+<div id="how-it-works" class="category">
+	<div class="container container-panels clearfix">
+		<div class="row visible-xs visible-sm clearfix">
+			<div class="wrap-select-cate">
+				<select>
+					<?php foreach($this->categoryList as $category){?>
+					<option><?php echo $category['category_name'];?></option>
+					<?php }?>
+				</select>
+			</div>
+		</div>
+		<div class="row hidden-xs hidden-sm clearfix">
+			<div class="sticky-wrapper" data-spy="affix" data-offset-top="160">
+				<div class="container-panels nov1" id="how-it-works-navbar">
+					<div class="col-md-12 panel">
+						<ul class="how-it-works-nav">
+							<?php foreach($this->categoryList as $category){?>
+							<li><a <?php if(isset($this->categoryDetail['category_id']) && $this->categoryDetail['category_id'] == $category['category_id']) echo 'class="active"';?> href="<?php echo BASE_URL.'/nguyen-lieu.html?category_id='.$category['category_id'];?>"><?php echo $category['category_name'];?></a></li>
+							<?php }?>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-12">
+				<ul class="inline breadcrumbs">
+					<li><a title="Trang chủ Ucanncook.vn" href="/">Trang chủ</a></li>
+					<li><a title="Nguyên liệu" href="/nguyen-lieu.html">Nguyên liệu</a></li>
+					<?php if(isset($this->categoryDetail['category_id'])){?>
+					<li><?php echo $this->categoryDetail['category_name']?></li>
+					<?php }?>
+				</ul>
+				<?php if(isset($this->categoryDetail['category_id'])){?>
+				<h1 class="title-category"><?php echo $this->categoryDetail['category_name']?></h1>
+				<?php }?>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="category-inside clearfix">
+				<div class="hidden-xs hidden-sm col-md-3 col-xs-12 left-sidebar">
+					<div class="filter-by">
+						<h2>Lọc theo</h2>
+						<div class="tab-filter-by">
+							<h3>Phổ biến</h3>
+							<ul class="clearfix">
+								<?php $categoryLink = isset($this->categoryDetail['category_id'])?'&category_id='.$this->categoryDetail['category_id']:'';?>
+								<li><input <?php if(isset($this->params['sort']) && $this->params['sort'] == 'date_desc') echo 'checked';?> type="radio" id="date_desc" name="filter_sort" onclick="window.location= '<?php echo BASE_URL.'/nguyen-lieu.html?sort=date_desc'.$categoryLink;?>'"/> <label for="date_desc">Nguyên liệu mới</label></li>
+								<li><input <?php if(isset($this->params['sort']) && $this->params['sort'] == 'promotion_desc') echo 'checked';?> type="radio" id="promotion_desc" name="filter_sort" onclick="window.location='<?php echo BASE_URL.'/nguyen-lieu.html?sort=promotion_desc'.$categoryLink;?>'"/> <label for="promotion_desc">Khuyến mãi</label></li>
+							</ul>
+						</div>
+					</div>					
+				</div>
+				<div class="col-md-9 col-xs-12 right-content">
+					<?php echo $this->paging;?>
+					<div class="main-rc">
+						<ul class="clearfix">
+							<?php foreach($this->ingredient as $item){
+								$url = Ingredient::ingredientUrl($item);
+							?>
+							<li class="clearfix">
+								<div class="pic-mrc"><a href="<?php echo $url?>" title="<?php echo $item['name'];?>"><img style="height: 184px;width:250px" class="img-responsive" src="<?php echo $item['image'];?>" alt="<?php echo $item['name'];?>"></a></div>
+								<div class="desc-mrc">
+									<h2><a title="<?php echo $item['name'];?>" href="<?php echo $url?>"><?php echo $item['name'];?></a></h2>
+									<div class="price clearfix"><span class="price-inner"><?php echo My_Zend_Globals::numberFormat($item['price'])?> VND</span><span class="sl"><?php echo Ingredient::$_ARRAY_UNIT[$item['unit_price']]['name']; ?></span></div>
+								</div>
+								<div class="quality fl"><a class="mic decrement" href="javascript:void(0)">-</a><span class="c-mic buy_quantity">1</span><a class="mic increment" href="javascript:void(0)">+</a></div>
+								<a class="btn-add fr buy_ingredient_list" href="javascript:void(0)" rel="<?php echo $item['id'];?>">Mua</a>
+							</li>
+							<?php }?>
+						</ul>
+					</div>
+					<?php echo $this->paging;?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$('.increment').click(function(){
+		var parent = $(this).parent();
+		var quantity = parseInt($('.buy_quantity', parent).html());
+		if(quantity == 100)
+			return;
+		$('.buy_quantity', parent).html(quantity+1)
+	});
+	$('.decrement').click(function(){
+		var parent = $(this).parent();
+		var quantity = parseInt($('.buy_quantity', parent).html());
+		if(quantity == 1)
+			return;
+		$('.buy_quantity', parent).html(quantity-1)
+	});
+	$('.buy_ingredient_list').click(function()
+	{
+		common.progress();
+		var id = $(this).attr('rel');
+		var quantity = $('.buy_quantity', $(this).parent()).html();
+		cart.addToCart(cart.typeIngredient, id, quantity);
+		common.setFlashMessage('Nguyên liệu bạn chọn đã được thêm vào giỏ hàng thành công');
+		cart.incrementCountCart(quantity);
+	});
+</script>

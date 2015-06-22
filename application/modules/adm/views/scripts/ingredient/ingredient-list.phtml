@@ -1,0 +1,122 @@
+<?php $params = $this->params;?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý nguyên liệu</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/ingredient/add-ingredient" title="Thêm mới nguyên liệu"></a></span>	
+		</div>
+    </div>
+    <form id="frm" name="frm" method="get" action="/adm/ingredient/ingredient-list">
+        <ul class="filter clearfix">            
+           	<li>
+                <label>Tên nguyên liệu</label>
+                <input id="ingredient_name" name="ingredient_name" value="<?php echo $params['ingredient_name']?>" class="large" type="text" />
+            </li>   
+            <li id="category_option">
+                <label>Loại nguyên liệu</label>
+                 <select id="type" name="type" class="cat">
+					<option value="0">Loại nguyên liệu</option>
+					<?php foreach(Ingredient::$_ARRAY_TYPE as $key => $type){?>
+					<option value="<?php echo $key?>" <?php if($key == $params['type']) echo 'selected="selected"';?>><?php echo $type?></option>
+					<?php }?>
+				</select>                
+            </li>
+            <li id="category_option">
+                <label>Danh mục</label>
+                 <select id="type" name="category_id" class="cat">
+					<option value="0">Loại nguyên liệu</option>
+					<?php foreach($this->categoryList as $category){?>
+					<option value="<?php echo $category['category_id']?>" <?php if($category['category_id'] == $params['category_id']) echo 'selected="selected"';?>><?php echo $category['category_name']?></option>
+					<?php }?>
+				</select>                
+            </li>                                           
+            <li class="clear">
+                <input id="submit" name="submit" value="" class="button_search" type="submit" />
+            </li>
+         </ul>
+     </form>
+    <div class="clear"></div>  
+    <?php echo $this->paging; ?>
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                    <tr>
+                       <td valign="middle" colspan="9" class="firstRow"></td>
+                    </tr>
+                    <tr>                      
+                        <td style="width: 10px" class="secondRow">ID</td>         
+						<td width="7%" class="secondRow">Hình ảnh</td>					   
+                        <td width="26%" class="secondRow">Tên nguyên liệu</td>
+                        <td width="8%" class="secondRow">Giá</td>
+                        <td width="10%" class="secondRow">Đơn vị tính</td>
+                        <td width="10%" class="secondRow">Loại</td>
+                        <td width="9%" class="secondRow">Số lượng</td>          
+					    <td width="15%" class="secondRow">Cập nhật</td>					   
+                        <td width="12%" class="secondRow">Thao tác</td>
+                    </tr> 
+                    <?php if(!empty($this->ingredients)){?>
+					<?php foreach($this->ingredients as $item){?>
+                    <tr>
+	                    <td align="center" class="ctn"><?php echo $item['id']?></td>
+	                    <td class="ctn"><img src="<?php echo $item['image']?>" style="width:70px;height:70px"></td>	                    
+	                    <td class="ctn">
+	                    	<?php echo $item['name']?>
+	                    </td>
+	                    <td class="ctn"><?php echo number_format($item['price'], 0, ',', '.');?></td>
+	                    <td class="ctn"><?php echo Ingredient::$_ARRAY_UNIT[$item['unit_price']]['name']?></td>
+	                     <td class="ctn"><?php echo Ingredient::$_ARRAY_TYPE[$item['type']]?></td>
+	                    <td class="ctn"><?php echo number_format($item['quantity'], 0, ',', '.'); ?></td>
+	                     <td class="ctn"><?php echo date('H:i d/m/Y', $item['updated_date']); ?></td>
+	                    <td class="ctn">	                    		                  
+							<a href="<?php echo BASE_URL.'/adm/ingredient/edit-ingredient/id/'.$item['id']?>" class="b_edit" title="Cập nhật nguyên liệu này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+							<a href="javascript:void(0)" class="btn btn-danger btn-sm" onClick="ingredient.deleteItem('<?php echo $item['id']; ?>')" title="Xóa nguyên liệu này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="40px" height="20px"/></a>
+	                    </td>
+                	</tr> 
+                    <?php }}else{?>
+	                <tr>
+	                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+	                </tr>
+	                <?php } ?>              	                	
+                    <tr>
+						<td valign="middle" colspan="9" class="firstRow"></td>                 
+					</tr>
+           </tbody>
+       </table>
+    </div>
+   <?php echo $this->paging; ?>
+<script>
+	var ingredient = 
+	{
+		deleteItem : function(id, parent)
+		{
+		    $(this).myBoxy (Boxy,{
+		        type:'confirm',
+		        message: "Bạn có chắc chắn muốn xóa nguyên liệu này?",
+		        id : id,
+				parent: parent,
+		        callback: function() 
+		        {
+		            var boxy = Boxy.get(this);
+		            var options = boxy.options;
+		            ingredient.doDeleteItem(id, parent);
+		            boxy.hide();
+		        }
+		    });
+		},
+		doDeleteItem : function(id)
+		{
+		    $.post(Settings.baseurl + '/adm/ingredient/delete-ingredient', {
+		        id:id, act:'del'
+		    },
+		    function(data)
+		    {	
+				$(this).myBoxy (Boxy,{
+					type: 'success',
+			        message: 'Nguyên liệu bạn chọn đã được xóa thành công!',
+					refresh:true
+			    });		
+		    });
+		}
+	};
+</script>
+</div>

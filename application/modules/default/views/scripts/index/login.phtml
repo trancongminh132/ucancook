@@ -1,0 +1,99 @@
+<style>
+	.error{color:red;display:none;padding-left:3px}	
+</style>
+<div class="user-session">
+	<div class="container clearfix">
+		<div class="row">
+			<h1 class="text-center user-session-header">Xin chào đầu bếp!</h1>
+		</div>
+		<div class="row">
+			<div class="user-session-container">
+				<ul class="nav-tabs nav-tabs-user-session">
+					<li class="nav-tab active">
+						<a id="sign-in" href="<?php echo BASE_URL?>/login.html">Đăng nhập</a>
+					</li>
+					<li class="nav-tab">
+						<a id="sign-up" href="<?php echo BASE_URL?>/register.html">Đăng ký</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<!--sign in-->
+					<div class="sign-in tab-pane active" id="sign-in-tab">
+						<div class="text-center">
+							<a class="button facebook" href="javascript:void(0)" onclick="fbLogin()">Đăng nhập bằng Facebook</a>
+						</div>
+						<div class="user-session-break-container">
+							<div class="user-session-break">
+								<div class="user-session-break-content">
+									<h2>hoặc</h2>
+								</div>
+							</div>
+						</div>
+						<p class="error bar-notice notice-error" id="error-login-fail">Email đăng nhập hoặc mật khẩu không đúng</p>
+						<form class="simple-form" action="/user/alogin" target="ifrmLogin" method="post" onsubmit="return validateLoginForm()">
+							<div class="input">
+								<input type="text" size="30" placeholder="Địa chỉ email" name="email" id="email">
+							</div>
+							<p class="error bar-notice notice-error" id="error-email">Vui lòng nhập email</p> 
+							<p class="error bar-notice notice-error" id="error-email-invalid">Địa chỉ email không hợp lệ</p>         
+							<div class="input">
+								<input type="password" size="30" placeholder="Mật khẩu" name="password" id="password">
+							</div>
+							<p class="error bar-notice notice-error" id="error-password">Vui lòng nhập mật khẩu</p>          
+							<input type="submit" value="Đăng nhập" name="commit" class="button">
+							<div class="sign-in-bottom clearfix">
+								<div class="input fl">
+									<label for="user_remember_me" class="checkbox">
+									<input type="checkbox" value="1" placeholder="Ghi nhớ đăng nhập" name="user[remember_me]" id="user_remember_me" checked="checked">Ghi nhớ đăng nhập</label>
+								</div>							
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<iframe name="ifrmLogin" id="ifrmLogin" style="display: none"></iframe>
+<script>
+	var returnUrl = "<?php echo $this->return;?>";
+	var fbLogin = function()
+	{
+	    PopupManager.open(Settings.baseurl + "/user/register-from-social/popup/true", 500, 450, function(){
+	        handleSuccessLogin();
+	    });
+	}
+	var errorLogin = function()
+	{
+	    $("#error-login-fail").show();
+	};
+	var handleSuccessLogin = function()
+    {
+    	loginaccount.get_login(returnUrl);
+    };
+	var validateEmail = function(email){
+		var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+		if(filter.test(email))
+	    	return true;
+		return false;
+	};
+	var validateLoginForm = function()
+    {
+    	$(".error").hide();
+        var email = $("#email").val();
+        if ($.trim(email) == '') {
+            $("#error-email").show();
+            return false;
+        }
+        if(!validateEmail(email)){
+        	$("#error-email-invalid").show();
+            return false;
+        }
+        var password = $("#password").val();
+        if($.trim(password) == '' ) {
+            $("#error-password").show();
+            return false;
+        }
+        return true;
+    }
+</script>

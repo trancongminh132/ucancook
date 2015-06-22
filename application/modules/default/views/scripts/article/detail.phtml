@@ -1,0 +1,52 @@
+<div id="main-content">
+	<a target="_blank" title="<?php echo $this->article['title']?>" href="<?php echo Article::articleUrl($this->article);?>"><img class="img-responsive" src="<?php echo $this->article['picture']?>"></a>
+	<div class="breadcrumbs-wrapper clearfix">
+		<ul class="breadcrumbs">
+			<li><span><a href="/blog">Trang chủ</a></span></li>
+			<li><span><a href="<?php echo Category::categoryNewsUrl($this->category);?>"><?php echo $this->category['category_name'];?></a></span></li>
+			<li class="lastcrumb"><span class="current">3 Quick and Easy Thanksgiving Appetizers</span></li>
+		</ul>
+	</div>
+	<div class="wrap-post">
+		<h2 class="article-title"><?php echo $this->article['title']?>
+			<span class="article-meta">
+				<span class="article-date">Ngày <?php echo date('d', $this->article['created_date'])?> - <?php echo date('n', $this->article['created_date'])?>, <?php echo date('Y', $this->article['created_date'])?></span><span class="article-category"><a href="<?php echo Category::categoryNewsUrl($this->category);?>" title="<?php echo $this->category['category_name'];?>"><?php echo $this->category['category_name'];?></a></span><span class="article-comments"><a href="#comment">0 Bình luận</a></span>
+			</span>
+		</h2>
+		<div class="post-inside">
+			<p><?php echo $this->article['content']?></p>
+		</div>
+		<div class='shareaholic-canvas' data-app='share_buttons' data-app-id='14002816'></div>
+		<div class="article-social-links">
+			<ul class="clearfix">
+				<li class="tweet-link"><a href="http://twitter.com/share?text=<?php echo $this->article['title']?>" target="_blank">Twitter</a>
+				</li>
+				<li class="facebook-link"><a target="_blank" href="http://www.facebook.com/sharer.php?u=<?php echo Article::articleUrl($this->article)?>&amp;t=<?php echo $this->article['title']?>">Facebook</a>
+				</li>
+				<li class="pinterest-link"><a href="http://pinterest.com/pin/create/button/?url=<?php echo Article::articleUrl($this->article)?>/&amp;media=&amp;description=<?php echo $this->article['title']?>" target="_blank">Pinterest</a>
+				</li>
+			</ul>
+		</div>
+		<?php if(!empty($this->relatedArticles)){?>
+		<div class="title-block">
+			<h3>Xem thêm bài viết</h3>
+		</div>
+		<ul style="margin:0 !important;" class="news-block-columns-5 clearfix">
+			<?php foreach($this->relatedArticles as $item){?>
+			<li class="news-block-col-5">
+				<div class="news-image-container">
+					<a title="<?php echo $item['title']?>" href="<?php echo Article::articleUrl($item);?>">
+						<img class="img-responsive" alt="" src="<?php echo My_Zend_Globals::getThumbImage($item['picture']);?>">
+					</a>
+				</div>
+				<h3 class="news-title-lower"><a title="<?php echo $item['title']?>" href="<?php echo Article::articleUrl($item);?>"><?php echo My_Zend_Globals::cutString($item['title'], 0, 40);?></a><span>Ngày <?php echo date('j', $item['created_date'])?>, <?php echo date('n', $item['created_date'])?> - <?php echo date('Y', $item['created_date'])?></span></h3>
+			</li>
+			<?php }?>
+		</ul>
+		<?php }?>
+		<div id="comment" class="wrap-respond">
+			<div class="title-block"><h3>Bình luận</h3></div>
+			<div class="fb-comments" data-href="<?php echo $this->canonicalUrl?>" data-width="656" data-numposts="10" data-colorscheme="light"></div>
+		</div>
+	</div>
+</div>

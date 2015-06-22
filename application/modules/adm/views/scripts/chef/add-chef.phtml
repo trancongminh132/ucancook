@@ -1,0 +1,123 @@
+<?php
+	echo $this->headScript()
+    	->appendFile($this->layout()->_general['static']['path'].'/js/upload.js')
+		->appendFile($this->layout()->_general['static']['path'].'/js/tiny_mce/jquery.tinymce.js');
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Thêm mới đầu bếp</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên đầu bếp:</label>
+                        </div>
+                        <input name="chef_name" type="text" class="title_text_input" />                      
+                    </div>                                        
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Giới tính:</label>
+                      	</div>
+                  			<select class="post_select" name="gender" id="gender">
+								<option value="1">Nam</option>
+								<option value="0">Nữ</option>
+							</select>         
+                	</div>   
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Avatar:</label>
+                        </div>
+                        <div id="tinyMceUploadAvatar"></div>
+                        <p class="help-block" style="padding-left:130px;padding-top: 10px">
+                            <img style="width:200px;height:150px" class="avatar" src="/a/images/no_image.gif" alt="" />
+                            <input type="hidden" id="avatar_url" name="avatar"/>
+                        </p>
+                    </div>
+                    <div class="listing_input hgauto">
+	                	 <div class="post_label_container">
+                            <label class="postLabel">Giới thiệu về đầu bếp:</label>
+                      	</div>
+                      	<p class="help-block" style="padding-left:130px;padding-top: 10px">
+		                	<textarea  id='mce_0' name="chef_description" class="box_html" rows="" cols="">
+		                	
+		                	</textarea>
+		                </p>
+	                </div>
+                	<div class="clear"></div>       
+                    <div class="button_listing_input clear">
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+	var editor_tiny_url = "<?php echo $this->layout()->_general['server']['path']."/js/tiny_mce/tiny_mce.js";?>";
+	var currentImage = 1;
+	var submitID = 0;
+	$('textarea.box_html').tinymce({
+		script_url  : editor_tiny_url,
+	    mode: "exact",
+		width: "100%",
+		height: "500",
+	    theme: "advanced",
+	    /* Dùng domain */
+	    remove_script_host: false,
+	    convert_urls: true,
+	    /* Dùng đường dẫn tuyệt đối */
+	    relative_urls: false,
+	    verify_html: true,
+	    cleanup: true,
+	    language: "vi",
+	    plugins: "emotions, table, paste,preview,fullscreen,inlinepopups,safari,searchreplace",
+	    valid_elements: "a,b,blockquote,br,center,del,div,em,font,h2,h3,h4,i,img,ins,li,hr,ol,p,pre,s,span,strong,strike,sub,sup,table,tbody,td,th,tr,u,ul",
+	    extended_valid_elements: "a[href|name|rel|style|target|title],b[style],blockquote[style|title],br[clear|title],center[],del[style|title],div[align|style|title|class],em[style|title],font[color|face|size|style|title],h2[],h3[],h4[],i[style|title],img[align|alt|border|height|hspace|idata|src|style|title|vspace|width],ins[style|title],li[style|title|type],hr[align|noshade|size|style|title],ol[style|title|type],p[align|style|title],pre[style|title],s[style|title],span[style|title|class],strong[style],strike[style|title],sub[style|title],sup[style|title],table[align|bgcolor|border|bordercolor|cellpadding|cellspacing|height|style|title|width],tbody[],td[align|bgcolor|colspan|height|nowrap|rowspan|style|title|valign|width],th[align|bgcolor|colspan|height|nowrap|rowspan|style|title|valign|width],tr[align|bgcolor|height|nowrap|style|title|valign],u[style|title],ul[style|title|type],",
+	    invalid_styles: "behavior,background-image,background,list-style-image,expression,/*,*/",
+	    /* Theme options */
+	    theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect,forecolor,backcolor,cut, copy,paste",
+	    theme_advanced_buttons2: "image_custom,pasteword,link,unlink,emotions,|,table,tablecontrols,code,preview,bullist,numlist,outdent,indent",
+	    theme_advanced_buttons3: "undo, redo, cleanup, help, removeformat,forecolorpicker,backcolorpicker,search,replace",
+	    theme_advanced_buttons4: "",
+	    theme_advanced_toolbar_location: "top",
+	    theme_advanced_toolbar_align: "left",
+	    theme_advanced_statusbar_location: "bottom",
+	    theme_advanced_resizing: true,
+	    theme_advanced_resizing_use_cookie: false,
+	    theme_advanced_path: false,
+		paste_auto_cleanup_on_paste : false,
+	    setup : function(ed) {
+			ed.addButton('image_custom', {
+				title : 'Đăng ảnh',
+				image : Settings.imgurl+'/mce_danganh.jpg',
+				onclick : function()
+				{	
+					ImageUpload.showPopup(this.id);
+				}
+			});
+		},
+		content_css : Settings.cssurl+"/tinyMCE.css"
+	});
+	callbackUploadAvatar = function(resp){
+		switch(resp.error_code){
+			case 0:		
+				var photoSrc = resp.data.photo_src;	
+				$('.avatar').attr('src', photoSrc)
+				$('#avatar_url').val(photoSrc);
+				break;
+		}
+	};
+	$('#tinyMceUploadAvatar').photoUpload(
+	{
+		prefix: 'avatar_',
+		maxNumID: 1,			
+		ajaxFile: Settings.uploadurl,
+		file_types: "jpg,png",
+		callback: callbackUploadAvatar,				
+	});
+</script>

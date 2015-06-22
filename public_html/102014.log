@@ -1,0 +1,20 @@
+2014-10-03T00:51:47+07:00 INFO (6): (IP: 1.53.22.134) ++++===============  Contact::insert -- No adapter configuration for business !!!  ===============+++
+2014-10-04T12:25:24+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T12:27:19+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T12:27:35+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T13:40:48+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T13:40:48+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '1-4' for key 'PRIMARY'  ===============+++
+2014-10-04T13:41:36+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T22:06:38+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T22:06:38+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '1-2' for key 'PRIMARY'  ===============+++
+2014-10-04T22:06:38+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '3-2' for key 'PRIMARY'  ===============+++
+2014-10-04T22:06:58+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T22:06:58+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '1-4' for key 'PRIMARY'  ===============+++
+2014-10-04T22:07:16+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T22:07:16+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '1-3' for key 'PRIMARY'  ===============+++
+2014-10-04T22:07:16+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '3-3' for key 'PRIMARY'  ===============+++
+2014-10-04T22:18:22+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-10-04T22:18:22+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '1-2' for key 'PRIMARY'  ===============+++
+2014-10-04T22:18:22+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '5-2' for key 'PRIMARY'  ===============+++
+2014-10-04T22:18:22+07:00 INFO (6): (IP: 183.80.141.181) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '3-2' for key 'PRIMARY'  ===============+++
+2014-10-31T18:12:18+01:00 INFO (6): (IP: 127.0.0.1) ++++===============  Product::getProductByAlias - Access denied for user 'phongdo'@'localhost' (using password: YES)  ===============+++

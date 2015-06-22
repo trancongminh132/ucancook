@@ -1,0 +1,103 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Danh sách đầu bếp</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/chef/add-chef" title="Thêm mới chef"></a></span>	
+		</div>
+    </div>
+    <?php echo $this->paging; ?>
+    <form method="post">
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="7" class="firstRow"></td>
+                   </tr>
+                   <tr>
+                       <td class="secondRow">ID</td> 
+                       <td class="secondRow">Hình đại diện</td>                 
+                       <td class="secondRow">Tên đầu bếp</td>                       
+                       <td class="secondRow">Giới tính</td>
+                       <td class="secondRow">Cập nhật</td>
+                       <td width="12%" class="secondRow">Thao tác</td>
+                  </tr>
+                <?php 
+                if (!empty($this->chefs)):
+					 foreach ($this->chefs as $item):					                 	
+                ?>
+                <tr>
+                     <td align="left" class="ctn"><?php echo $item['id']?></td>
+                     <td class="ctn"><img src="<?php echo $item['avatar']?>" style="height:70px;width:80px"></td>
+                     <td class="ctn"><?php echo $item['chef_name']?></td>
+                     <td align="right" class="ctn"><?php echo (($item['gender'] == 1) ? 'Nam ':'Nữ');?></td>
+                    
+                     <td class="ctn">
+                     	<?php echo date('H:i d/m/Y', $item['updated_date'])?>
+                     </td>
+                     <td class="ctn">	                    	
+						<a href="<?php echo BASE_URL.'/adm/chef/edit-chef/id/'.$item['id']?>" class="b_edit" title="Cập nhật đầu bếp này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+						<a href="javascript:void(0)" class="btn btn-danger btn-sm" onClick="Chef.deleteChef(<?php echo $item['id']; ?>)" title="Xóa đầu bếp này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="40px" height="20px"/></a>
+	                 </td>
+                 </tr>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <tr>
+                   <td class="ctn nonSearch" colspan="7">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php endif; ?>
+                <tr>
+                  <td valign="middle" colspan="7" class="firstRow"></td>
+                </tr>
+            </tbody>
+        </table>       
+    </div>    
+     </form>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+	$(function() {
+		$( ".datepicker" ).datepicker({dateFormat : 'dd-mm-yy'});
+	});
+
+	var Chef = 
+	{
+		deleteChef : function(id)
+		{
+		    $(this).myBoxy (Boxy,{
+		        type:'confirm',
+		        message: "Bạn có chắc chắn muốn xóa đầu bếp này?",
+		        id : id,
+		        callback: function() 
+		        {
+		            var boxy = Boxy.get(this);
+		            var options = boxy.options;
+		            Chef.doDeleteChef(id);
+		            boxy.hide();
+		        }
+		    });
+		},
+		doDeleteChef : function(id)
+		{
+		    $.post(Settings.baseurl + '/adm/chef/delete-chef', {
+		        id:id
+		    },
+		    function(data)
+		    {	
+			    if(data == 1)
+			    {
+					$(this).myBoxy (Boxy,{
+						type: 'success',
+				        message: 'Đầu bếp bạn chọn đã được xóa thành công!',
+						afterHide:function(){location.reload()}
+				    });
+			    }else{
+			    	$(this).myBoxy (Boxy,{
+						type: 'alert',
+				        message: 'Thao tác thất bại. Bạn vui lòng thử lại sau!',
+						afterHide:function(){location.reload()}
+				    });
+				}		
+		    });
+		}
+	};
+</script>

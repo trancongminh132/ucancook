@@ -1,0 +1,59 @@
+<?php
+	$this->headLink()->appendStylesheet($this->layout()->_general['server']['path'].'/css/jquery.ui.datepicker.css');
+	$this->headScript()->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.datepicker.js'); 
+	$params = $this->filters;
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Cập nhật thực đơn | <a href="<?php echo BASE_URL?>/adm/menu/menu-list">Quản lý thực đơn</a></div>
+    </div>
+    <?php
+   	if(isset($_GET['result']) && $_GET['result'] == 'success')
+   	{
+   	?>
+	<div class="warning" style="color:green;font-weight:bold">Thực đơn đã được cập nhật thành công!</div>
+	<?php
+	}
+	?>
+    <div class="clear"></div>
+    <form action="" method="post">
+	    <div>
+	        <div class="fdefault posting">
+            	<h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Chọn món ăn:</label>
+                        </div>
+                        <select id="type" name="dish_id" class="cat">
+							<option value="0">Chọn món ăn</option>
+							<?php foreach($this->dishes as $item){?>
+							<option value="<?php echo $item['id']?>" <?php if($item['id'] == $this->menu['dish_id']) echo 'selected="selected"';?>><?php echo $item['name']?></option>
+							<?php }?>
+						</select>
+                    </div>
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Ngày bán:</label>
+                        </div>
+                       <input type="text" class="datepicker large" name="sale_date" value="<?php echo date('d-m-Y', $this->menu['sale_date']);?>">        
+                    </div>	   
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Số lượng bán :</label>
+                      	</div>
+						<input type="text" class="large" name="quantity" id="quantity"  alt="" value="<?php echo My_Zend_Globals::numberFormat($this->menu['quantity']);?>">    
+					</div>
+                    <div class="button_listing_input">
+                    	<input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+                	</div>	
+                </div>							                                           
+	        </div>
+	    </div>
+    </form>
+</div>
+<script>
+$(function() {
+	$(".datepicker" ).datepicker({dateFormat : 'dd-mm-yy'});
+});
+</script>

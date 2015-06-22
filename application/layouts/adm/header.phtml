@@ -1,0 +1,94 @@
+<?php 
+	function getCurrentController($controller)
+	{	
+		echo $controller == CURRENT_CONTROLLER ? "class='active'" : "";
+	}
+?>
+<style>ul.topnav li a {padding: 0 13px;}</style>
+<div id="header">
+    <h1 class="logo"><a href="<?php echo BASE_URL ?>"><img style="height:50px" alt="ucancook.vn" src="<?php echo $this->layout()->_general['server']['path']; ?>/images/logo.png"></a></h1>
+    <div class="box_welcome">Chào <strong><?php echo LOGIN_UNAME; ?></strong>, <a href="<?php echo $this->url(array('action' => 'logout', 'controller' => 'index'), null, true); ?>">Thoát</a></div>
+    <div id="menu">
+        <ul class="topnav"> 
+        	<li <?php getCurrentController('ingredient');?>>
+                <a href="/adm/ingredient/ingredient-list">Ingredient</a>
+                <ul class="subnav">                   
+                    <li><a href="/adm/ingredient/ingredient-list">Danh sách nguyên liệu</a></li>                 	
+                    <li><a href="/adm/ingredient/add-ingredient">Thêm mới nguyên liệu</a></li>   
+                </ul>
+            </li>  
+            <li <?php getCurrentController('dish');?>>
+                <a href="/adm/dish/dish-list">Dishes</a>
+                <ul class="subnav">                   
+                    <li><a href="/adm/dish/dish-list">Danh sách món ăn</a></li>                 	
+                    <li><a href="/adm/dish/add-dish">Thêm mới món ăn</a></li>   
+                </ul>
+            </li>			
+            <li <?php getCurrentController('menu');?>>
+            	<a href="/adm/menu">Menu</a>
+                <ul class="subnav">
+                    <li><a href="/adm/menu">Danh sách thực đơn</a></li>
+                    <li><a href="/adm/menu/add-menu">Thêm mới thực đơn</a></li>                
+                </ul>
+            </li>
+            <li <?php getCurrentController('attribute');?>><a href="/adm/attribute/attribute-list">Attribute</a>
+                <ul class="subnav">                 
+                    <li><a href="/adm/attribute/attribute-list">Danh sách thuộc tính</a></li>
+                    <li><a href="/adm/attribute/add-attribute">Thêm mới thuộc tính</a></li>                               
+                </ul>
+            </li>
+             <li <?php getCurrentController('banner');?>><a href="/adm/banner/banner-list">Banner</a>
+                <ul class="subnav">                 
+                    <li><a href="/adm/banner/banner-list">Danh sách banner</a></li>
+                    <li><a href="/adm/banner/add-banner">Thêm mới banner</a></li>                               
+                </ul>
+            </li>                     
+            <li <?php getCurrentController('order');?>><a href="/adm/order">Order</a>
+                <ul class="subnav">
+                    <li><a href="/adm/order">Danh sách đơn hàng</a></li>    
+                </ul>
+            </li>
+            <li <?php getCurrentController('user');?>>
+            	<a href="/adm/user">User</a>
+                <ul class="subnav">
+                	<li><a href="/adm/user">Danh sách người dùng</a></li>               
+                </ul>
+            </li>
+            <li <?php getCurrentController('coupon');?>>
+            	<a href="/adm/coupon">Coupon</a>
+                <ul class="subnav">
+                	<li><a href="/adm/coupon">Danh sách coupon</a></li> 
+                	<li><a href="/adm/coupon/add-coupon">Thêm mới coupon</a></li>                  
+                </ul>
+            </li>
+            <li <?php getCurrentController('chef');?>>
+            	<a href="/adm/chef">Chef</a>
+                <ul class="subnav">
+                	<li><a href="/adm/chef">Danh sách đầu bếp</a></li>
+                	<li><a href="/adm/chef/add-chef">Thêm mới đầu bếp</a></li>               
+                </ul>
+            </li>
+            <li <?php getCurrentController('category');?>>
+            	<a href="/adm/category">Category</a>
+                <ul class="subnav">
+                	<li><a href="/adm/category">Danh sách danh mục</a></li>  
+                	<li><a href="/adm/category/add-category">Thêm mới danh mục</a></li>                  
+                </ul>
+            </li>
+            <li <?php getCurrentController('article');?>>
+            	<a href="/adm/article">Article</a>
+                <ul class="subnav">
+                	<li><a href="/adm/article">Danh sách bài viết</a></li>  
+                	<li><a href="/adm/article/create">Thêm mới bài viết</a></li>                  
+                </ul>
+            </li>
+            <li <?php getCurrentController('tag');?>>
+            	<a href="/adm/tag">Tags</a>
+                <ul class="subnav">
+                	<li><a href="/adm/tag">Danh sách tag</a></li>  
+                	<li><a href="/adm/tag/create">Thêm mới tag</a></li>                  
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

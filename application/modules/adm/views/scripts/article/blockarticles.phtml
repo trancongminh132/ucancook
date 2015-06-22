@@ -1,0 +1,76 @@
+<?php
+$params = $this->params;
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý bài viết trong blocks</div>       
+    </div>
+    <form id="frm" name="frm" method="get" action="<?php echo $this->url(array('action' => 'blockarticles', 'controller' => 'article', 'module' => 'adm'), null, true); ?>">
+		<ul class="filter clearfix">
+			<li class="expand"><label>Block</label> 
+			<select id="block_name" name="block_name" class="cat">
+					<option value="">--- Chọn block ---</option>
+					 <?php foreach(Article::$_BLOCKS as $pageName => $blocks):?>
+                     <optgroup label="<?php echo $pageName?>">
+                     <?php foreach($blocks as $blockId => $block):?>
+                       	<option value="<?php echo $blockId?>" <?php echo (isset($params['block_name']) && $params['block_name'] == $blockId) ? 'selected' : ''?>>-- <?php echo $block['block_name']?></option>
+                     <?php endforeach; ?>
+                     </optgroup>
+                     <?php endforeach;?>
+			</select>
+			</li>
+			<li class="expand"><label>Tình trạng sản phẩm</label> <select id="status"
+				name="status" class="cat">
+					<option value="-1">Tất cả</option>
+					<option value="0" class="second" <?php echo (isset($params['status']) && $params['status'] == 0) ? 'selected="selected"' : ''; ?>>Ẩn</option>
+					<option value="1" class="second" <?php echo ($params['status'] == 1) ? 'selected="selected"' : ''; ?>>Hiển thị</option>
+			</select>
+			</li>			
+			<li class="clear"><input id="submit" name="submit" value=""	class="button_search" type="submit" /></li>
+		</ul>
+	</form>
+                                    <div class="clear"></div>                                    
+    <?php echo $this->paging; ?>
+                                                    <div class="table_member">
+                                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                            <tbody>                                                               
+                                    <tr>
+                                        <td align="center" width="1%" class="secondRow"><input id="checkAll" type="checkbox" value=""></td>
+                                        <td width="30%" class="secondRow">Bài viết</td>                                       
+                                        <td width="16%" class="secondRow">Danh mục</td>  
+                                        <td width="11%" class="secondRow">Block</td>                                      
+                                        <td width="20%" class="secondRow">Hình ảnh</td>                                        
+                                        <td width="11%" class="secondRow">Cập nhật</td>
+                                        <td width="11%" class="secondRow">Trạng thái</td>
+                                        <td width="8%" class="secondRow">Chức năng</td>                                        
+                                    </tr>
+                <?php if (!empty($this->articles)): ?>
+                <?php foreach ($this->articles as $article): ?>
+				<tr>
+					<td align="center" class="ctn"><input type="checkbox"
+						value="<?php echo $article['article_id'];?>" name="article_id"></td>
+					<td class="ctn"><p class="title">
+							<a class="tooltip" target="_blank"
+								href="<?php echo $this->url(array('action' => 'detail', 'controller' => 'article', 'module' => 'adm', 'article_id' => $article['article_id']), null, true); ?>"><?php echo $article['title']; ?></a>
+						</p></td>
+					<td class="ctn"><?php echo $article['block_name']; ?></td>
+					<td class="ctn"><?php echo $article['category_name']; ?></td>
+					<td class="ctn"><img src="<?php echo $article['picture']; ?>" width="100"/></td>					
+					<td class="ctn"><?php echo date('H:i d/m/Y', $article['updated_date']); ?></td>
+					<td class="ctn"><?php echo $article['status'] == 1 ? 'Hiển thị' : 'Ẩn'; ?></td>
+					<td class="ctn">
+						<a title="Sửa bài viết" class="action" href="<?php echo $this->url(array('action' => 'editblockarticle', 'controller' => 'article', 'module' => 'adm', 'id' => $article['id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_edit.jpg" alt="Sửa bài viết" /></a>                        
+                        <a title="Xóa bài viết" class="action" onclick="return confirm('Bạn muốn xóa bài viết này?')" href="<?php echo $this->url(array('action' => 'deleteblockarticle', 'controller' => 'article', 'module' => 'adm', 'id' => $article['id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_del.jpg" alt="Xóa bài viết" /></a>                       
+					</td>
+				</tr>
+				<?php endforeach; ?>
+                <?php else: ?>
+                                                                                    <tr>
+                                                                                        <td class="ctn nonSearch" colspan="7">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                                                                                    </tr>
+                <?php endif; ?>                                                                                   
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+    <?php echo $this->paging; ?>
+</div>

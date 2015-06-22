@@ -1,0 +1,237 @@
+<?php  
+	echo $this->headScript()     
+	 	->appendFile($this->layout()->_general['static']['path'].'/js/upload.js')
+	    ->appendFile($this->layout()->_general['static']['path'].'/js/auto_numberic.js')
+	 	->appendFile($this->layout()->_general['static']['path'].'/js/tiny_mce/jquery.tinymce.js');
+?>
+<style>
+	.medium {width:60%}
+	.pic {
+		position: relative;
+		float: left;
+		width: 200px;
+		height: 82px;
+		margin-bottom: 6px;
+		margin-right: 11px;
+	}
+	.close_image {
+		position: absolute;
+		bottom: -8px;
+		right: -10px;
+		float: left;
+		width: 21px;
+		height: 20px;
+		text-indent: -9999px;
+	}
+	.general-icon {
+		background: url(/a/images/close.gif) no-repeat;
+	}
+	.check{
+		position: absolute;
+		top: 2px;
+		background: url(/a/images/arrow_up_30.png) no-repeat;
+		left: 3px;
+		float: left;
+		width: 24px;
+		height: 24px;
+		margin: 0;
+	}
+	.pic-active {
+		border: 2px solid #41c200;
+	}
+</style>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Thêm mới nguyên liệu</div>
+    </div>
+    <div class="clear"></div>
+    <form action="" method="post">
+	    <div class="leftSide">
+	         <div class="widget">
+	            <div class="gallery" id="gallery">
+	               <ul>
+	               		<li style="padding-bottom:10px;font-weight:bold;font-size:13px">
+	               			<label for="special_price">Upload hình sản phẩm</label>
+							<div id="tinyMceUploadImageProduct"></div>
+	               		</li>              
+	               </ul> 
+	               <div class="fix"></div>
+	           </div>
+			 </div>
+	    </div>
+	    <div class="rightSide">
+	        <div class="fdefault posting">
+	            	<h3 class="n1">Thông tin cơ bản</h3>
+	                <div class="group_listing_input">
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Tên nguyên liệu:</label>
+	                        </div>
+	                        <input name="ingredient_name" type="text" class="title_text_input" />
+	                    </div>
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Đơn vị tính:</label>
+	                        </div>
+	                        <select class="post_select" name="unit_price">
+								<option value="0">Chọn đơn vị tính</option>
+								<?php foreach (Ingredient::$_ARRAY_UNIT as $unitId => $unit){?>								
+								<option value="<?php echo $unitId;?>" ><?php echo $unit['name']?></option>
+								<?php }?>
+							</select>         
+	                    </div>	            
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Loại nguyên liệu:</label>
+	                        </div>
+	                        <select class="post_select" name="type">
+								<option value="0">Chọn loại nguyên liệu</option>
+								<?php foreach (Ingredient::$_ARRAY_TYPE as $key => $type){?>								
+								<option value="<?php echo $key;?>"><?php echo $type?></option>
+								<?php }?>
+							</select>         
+	                    </div>	
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Danh mục:</label>
+	                        </div>
+	                        <select class="post_select" name="category_id">
+								<option value="0">Chọn danh mục</option>
+								<?php foreach ($this->categoryList as $category){?>								
+								<option value="<?php echo $category['category_id'];?>" ><?php echo $category['category_name']?></option>
+								<?php }?>
+							</select>         
+	                    </div>      	              
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Giá bán:</label>
+	                        </div>
+	                        <input name="price" type="text" class="title_text_input auto_numberic" id="price" alt=""/>                        
+	                    </div>
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Giá khuyến mãi:</label>
+	                        </div>
+	                        <input name="special_price" type="text" class="title_text_input auto_numberic" id="special_price" alt=""/>                        
+	                    </div>	           
+	                	
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Số lượng tồn kho:</label>
+	                        </div>
+	                        <input name="quantity" type="text" class="title_text_input auto_numberic" id="quantity" alt=""/>
+	                    </div>
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Mô tả ngắn:</label>
+	                        </div>
+                        	<textarea style="width: 500px" id="summary" name="summary" class="medium form-control" rows="5"></textarea>
+                    	</div>							                  
+	                </div>								
+	                <div class="line clear"></div>
+	                <h3 class="n2">Mô tả nguyên liệu</h3>
+	                <textarea  id='mce_0' name="description" class="box_html" rows="" cols="">	                	
+	                </textarea>
+	                <div class="button_listing_input">
+	                	<input type="hidden" name="ingredient_image" id="ingredient_image" value=""/>
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>	                           
+	        </div>
+	    </div>
+    </form>
+</div>
+<script type="text/javascript">
+	var editor_tiny_url = "<?php echo $this->layout()->_general['static']['path']?>/js/tiny_mce/tiny_mce.js";
+	var currentImage = 1;
+	var submitID = 0;
+	$('textarea.box_html').tinymce({
+		script_url  : editor_tiny_url,
+        mode: "exact",
+		width: "100%",
+		height: "500",
+        theme: "advanced",
+        /* Dùng domain */
+        remove_script_host: false,
+        convert_urls: true,
+        /* Dùng đường dẫn tuyệt đối */
+        relative_urls: false,
+        verify_html: true,
+        cleanup: true,
+        language: "vi",
+        plugins: "emotions, table, paste,preview,fullscreen,inlinepopups,safari,searchreplace",
+        valid_elements: "a,b,blockquote,br,center,del,div,em,font,h2,h3,h4,i,img,ins,li,hr,ol,p,pre,s,span,strong,strike,sub,sup,table,tbody,td,th,tr,u,ul",
+        extended_valid_elements: "a[href|name|rel|style|target|title],b[style],blockquote[style|title],br[clear|title],center[],del[style|title],div[align|style|title|class],em[style|title],font[color|face|size|style|title],h2[],h3[],h4[],i[style|title],img[align|alt|border|height|hspace|idata|src|style|title|vspace|width],ins[style|title],li[style|title|type],hr[align|noshade|size|style|title],ol[style|title|type],p[align|style|title],pre[style|title],s[style|title],span[style|title|class],strong[style],strike[style|title],sub[style|title],sup[style|title],table[align|bgcolor|border|bordercolor|cellpadding|cellspacing|height|style|title|width],tbody[],td[align|bgcolor|colspan|height|nowrap|rowspan|style|title|valign|width],th[align|bgcolor|colspan|height|nowrap|rowspan|style|title|valign|width],tr[align|bgcolor|height|nowrap|style|title|valign],u[style|title],ul[style|title|type],",
+        invalid_styles: "behavior,background-image,background,list-style-image,expression,/*,*/",
+        /* Theme options */
+        theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect,forecolor,backcolor,cut, copy,paste",
+        theme_advanced_buttons2: "image_custom,pasteword,link,unlink,emotions,|,table,tablecontrols,code,preview,bullist,numlist,outdent,indent",
+        theme_advanced_buttons3: "undo, redo, cleanup, help, removeformat,forecolorpicker,backcolorpicker,search,replace",
+        theme_advanced_buttons4: "",
+        theme_advanced_toolbar_location: "top",
+        theme_advanced_toolbar_align: "left",
+        theme_advanced_statusbar_location: "bottom",
+        theme_advanced_resizing: true,
+        theme_advanced_resizing_use_cookie: false,
+        theme_advanced_path: false,
+		paste_auto_cleanup_on_paste : false,
+        setup : function(ed) {
+			ed.addButton('image_custom', {
+				title : 'Đăng ảnh',
+				image : Settings.imgurl+'/mce_danganh.jpg',
+				onclick : function()
+				{	
+					ImageUpload.showPopup(this.id);
+				}
+			});
+		},
+		content_css : Settings.cssurl+"/tinyMCE.css"
+	});
+	$('input.auto_numberic').autoNumeric();
+	callbackUpload = function(resp)
+	{
+		switch(resp.error_code)
+		{
+			case 0:    			
+				var photo_src = resp.data.photo_src;	
+				var html = '<li><div class="pic"><a href="javascript:void(0);" title="Chọn làm hình chính" class="func-pic active-pic" rel="'+ photo_src +'"><span class="general-icon check" title="Chọn hình đại diện"></span></a><a href="javascript:void(0);" title="Xóa khỏi danh sách" class="general-icon close_image remove-pic"></a><img src="'+ photo_src +'" alt="" width="200" height="78"></a>';
+					html += '<input type="hidden" name="pic_url[]" value="'+ photo_src +'" /></div></li>';     
+				$('#gallery ul').append(html);		   			
+				break;
+			case 1:
+				$(this).myBoxy (Boxy,{
+					type:'alert',
+					message: "Hình đã vượt quá kích thước quy định"
+				});                
+				break;
+			default:
+				break;
+		}
+	};
+	$('#tinyMceUploadImageProduct').photoUpload(
+	{
+		prefix: 'quick_upload_',
+		maxNumID: 1,			
+		ajaxFile: Settings.uploadurl,
+		file_types: "jpg,png",
+		callback: callbackUpload,				
+	});
+	$('a.remove-pic').live('click',function(){
+		if($(this).prev().attr('rel') == $('#ingredient_image').val())   
+		{
+			$('#ingredient_image').val('');
+		}
+		$(this).parent().parent().remove();
+	});
+	$('a.active-pic').live('click',function()
+	{
+		$('.pic').removeClass('pic-active');		
+		var main = $(this).attr("rel");
+		$(this).parent().addClass('pic-active');
+		$("#ingredient_image").val(main);
+		$(this).myBoxy (Boxy,{
+			type: 'success',
+			message: 'Bạn đã chọn hình này làm hình của nguyên liệu'			
+		});
+	});
+</script>  <!--End Content-->  
+</div>

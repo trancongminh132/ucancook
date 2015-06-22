@@ -1,0 +1,116 @@
+<?php
+$this->headScript()
+        ->appendFile($this->layout()->_general['server']['path'].'/js/jquery.validate.pack.js')
+        ->appendFile($this->layout()->_general['server']['path'].'/js/tiny_mce/jquery.tinymce.js')
+        ->appendFile($this->layout()->_general['server']['path'].'/js/upload.js');        
+
+$configuration = My_Zend_Globals::getConfiguration();
+$apiUpload = $configuration->api->photo->baseurl;
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Thêm bài viết vào blocks</div>       
+    </div>
+    <div class="clear"></div>   
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post" id="frm">
+                <?php if ($this->message): ?>
+                <div class="<?php echo $this->message['type']; ?>"><p><?php echo $this->message['msg']; ?></p></div>
+                <?php endif; ?>
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tiêu đề tin:</label>
+                        </div>
+                        <input name="title" disabled type="text" value="<?php echo $this->escape($this->article['title']); ?>" class="title_text_input" />                       
+                    </div>                 
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Block:</label>
+                        </div>
+                        <select class="medium_text_input" name="block_name" id="block_name">
+                            <option value="">--- Chọn block ---</option>
+                            <?php foreach(Article::$_BLOCKS as $pageName => $blocks):?>
+                            <optgroup label="<?php echo $pageName?>">
+                            	<?php foreach($blocks as $blockId => $block):?>
+                            	<option width="<?php echo $block['image_width']?>" height="<?php echo $block['image_height']?>" value="<?php echo $blockId?>"<?php echo $this->params['block_name'] == $blockId ? ' selected' : ''?>>-- <?php echo $block['block_name']?></option>
+                            	<?php endforeach; ?>
+                            </optgroup>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                    <div class="listing_input hgauto">
+                    	<div class="post_label_container">
+                            <label class="postLabel">Hình ảnh:</label>                            
+                        </div>
+                        <div id="divUpload"></div>            
+                        <div id="show_picture" style="margin: 10px 130px"></div>        
+                        <input type="hidden" name="picture" id="picture" />
+                    </div>
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Sắp xếp:</label>
+                        </div>
+                        <input name="sort_order" type="text" value="<?php echo intval($this->params['sort_order']); ?>" class="title_text_input" />                       
+                    </div>   
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Status:</label>
+                        </div>
+                        <select class="medium_text_input" name="status" id="status">
+                            <option value="1" <?php echo $this->params['status'] == 1 ? 'selected' : ''?>>Hiện</option>
+                            <option value="0" <?php echo $this->params['status'] == 0 ? 'selected' : ''?>>Ẩn</option>                        
+                        </select>
+                    </div>
+                    <div class="button_listing_input">
+                    	<div class="post_label_container">
+                            <label class="postLabel"></label>                            
+                        </div>
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>            
+                </div>      
+                <input type="hidden" name="article_id" value="<?php echo $this->article['article_id'];?>" />          
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function callbackUpload(resp)
+    {
+    	switch(resp.error_code)
+    	{
+    		case 0:    		
+    			var photoSrc = resp.data.photo_src;	    			
+    			$('#picture').val(photoSrc);
+    			$('#show_picture').html('<img src="'+ photoSrc+ '" width="100"/>');
+    		break;
+    	}
+    }
+
+    function initUpload(width, height)
+	{
+		$('#divUpload').html('');
+	    options = {    	       
+	    		ajaxFile: Settings.uploadurl,
+	            file_types: "jpg,gif,png",
+	            width:width,
+	            height:height,
+	            time: '<?php echo time()?>',
+	            resize: 1,
+	            seckey: '<?php echo My_Zend_Globals::generatePhotoSignKey(time(), 75, 75 , 100*1024)?>',
+	            callback: callbackUpload
+	    };
+	    $('#divUpload').photoUpload(options);
+	}
+
+    $('#block_name').change(function() {
+    	var width = $('option:selected', this).attr('width');
+        var height = $('option:selected', this).attr('height');
+        if(width > 0 && height > 0)
+        {
+        	initUpload(width, height);
+        }
+    });
+</script>

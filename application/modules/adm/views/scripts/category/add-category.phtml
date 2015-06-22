@@ -1,0 +1,91 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Thêm mới danh mục</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên danh mục:</label>
+                        </div>
+                        <input name="category_name" type="text" class="title_text_input" />                      
+                    </div>     
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Loại danh mục:</label>
+                        </div>
+                        <select class="post_select" name="type">
+							<option value="0">Loại danh mục</option>
+							<?php foreach(Category::$_ARRAY_TYPE_CATEGORY as $key => $type){?>
+							<option value="<?php echo $key?>"><?php echo $type?></option>
+							<?php }?>
+						</select>         
+                    </div>	                  
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tình trạng:</label>
+                        </div>
+                        <input type="checkbox" id="product_status" name="status" value="1"> Online 
+                    </div>
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Hiển thị trên menu:</label>
+                        </div>
+                        <input type="checkbox" id="show_menu" name="show_menu" value="1" checked> Hiển thị menu
+                    </div>                   
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Danh mục cha :</label>
+                      	</div>
+                  			<select class="post_select" name="parent_id">
+								<option value="0">[Root]</option>
+								<?php
+									if(!empty($this->arrParent) && !empty($this->arrParent))
+									{
+									    foreach($this->arrParent as $value)
+									    {
+									?>
+									       <option value="<?php echo $value['category_id'];?>"><?php echo $value['category_name'];?></option>
+								<?php }}?>
+							</select>         
+                	</div> 
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Thứ tự :</label>
+                      	</div>
+                  			<select class="post_select" name="ordering">
+								<?php for($i=1;$i<=100;$i++){?>
+								<option value="<?php echo $i?>" ><?php echo $i?></option>
+								<?php }?>
+							</select>         
+                	</div>  
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Page Title:</label>
+                        </div>
+                        <textarea style="width: 500px" id="page_title" name="page_title" class="medium form-control" rows="5"></textarea>
+                    </div>
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Meta Keywords:</label>
+                        </div>
+                        <textarea style="width: 500px" class="form-control medium" rows="3" id="meta_keyword" name="meta_keyword"></textarea>
+                    </div>
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Meta Description:</label>
+                        </div>
+                        <textarea style="width: 500px" class="form-control medium" rows="3" id="meta_description" name="meta_description"></textarea>
+                    </div>
+                    <div class="button_listing_input">
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>

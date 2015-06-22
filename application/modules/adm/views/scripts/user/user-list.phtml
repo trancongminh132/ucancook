@@ -1,0 +1,104 @@
+<?php $params = $this->params;?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý người dùng</div>
+    </div>
+    <form id="frm" name="frm" method="get" action="<?php echo $this->url(array('action' => 'user-list', 'controller' => 'user', 'module' => 'adm'), null, true); ?>">
+        <ul class="filter clearfix">            
+           	<li>
+                <label>Địa chỉ email</label>
+                <input id="email" value="<?php if(isset($this->params['email'])) echo $this->params['email']?>" name="email" class="large" type="text" />
+            </li>  
+            <li>  
+                <label>Tình trạng</label>
+                <select id="category_id_param" name="is_ban" class="cat">
+					<option value="10">Chọn tình trạng</option>
+					<option <?php echo (isset($this->params['is_ban']) && $this->params['is_ban'] == 0)?'selected="selected"':''; ?> value="0">Online</option>
+					<option <?php echo (isset($this->params['is_ban']) && $this->params['is_ban'] == 1)?'selected="selected"':''; ?> value="1">Đã khóa</option>
+                </select>                
+            </li>                              
+            <li class="clear">
+                <input id="submit" name="submit" value="" class="button_search" type="submit" />
+            </li>
+         </ul>
+     </form>
+    <div class="clear"></div>
+   
+    <?php echo $this->paging; ?>
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="8" class="firstRow"></td>
+                   </tr>
+                   <tr>                      
+                       <td style="width: 10px" class="secondRow">ID</td>                       
+                       <td width="20%" class="secondRow">Email</td>
+                       <td width="20%" class="secondRow">Tên người dùng</td>
+                       <td width="20%" class="secondRow">Địa chỉ</td>
+                       <td width="10%" class="secondRow">Tình trạng</td>                                
+                       <td width="10%" class="secondRow">Cập nhật</td>
+                       <td width="19%" class="secondRow">Thao tác</td>
+                  </tr>               
+	                <?php if(!empty($this->listUser)){?>
+					<?php foreach ($this->listUser as $user){
+					?>
+                	<tr>
+	                    <td align="center" class="ctn"><?php echo $user['user_id']?><br /></td>
+	                    <td class="ctn">
+	                    	<?php echo $user['email']?><br />
+	                    </td>	                    
+	                    <td class="ctn">
+	                    	<?php echo $user['display_name']?>
+	                    </td>
+	                    <td class="ctn"><?php echo User::generateUserAddress($user['address'], "", "")?></td>	               
+	                    <td class="ctn"><?php if($user['is_ban'] == 1) echo '<span class="badge bg-red">Đã khóa</span>'; else echo '<span class="badge bg-green">Online</span>';?></td>
+	                    <td class="ctn"><?php echo date('H:i d/m/Y', $user['last_update'])?></td>	                  
+	                    <td class="ctn">	                    	
+	                    	<a href="javascript:void(0)" class="btn btn-warning btn-sm lock-unlock" rel="<?php echo $user['user_id']?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/<?php echo $user['is_ban'] == 0?'b_lock':'b_unlock';?>.jpg" alt="" width="60px" height="20px"/></a>
+							<a href="<?php echo BASE_URL.'/adm/user/edit-user/id/'.$user['user_id']?>" class="b_edit" title="Cập nhật người dùng này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+	                    </td>
+                </tr>  
+                <?php }}else{?>
+                <tr>
+                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td valign="middle" colspan="8" class="firstRow">                  
+                </tr>
+           </tbody>
+       </table>
+    </div>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+$('.lock-unlock').click(function(){
+	var obj = $(this);
+	userId = obj.attr('rel');
+	$.post('<?php echo BASE_URL."/adm/user/lock-unlock"?>', { user_id : userId}, function(data){
+		if(data.rs == 1){
+			type = 'success';	
+			if(data.is_ban == 1){
+				message = 'Khóa tài khoản không thành công';
+			}else{
+				message = 'Mở khóa tài khoản không thành công';
+			}
+	
+		}else{
+			type = 'alert';
+			if(data.isban == 1){
+				message = 'Khóa tài khoản không thành công';
+			}else{
+				message = 'Mở khóa tài khoản không thành công';
+			}
+		}
+		
+		$(this).myBoxy(Boxy, {
+			type : type,
+			message : message,
+			afterHide:function(){location.reload();}			
+		})
+	},'Json')
+});
+</script>

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />	
+ 	<title>Admin Dashboard</title>
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->layout()->_general['server']['path'];?>/images/favicon.ico" />	
+    <?php 
+    echo $this->headLink()    	
+		 ->prependStylesheet($this->layout()->_general['server']['path'].'/css/backend_123mua.1.0.1.css')
+    	 ->appendStylesheet($this->layout()->_general['server']['path'].'/css/boxy.classic.css'); 		     	
+	echo $this->headScript()
+    	->prependFile($this->layout()->_general['server']['path'].'/js/jquery.1.0.1.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.plus.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.boxy.js')    	
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.treeview.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/myboxy.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/upload.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/utility.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.core.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.widget.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.mouse.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.sortable.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.debounce-1.0.4.js')
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery.debounce.js')    
+    	->appendFile($this->layout()->_general['server']['path'].'/js/jquery-ui-1.8.18.custom.min.js')
+        ->appendFile($this->layout()->_general['server']['path'].'/js/global.js')
+		->appendFile($this->layout()->_general['server']['path'].'/js/auto_numberic.js');
+    
+    	?>
+    <script type="text/javascript">
+    	var baseurl = "<?php echo BASE_URL; ?>";		
+    	var imgurl = "<?php echo $this->layout()->_general['server']['path']; ?>";
+    	var flgBool = false;
+    	var timeoutinteraction = 0;
+    	var Settings = {domain:"<?php echo DOMAIN;?>",uploadurl:"<?php echo BASE_URL;?>/adm/index/upload",baseurl: "<?php echo BASE_URL; ?>", imgurl: "<?php echo $this->layout()->_general['static']['path']; ?>/images", cssurl: "<?php echo $this->layout()->_general['static']['path']; ?>/css"};
+    	document.domain="<?php echo DOMAIN;?>";
+    	$(document).ready(function(){    	
+    		$("ul.subnav").parent().append("<span></span>");    	
+    		$("ul.topnav li span").hover(function() {    	
+    			$(this).parent().find("ul.subnav").slideDown('fast').show();    	
+    			$(this).parent().hover(function() {
+    			}, function(){
+    				$(this).parent().find("ul.subnav").slideUp('fast');
+    			});    	
+    			}).hover(function() {
+    				$(this).addClass("subhover");
+    			}, function(){
+    				$(this).removeClass("subhover");
+    		});	
+    	});
+	</script>
+</head>
+<body>
+<div id="wrapper">	
+  <!--Start Header-->
+  <?php    
+       echo $this->render('header.phtml');    
+  ?>
+  <!--End Header-->
+  <!--Start Content-->
+  <?php echo $this->layout()->content; ?>
+  <!--End Content-->  
+</div>
+</body>
+</html>

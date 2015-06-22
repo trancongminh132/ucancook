@@ -1,0 +1,25 @@
+<?php 
+
+	$dir = APPLICATION_PATH.'/configs/';
+	require_once $dir.'controller.php';
+	global $_CONTROLLERS, $_ACTIONS;
+	$controller = $_CONTROLLERS[CURRENT_CONTROLLER]['name'];
+	$description = $_CONTROLLERS[CURRENT_CONTROLLER]['description'];
+	$linkOne = $_CONTROLLERS[CURRENT_CONTROLLER]['link'];
+	
+	if(!empty($_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][CURRENT_ACTION]['parent']))
+	{
+		$action = $_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][$_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][CURRENT_ACTION]['parent']]['name'];
+		$children = $_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][CURRENT_ACTION]['name'];
+		$linkTwo = $_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][$_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][CURRENT_ACTION]['parent']]['link'];
+	}else 
+	{
+		$children = "";
+		$action = $_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][CURRENT_ACTION]['name'];
+		$linkTwo = $_ACTIONS[$_CONTROLLERS[CURRENT_CONTROLLER]['id']][CURRENT_ACTION]['link'];
+	}
+	
+?>
+<section class="content-header">
+	<?php echo My_Zend_Globals::generateBreadCrumbs($controller, $description, $action, $linkOne, $linkTwo, $children);?>
+</section>

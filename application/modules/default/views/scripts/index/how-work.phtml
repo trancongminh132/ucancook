@@ -1,0 +1,243 @@
+<?php 
+	require_once APPLICATION_PATH.'/configs/cities.php';
+	global $_DISTRICTS;
+?>
+<div id="how-it-works">
+	<div class="container container-panels clearfix">
+		<div class="row clearfix">
+			<div class="col-md-12 how-it-works-header nov1">
+				<div class="how-it-works-header-inner">
+					BỮA ĂN NGON, NHANH, ĐỦ CHẤT CHO BẠN VÀ GIA ĐÌNH
+					<div class="sub">
+						Ý TƯỞNG HAY, CHUẨN BỊ SẴN, GIAO TẬN NHÀ, ĐỦ CÔNG THỨC
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row hidden-xs hidden-sm clearfix">
+			<div class="sticky-wrapper" data-spy="affix" data-offset-top="605">
+				<div class="container-panels nov1" id="how-it-works-navbar">
+					<div class="col-md-10 col-md-offset-1 panel">
+						<ul class="how-it-works-nav">
+							<li><a class="active" href="#ordering">Đặt hàng</a></li>
+							<li><a href="#delivery-zones">Khu vực giao hàng</a></li>
+							<li><a href="#the-box">Quy cách Đóng gói</a></li>
+							<li><a href="#quality-standards">Chất lượng sản phẩm</a></li>
+							<li><a href="#pricing">Đăng ký định kỳ</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<section class="section-nav" id="ordering">
+		<div class="row panel panel-gray clearfix">
+			<div class="col-md-10 col-md-offset-1">
+				<h2 class="header-large-thin text-center">Đặt hàng từ Ucancook</h2>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="how-it-works-image how-it-works-image-browse">
+							Truy cập Ucancook
+						</div>
+						<h4>Chọn thực đơn</h4>
+						<p>Thực đơn của chúng tôi được cập nhật mỗi ngày. Bao gồm thịt, cá và cả các món chay hấp dẫn.</p>
+					</div>
+					<div class="col-md-4">
+						<div class="how-it-works-image how-it-works-image-delivery">
+							Để Ucancook giao hàng
+						</div>
+						<h4>Chọn ngày giao hàng</h4>
+						<p>Bạn chỉ việc chọn chính xác khu vực mình sinh sống bao gồm thông tin Quận, Phường. Trong thời gian này chúng tôi chỉ phục vụ tại khu vực TP.HCM.</p>
+					</div>
+					<div class="col-md-4">
+						<div class="how-it-works-image how-it-works-image-cook">
+							Chế biến theo công thức từ Ucancook
+						</div>
+						<h4>Nhận hàng và tự chế biến</h4>
+						<p>Ucancook sẽ giao toàn bộ nguyên liệu cho món ăn bạn đã chọn trong thùng được giữ lạnh cùng công thức nấu ăn. Bạn thoải mái tự chế biến và thưởng thức món ăn do chính tay mình nấu.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+
+		<section class="section-nav" id="delivery-zones">
+		<div class="row panel panel-dark-gray clearfix">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row clearfix">
+					<div class="col-md-6">
+						Hiện nay chúng tôi phục vụ gần như toàn bộ khu vực nội thành của thành phố Hồ Chí Minh. 
+Vui lòng chọn Quận/Huyện chính xác để nắm thông tin dịch vụ của chúng tôi!
+					</div>
+					<div class="col-md-5 col-md-offset-1">
+						<form class="simple-form fr">
+							<div class="input">
+								<select id="check_district" name="check_district">
+									<?php foreach($_DISTRICTS[29] as $key => $district){?>
+									<option value="<?php echo $key;?>"><?php echo $district['district_name']?></option>
+									<?php }?>
+								</select>
+							</div>
+							<a href="javascript:void(0)" class="button btn_check_district">Kiểm tra</a>
+							<div class="zip-code-checker-status how-it-works-zip-code-checker-status" style="display: none;padding-top: 10px;margin-bottom: -30px;color: #fff;font-size: 16px;line-height: 1.5em;">Tuyệt vời, chúng tôi có giao hàng đến đây.</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+
+		<section class="section-nav" id="the-box">
+		<div class="row panel panel-gray clearfix">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row clearfix">
+					<div class="col-md-12">
+						<h3 class="header-orange-small text-center">Có những gì trong thùng hàng?</h3>
+						<h2 class="header-large-thin text-center">Đơn giản hóa đơn hàng</h2>
+						<p class="how-it-works-lead text-center">Toàn bộ nguyên liệu nấu ăn được chứa trong thùng carton cứng hoặc thùng xốp có đá khô để đảm bảo độ lạnh cần thiết. Toàn bộ nguyên liệu này đều được cung cấp bởi các nhà cung cấp lớn có uy tín. Đảm bảo vệ sinh an toàn thực phẩm.</p>
+					</div>
+				</div>
+				<div class="how-it-works-box-image clearfix">
+					<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_01.jpg" alt="About-box@2x">
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6">
+						<h3>Chuẩn bị cho bữa tối</h3>
+						<p>Toàn bộ thực phẩm được chúng tôi giao cho bạn trong thùng giữ lạnh tiêu chuẩn. Bạn nên đưa thực phẩm này vào tủ lạnh vào buổi tối để bảo quản và đảm bảo mọi thứ sẽ tươi ngon trong vòng từ 4-5 ngày sau đó!</p>
+					</div>
+					<div class="col-md-6">
+						<h3>Tiết kiệm thời gian và công sức</h3>
+						<p>Chúng tôi đã dành nhiều thời gian cho việc nghiên cứu các món ăn ngon với đầy đủ lượng calories cần thiết cho bạn và gia đình. Các món ăn luôn được điều chỉnh khác nhau trong tuần để bạn có thể thoải mái lựa chọn và không mất thời gian để đi chợ. Bạn hãy tập trung vào công việc của mình. Chúng tôi sẽ hỗ trợ bạn việc lên thực đơn và chọn lựa những nguồn thực phẩm tốt nhất.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+
+		<section class="section-nav" id="quality-standards">
+		<div class="row panel panel-dark-gray quality-standards clearfix">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="food-with-thought-icon">
+					<img src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_02.png" alt="Fwt@2x">
+					<div class="rule-behind"></div>
+				</div>
+				<div class="row ingredient-standards clearfix">
+					<div class="col-md-6">
+						<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_03.jpg" alt="Meat@2x">
+					</div>
+					<div class="col-md-6">
+						<div class="icon">
+							<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_04.png" alt="Cow-icon@2x">
+						</div>
+						<div class="rule-under-icon"></div>
+						<h4>Không dùng chất bảo quản và hormon tăng trưởng</h4>
+						<p>Chúng tôi cam kết chất lượng về nguồn thực phẩm. Đảm bảo không dùng thuốc kháng sinh hoặc hóc môn tăng trưởng gây hại cho sức khỏe.</p>
+					</div>
+				</div>
+				<div class="row ingredient-standards clearfix">
+					<div class="col-md-6">
+						<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_05.jpg" alt="Fish@2x">
+					</div>
+					<div class="col-md-6">
+						<div class="icon">
+							<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_06.jpg" alt="Fish-icon@2x">
+						</div>
+						<div class="rule-under-icon"></div>
+						<h4>THU MUA HẢI SẢN TRONG NƯỚC</h4>
+						<p>Hải sản mà chúng tôi cung cấp từ nguồn tin cậy. Đảm bảo chất lượng về độ lạnh trong suốt quá trình vận chuyển và đóng gói. Đảm bảo hàng luôn tươi ngon.</p>
+					</div>
+				</div>
+
+				<div class="row ingredient-standards clearfix">
+					<div class="col-md-6">
+						<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_07.jpg" alt="Produce@2x">
+					</div>
+					<div class="col-md-6">
+						<div class="icon">
+							<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/how_08.png" alt="Produce-icon@2x">
+						</div>
+						<div class="rule-under-icon"></div>
+						<h4>RAU CỦ QUẢ TƯƠI, THEO MÙA</h4>
+						<p>Các thực đơn sẽ được thiết kế dựa trên loại rau củ quả tươi theo từng mùa trong năm được chọn lựa từ những nhà cung cấp có uy tín trong nước.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+
+		<section class="section-nav" id="pricing">
+		<div class="row panel panel-pricing clearfix">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row clearfix">
+					<div class="col-md-10 col-md-offset-1">
+						<h2 class="header-large-thin text-center">ĐĂNG KÝ TRỞ THÀNH KHÁCH HÀNG THƯỜNG XUYÊN</h2>
+						<p class="text-center">Bạn có thể đăng ký để trở thành khách hàng thường xuyên của UCANCOOK.vn và nhận mức chiết khấu tốt nhất cho sản phẩm. Đồng thời không phải suy nghĩ nhiều về món ăn và công thức nấu nướng mỗi ngày.</p>
+					</div>
+				</div>
+				<div class="row pricing-benefits">
+					<div class="col-md-4 pricing-benefit">
+						<h3 class="pricing-benefit-header"><i class="icon-check-orange"></i>Đặc biệt tiết kiệm</h3>
+						Bạn được hưởng  mức chiết khấu đến 20% nếu bạn đăng ký chương trình khách hàng thường xuyên của Ucancook.vn.
+					</div>
+					<div class="col-md-4 pricing-benefit">
+						<h3 class="pricing-benefit-header"><i class="icon-check-orange"></i>Giao hàng tự động</h3>
+						Bạn sẽ định kỳ nhận được thùng hàng chứa đủ các nguyên liệu cần thiết cho cả một tuần dựa trên những món ăn mà bạn đã chọn. Trừ phi bạn bỏ qua 1 tuần nhất định.
+					</div>
+					<div class="col-md-4 pricing-benefit">
+						<h3 class="pricing-benefit-header"><i class="icon-check-orange"></i>Không bị giới hạn giá trị mua hàng tối thiểu trong tháng</h3>
+						BẠn có thể hoàn toàn tùy chọn danh mục nguyên liệu được chọn cho mỗi tuần. Có thể bỏ qua nếu có những tuần bạn không muốn đặt hàng!
+						<div>
+							<i class="icon-warning-small"></i>
+							<span class="super">Tuy nhiên:</span> cho 1 tuần đặt hàng bạn cần có đơn hàng tối thiểu dành cho 4 người ăn.
+						</div>
+					</div>
+					<div class="col-md-12 text-center cta-buttons">
+						<a class="button button-orange" href="/thuc-don">Xem thực đơn</a>
+						<a class="button button-secondary" href="/register.html">Đăng ký</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>		
+	</div>
+</div>
+<script>
+	var sections = $('.section-nav')
+	  , nav = $('#how-it-works-navbar')
+	  , nav_height = nav.outerHeight();
+
+	$(window).on('scroll', function () {
+	  var cur_pos = $(this).scrollTop();
+
+	  sections.each(function() {
+		var top = $(this).offset().top - nav_height,
+			bottom = top + $(this).outerHeight();
+
+		if (cur_pos >= top && cur_pos <= bottom) {
+		  nav.find('a').removeClass('active');
+		  sections.removeClass('active');
+
+		  $(this).addClass('active');
+		  nav.find('a[href="#'+$(this).attr('id')+'"]').addClass('active');
+		}
+	  });
+	});
+
+	nav.find('a').on('click', function () {
+	  var $el = $(this)
+		, id = $el.attr('href');
+
+	  $('html, body').animate({
+		scrollTop: $(id).offset().top - nav_height + 5
+	  }, 500);
+
+	  return false;
+	});
+	$('.btn_check_district').click(function(){
+		var district = $('#check_district').val();
+		if(district == '')
+			return;
+		$('.how-it-works-zip-code-checker-status').show();
+	});
+</script>

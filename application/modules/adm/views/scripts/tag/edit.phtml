@@ -1,0 +1,28 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Sửa tên "<?php echo $this->tag['tag_name']?>"</div>       
+    </div>
+    <div class="clear"></div>   
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <?php if ($this->message): ?>
+                <div class="<?php echo $this->message['type']; ?>"><p><?php echo $this->message['msg']; ?></p></div>
+                <?php endif; ?>
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên:</label>
+                        </div>
+                        <input name="tag_name" type="text" value="<?php echo $this->escape($this->tag['tag_name']); ?>" class="title_text_input" />                       
+                    </div>                                                         
+                </div>            
+                <div class="line clear"></div>           
+                <div class="button_listing_input">
+                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

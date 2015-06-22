@@ -1,0 +1,519 @@
+<?php 
+	require_once APPLICATION_PATH.'/configs/cities.php';
+	global $_DISTRICTS;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="<?php echo $this->layout()->_general['static']['path'];?>/images/favicon_u.ico">
+	<title>Ucancook.vn - Chuyên cung cấp thực phẩm chất lượng trên thị trường</title>
+	<link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700,800">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/base.css" rel="stylesheet">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/layout.css" rel="stylesheet">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/bootstrap.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+	 	var Settings = {domain: "<?php echo DOMAIN;?>", baseurl: "<?php echo BASE_URL?>"};
+	 	var Account = {	UID: "<?php echo LOGIN_UID ?>"};
+	</script>
+    <script src="<?php echo $this->layout()->_general['static']['path'];?>/js/jquery.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/bootstrap.min.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/global.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/jquery.cookie.js"></script>
+	<style>
+		.field-with-errors input{border: 1px solid #ff1f1f;};
+	</style>
+</head>
+<body>
+	<div class="checkout-container clearfix">
+        <header class="header-checkout">
+            <div class="logo header-checkout-logo"></div>
+            <span class="header-checkout-lead">Thanh toán đơn hàng</span>
+            <div class="pull-right checkout-help-container">
+                <div class="checkout-help-inner">
+                    <div class="checkout-help">Trợ giúp?</div>
+                    <div class="checkout-help-options">
+                        <span class="checkout-help-option hide">
+                            <a class="checkout-help-link"><i class="icon-chat"></i>Trò chuyện trực tuyến</a>
+                        </span>
+                        <span class="checkout-help-option">
+                            <a class="checkout-help-link hidden-xs hidden-sm"><i class="icon-mail"></i>Email</a>
+                        </span>
+                        <span class="checkout-help-option"><a href="tel:<?php echo PHONE_NUMBER?>" class="checkout-help-link"><i class="icon-phone"></i><?php echo PHONE_NUMBER?></a></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <ol class="checkout-steps">
+            <li class="checkout-step step-active">
+                <h3 class="checkout-step-header">
+                    <span class="checkout-step-number">Bước 1</span>Địa chỉ giao hàng
+                </h3>
+                <div class="checkout-step-content">
+                	<?php if(!isset($_GET['act']) || ($_GET['act'] == 'shipping')){
+                			$dataAddress = $this->dataAddress;
+                	?>
+                    <form class="simple-form">
+                        <div class="checkout-section checkout-section-white clearfix">
+                            <label>Nhập thông tin giao hàng</label>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <input type="text" size="" placeholder="Họ tên" name="full_name" id="full_name" value="<?php if(isset($dataAddress['order_name'])) echo $dataAddress['order_name'];?>">
+                                </div>                             
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <input type="text" size="" placeholder="Địa chỉ email" name="email_order" id="email_order" value="<?php if(isset($dataAddress['order_email'])) echo $dataAddress['order_email'];?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <input type="tel" size="" placeholder="Số điện thoại" name="order_phone" id="order_phone" value="<?php if(isset($dataAddress['order_phone'])) echo $dataAddress['order_phone'];?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <input type="text" size="" placeholder="Địa chỉ: Số nhà, Phường, Xã" name="address" id="address" value="<?php if(isset($dataAddress['order_address'])) echo $dataAddress['order_address'];?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <select id="city" name="city" style="width:100%">
+                                    	<option value="29">TP. Hồ Chí Minh</option>									
+									</select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <select id="check_district" name="check_district" style="margin-top: 10px;width:100%">
+										<option value="">Chọn quận/huyện</option>
+										<?php foreach($_DISTRICTS[29] as $key => $district){?>
+										<option value="<?php echo $key;?>" <?php if(isset($dataAddress['order_district']) && $dataAddress['order_district'] == $key) echo 'selected';?>><?php echo $district['district_name']?></option>
+										<?php }?>
+									</select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout-section checkout-section-white clearfix">
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <label style="cursor:pointer"><input type="checkbox" value="1" name="address_business" <?php if(isset($dataAddress['company_name']) && !empty($dataAddress['company_name'])) echo 'checked';?> id="address_business">Đây là địa chỉ làm việc</label>
+                                </div>
+                            </div>
+                            <div id="is-business-address-toggle" class="row" style="<?php if(isset($dataAddress['company_name']) && !empty($dataAddress['company_name'])) echo 'display:block'; else echo 'display:none'?>">
+                                <div class="input col-md-12">
+                                    <input type="text" placeholder="Tên công ty" name="company_name" id="company_name" value="<?php if(isset($dataAddress['company_name']) && !empty($dataAddress['company_name'])) echo $dataAddress['company_name'];?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout-section checkout-section-white clearfix">
+                            <div class="checkout-delivery-instructions">
+                                <div class="row">
+                                    <div class="col-md-12" id="note_order_label" style="cursor:pointer">
+                                        <i class="icon-add-green add-delivery-instructions-icon"></i>
+                                        <label style="display:inline;cursor:pointer">Ghi chú giao hàng</label>
+                                    </div>
+                                </div>
+                                <div class="input text optional user_address_delivery_instructions" style="<?php if(isset($dataAddress['order_note']) && !empty($dataAddress['order_note'])) echo 'display:block'; else echo 'display:none'?>">
+                                	<textarea class="text optional span12" id="note_order" maxlength="100" name="note_order" placeholder="Ghi chú đơn hàng" rows="3" cols="35"><?php if(isset($dataAddress['order_note']) && !empty($dataAddress['order_note'])) echo $dataAddress['order_note'];?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout-section block-error" style="color:red;padding-bottom:9px">
+						    <ul id="checkout-shipping-address-errors" style="display: none;">
+						    	<li id="error_full_name">Bạn chưa nhập họ tên</li>
+						    	<li id="error_email_order">Bạn chưa nhập địa chỉ email</li>
+						    	<li id="error_order_phone">Bạn chưa nhập số điện thoại</li>
+						    	<li id="error_address">Bạn chưa nhập địa chỉ</li>
+						    	<li id="error_check_district">Bạn chưa chọn quận/huyện</li>
+						    </ul>
+						</div>
+                        <div class="checkout-section clearfix">
+							<input type="button" value="Tiếp tục" style="width:100%" class="button submit_address_order">
+                        </div>
+                    </form>
+                    <?php }?>
+                    <?php if(isset($_COOKIE['ucancook_address_order']) && (isset($_GET['act']) && ($_GET['act'] == 'review') || $_GET['act'] == 'billing')){
+                    	$dataAddress = Zend_Json::decode($_COOKIE['ucancook_address_order']);
+                    ?>
+                    <div class="checkout-shipping-read-only">
+	                    <div class="checkout-read-only-content"> 
+						    <div class="checkout-read-only-info checkout-section">
+						    	<div class="checkout-read-only-info-inner checkout-read-only-info-icon-offset">					        
+						        	<div class="checkout-read-only-group">
+						           		<i class="icon-geo"></i>
+						            	<div class="checkout-read-only-title"><strong><?php echo $dataAddress['order_name']?></strong></div>
+						            	<div class="address_line_1"><?php echo User::generateUserAddress($dataAddress['order_address'], $dataAddress['order_district'], $dataAddress['order_city']); ?></div>					            
+						              	<div class="address_line_2"><?php echo $dataAddress['order_email']?></div>				
+						              	<?php if(!empty($dataAddress['company_name'])){?>
+						              	<div>Tên công ty: <?php echo $dataAddress['company_name'];?></div>	  
+						              	<?php }?>          				            
+						          	</div>					
+						          	<div class="checkout-read-only-group">
+						              	<i class="icon-phone-small"></i>
+						              	<strong><?php echo $dataAddress['order_phone']?></strong>
+						          	</div>					
+						          	<div class="checkout-read-only-group">				            
+						                <i class="icon-shipping"></i>
+						                <div class="checkout-read-only-title">
+						                	<strong>Giao hàng vào <?php echo My_Zend_Globals::getDayNameVietNamese($_COOKIE['delivery_date']);?>, ngày <?php echo date('d-m-Y', $_COOKIE['delivery_date']);?></strong>
+						                	<?php if(!empty($dataAddress['order_note'])){?>
+						                	Ghi chú đơn hàng:<br/>
+						                	<?php echo $dataAddress['order_note'];?>
+						                	<?php }?>
+						                	</div>					            					            
+						          	</div>					        
+						      	</div>
+						  	</div>					  									  
+						    <div class="checkout-read-only-info checkout-section">
+						    	<div class="checkout-read-only-info-inner checkout-read-only-info-icon-offset">
+						        	<i class="icon-gift"></i>
+						        	Phiếu quà tặng sẽ được gửi qua Email.
+						      	</div>
+						    </div>					  										  
+						    <div class="checkout-section">
+						      <a class="checkout-read-only-change edit_shipping_address" style="color: #80a827;text-decoration: none;border-bottom: 1px solid;" href="javascript:void(0);">Cập nhật địa chỉ giao hàng</a>
+						    </div>					  
+						</div>
+					</div>
+					<?php }?>
+                </div>
+            </li>   
+            <li class="checkout-step <?php if(isset($_GET['act']) && ($_GET['act'] == 'review' || $_GET['act'] == 'billing')) echo 'step-active'; ?>">
+                <h3 class="checkout-step-header"><span class="checkout-step-number">Bước 2</span>Kiểm tra đơn hàng</h3>
+                <div class="checkout-step-content">
+                    <div class="checkout-section checkout-section-white">
+                        <label for="Review_your_order">Kiểm tra thông tin đơn hàng</label>
+                        <?php $totalPriceOrder = 0;?>
+                        <ul class="cart-items checkout-review-items">
+                        	<?php if(!empty($this->arrayReturn[TYPE_DISH])){?>
+                        	<?php foreach($this->arrayReturn[TYPE_DISH] as $item){?>
+                            <li class="cart-item">
+                                <div class="cart-item-details">
+                                    <span class="cart-item-price "><?php echo My_Zend_Globals::numberFormat($item['price']*$item['quantity'])?></span>
+                                    <div class="cart-item-img ">
+                                        <img class="img-responsive" alt="<?php echo $item['name']?>" src="<?php echo $item['image'];?>">
+                                    </div>
+                                    <span class="cart-item-title"><?php echo My_Zend_Globals::cutString($item['name'], 0, 20);?></span>
+                                    <span class="cart-item-quantity">SL: <?php echo $item['quantity']?> phần</span>
+                                </div>
+                            </li>
+                            <?php $totalPriceOrder+= ($item['price']*$item['quantity']);?>
+                            <?php }}?>
+                            <?php if(!empty($this->arrayReturn[TYPE_INGREDIENT])){?>
+                            <?php foreach($this->arrayReturn[TYPE_INGREDIENT] as $item){?>
+                            <li class="cart-item">
+                                <div class="cart-item-details">
+                                    <span class="cart-item-price"><?php echo My_Zend_Globals::numberFormat($item['price']*$item['quantity'])?></span>
+                                    <div class="cart-item-img ">
+                                        <img class="img-responsive" alt="<?php echo $item['name']?>" src="<?php echo $item['image'];?>">
+                                    </div>
+                                    <span class="cart-item-title"><?php echo My_Zend_Globals::cutString($item['name'], 0, 20);?></span>
+                                    <span class="cart-item-quantity">SL: <?php echo $item['quantity']?> phần</span>
+                                </div>
+                            </li>
+                            <?php $totalPriceOrder+= ($item['price']*$item['quantity']);?>
+                            <?php }}?>
+                            <?php if(!empty($this->arrayReturn[TYPE_GIFT])){?>
+                            <?php foreach($this->arrayReturn[TYPE_GIFT] as $item){?>
+                            <li class="cart-item">
+                                <div class="cart-item-details">
+                                    <span class="cart-item-price"><?php echo My_Zend_Globals::numberFormat($item['price']*$item['quantity'])?></span>
+                                    <i class="icon-giftcard cart-item-img"></i>
+                                    <span class="cart-item-title"><?php echo My_Zend_Globals::cutString($item['name'], 0, 20);?></span>
+                                    <span class="cart-item-quantity">SL: <?php echo $item['quantity']?> phần</span>
+                                </div>
+                            </li>
+                            <?php $totalPriceOrder+= ($item['price']*$item['quantity']);?>
+                            <?php }}?>
+                        </ul>
+
+                        <div class="checkout-review-subtotal">
+                            <div class="checkout-review-item clearfix">
+                                <span class="pull-left">Tổng cộng</span>
+                                <span id="subtotal-amount" class="pull-right"><?php echo My_Zend_Globals::numberFormat($totalPriceOrder)?> VNĐ</span>
+                            </div>
+                            <div class="checkout-review-item clearfix">
+                                <span class="pull-left">Phí giao hàng</span>
+                                <span id="shipping-amount" class="pull-right"><?php echo My_Zend_Globals::numberFormat($this->shippingCost)?> VNĐ</span>
+                            </div>
+                        </div>
+                        <div class="checkout-review-total checkout-review-item clearfix">
+                            <span class="pull-left">Tổng cộng</span>
+                            <span id="total-amount" class="pull-right"><?php echo My_Zend_Globals::numberFormat($this->shippingCost + $totalPriceOrder)?> VNĐ</span>
+                        </div>
+                    </div>
+                    <form class="simple-form form-checkout">
+                        <?php if(isset($_GET['act']) && ($_GET['act'] != 'billing')){?>
+                        <div class="checkout-section clearfix">
+							<input type="button" value="Tiếp tục" name="" class="button checkout-submit checkout-submit-review">
+                        </div>
+                        <?php }?>
+                    </form>
+                </div>
+            </li>
+            <li class="checkout-step <?php if(isset($_GET['act']) && ($_GET['act'] == 'billing')) echo 'step-active'; ?>">
+                <h3 class="checkout-step-header">
+                    <span class="checkout-step-number">Bước 3</span>Thanh toán
+                </h3>
+                <div class="checkout-step-content">
+                    <div class="checkout-section checkout-secure">
+                        <span class="pull-right"><i class="icon-secure"></i> Bảo mật</span>
+                    </div>
+                    <form class="simple-form" id="form-checkout">
+                        <div class="checkout-section checkout-section-white clearfix">
+                            <label>Chọn hình thức thanh toán</label>
+                            <div class="row">
+                            	<div class="input input-radio col-md-12">
+                                    <input style="cursor:pointer" id="n1" type="radio" name="payment_method" value="1"><label style="cursor:pointer" class="pp-non pp-01" for="n1">Thanh toán qua ngân lượng</label>
+                                </div>
+                                <div class="input input-radio col-md-12">
+                                    <input style="cursor:pointer" id="n2" type="radio" name="payment_method" value="2"><label style="cursor:pointer" class="pp-non pp-02" for="n2">Thanh toán qua bảo kim</label>
+                                </div>                              
+                                <div class="input input-radio col-md-12">
+                                    <input style="top:3px;cursor:pointer" id="n4" type="radio" name="payment_method" value="4"><label style="display: inline;font-weight:bold; cursor:pointer" for="n4">Thanh toán qua khi nhận hàng</label>
+                                </div>
+                            </div>
+                        </div>
+                        <?php $addressPayment = array();
+                        	if(isset($_COOKIE['ucancook_payment_address']))
+                        		$addressPayment = Zend_Json::decode($_COOKIE['ucancook_payment_address']);
+                        ?>
+                        <div class="checkout-section clearfix">
+							<div class="input">
+								<label class="checkbox"><input type="checkbox" value="1" id="same_address" name="" <?php if(!isset($addressPayment['payment_district'])) echo 'checked';?>>Địa chỉ thanh toán giống với Địa chỉ giao hàng</label>
+							</div>
+                        </div>                  
+                        <div class="checkout-section checkout-section-white clearfix address_billing" <?php if(!isset($addressPayment['payment_district'])) echo 'style="display:none"';?>>
+							<label>Thanh toán đến</label>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <input type="text" size="" placeholder="Địa chỉ" name="billing_address" id="payment_address" value="<?php if(isset($addressPayment['payment_address'])) echo $addressPayment['payment_address'];?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <select id="payment_city" name="payment_city" style="width:100%">
+                                    	<option value="29">TP. Hồ Chí Minh</option>									
+									</select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input col-md-12">
+                                    <select id="payment_district" name="payment_district" style="margin-top: 10px;width:100%">
+										<option value="">Chọn quận/huyện</option>
+										<?php foreach($_DISTRICTS[29] as $key => $district){?>
+										<option value="<?php echo $key;?>" <?php if(isset($addressPayment['payment_district']) && $addressPayment['payment_district'] == $key) echo 'selected';?>><?php echo $district['district_name']?></option>
+										<?php }?>
+									</select>
+                                </div>
+                            </div>
+                        </div>                      
+	                    <div class="checkout-section checkout-section-white">
+	                        <div class="input boolean optional billing_terms">
+	                    		<label class="checkbox">
+	                            	<input type="checkbox" id="accept-term" value="1" placeholder="Terms" name="" checked="checked">Tôi chấp nhận <a target="_blank" href="<?php echo BASE_URL?>/thoa-thuan-su-dung.html"><strong>Thỏa thuận sử dụng</strong></a> và tôi đã đọc <a target="_blank" href="<?php echo BASE_URL?>/chinh-sach-quyen-rieng-tu.html"><strong>Chính sách quyền riêng tư.</strong></a>
+	                            </label>
+	                        </div>
+	                    </div>
+                        <div class="checkout-section clearfix">
+							<input type="button" value="Thanh toán" name="" class="button checkout-submit" id="checkout_payment_cart">
+							<div id="label-error" style="display:none;color:red;padding-top:10px;margin-left:auto;margin-right:auto">
+	                        	Bạn chưa chọn hình thức thanh toán
+	                        </div>
+                        </div>                     
+                    </form>
+                    <div class="checkout-billing-read-only"></div>
+                </div>
+<!--                <span class="checkout-click-block"></span>-->
+            </li>
+        </ol>
+    </div>
+</body>
+<script>
+	$('#address_business').click(function(){
+		$('#is-business-address-toggle').toggle();
+	});
+	$('#note_order_label').click(function(){
+		$('.user_address_delivery_instructions').toggle();
+	});
+	$('.submit_address_order').click(function()
+	{
+		$('.col-md-12').removeClass('field-with-errors');
+		$('.block-error').hide();
+		$("#error_full_name").hide();
+		$("#error_email_order").hide();
+		$("#error_order_phone").hide();
+		$("#error_address").hide();
+		$("#error_check_district").hide();
+		$("#check_district").css('border', '1px solid #cfcfcf');
+		 
+		$(this).val('Đang gửi');
+		$(this).css('opacity', 0.4);
+		$(this).css('cursor', 'auto');
+		var name = $('#full_name').val();
+		var email_order = $('#email_order').val();
+		var phone = $('#order_phone').val();
+		var order_city = $("#city").val();
+		var order_district = $("#check_district").val();
+		var address = $("#address").val();			
+		var note = $('#note_order').val();			
+		var company_name = $("#company_name").val();
+
+		var error = 0;
+		
+		if (name == '') {
+            $("#full_name").parent().addClass('field-with-errors');
+            $("#error_full_name").show();
+            error = 1;
+		}
+		
+		if (email_order == '') {
+            $("#email_order").parent().addClass('field-with-errors');
+            $("#error_email_order").show();
+            error = 1;
+		}
+
+		if (!common.validateEmail(email_order)) {
+            $("#email_order").parent().addClass('field-with-errors');
+            $("#error_email_order").show();
+            error = 1;
+		}
+		
+		if (phone == '') {
+            $("#order_phone").parent().addClass('field-with-errors');
+            $("#error_order_phone").show();
+            error = 1;
+		}
+		if (address == '') {
+            $("#address").parent().addClass('field-with-errors');
+            $("#error_address").show();
+            error = 1;
+		}
+		if (order_district == '') {
+            $("#check_district").css('border', '1px solid #ff1f1f');
+            $("#error_check_district").show();
+            error = 1;
+		}
+		
+		if(error == 0)
+		{
+			$.post(Settings.baseurl + "/ajax/insert-order-address",{
+				email_order:email_order,
+				full_name: name, 
+				order_phone: phone, 
+				order_note: note,  
+				order_address: address, 			
+				order_district: order_district, 
+				order_city: order_city, 
+				company_name:company_name
+			},function(data)
+			{
+				if(data.rs == 1)
+				{	
+					$(this).val('Tiếp tục');
+					$(this).css('opacity', 1);
+					window.location = Settings.baseurl+'/checkout.html?act=review'
+				}else{
+					$(this).val('Tiếp tục');
+					$(this).css('opacity', 1);
+					$(this).css('cursor', 'pointer');
+					alert('Thao tác thất bại. Bạn vui lòng kiểm tra lại thông tin đặt mua!');
+					common.finish();
+				}
+			}, 'Json');
+		}else
+		{
+			$('.block-error').show();
+			$('.block-error ul').show();
+			$(this).val('Tiếp tục');
+			$(this).css('opacity', 1);
+			$(this).css('cursor', 'pointer');
+			return;
+		}			
+	});
+	$('.edit_shipping_address').click(function(){
+		window.location = Settings.baseurl+'/checkout.html?act=shipping'
+	});
+	$('.checkout-submit-review').click(function(){
+		window.location = Settings.baseurl+'/checkout.html?act=billing';
+	});
+	$('#same_address').click(function()
+	{
+		var checked = $(this).is(':checked');
+		if(!checked)
+			cart.sameAddress = false;
+		$('.address_billing').toggle();
+	});
+
+	$('#checkout_payment_cart').click(function()
+	{
+		var payment_city = $("#payment_city").val();
+		var payment_district = $("#payment_district").val();
+		var payment_address = $("#payment_address").val();			
+		var typePayment = $("#form-checkout input[type='radio']:checked").val();
+		$('#label-error').hide();
+		
+		if(typeof typePayment == "undefined"){
+			$('#label-error').show().html('Bạn chưa chọn hình thức thanh toán.');
+			return false;
+		}
+
+		var acceptTerm = $('#accept-term').prop('checked');
+		if(!acceptTerm)
+		{
+			$('#label-error').show().html('Bạn chưa chấp nhận Thỏa thuận sử dụng và Chính sách bảo mật.');
+			return false;
+		}
+		
+		$(this).val('Đang xử lý');
+		$(this).css('opacity', 0.4);
+		$(this).css('cursor', 'auto');
+		common.progress();
+		
+		$.post(Settings.baseurl + "/order/insert-order",{
+			payment_address: payment_address, 			
+			payment_district: payment_district, 
+			payment_city: payment_city,
+			type_payment:typePayment
+		},function(data)
+		{
+			if(data.rs == 1)
+			{	
+				if(typePayment != 4)
+				{
+					$.ajax({
+						type: 'POST',
+						url: Settings.baseurl + '/ajax/generateurlcheckout',
+						data: {type_payment:typePayment, order_id:data.order_id},
+						dataType:'json',
+						success: function(data)
+						{						
+							var url = data.url;
+							window.location = url;
+						}
+					});
+				}else{
+					window.location = Settings.baseurl+'/order/success?order_id='+data.order_id;
+				}
+			}else{
+				$(this).val('Thanh toán');
+				$(this).css('opacity', 1);
+				$(this).css('cursor', 'pointer');
+				alert('Thao tác thất bại. Bạn vui lòng kiểm tra lại thông tin đặt mua!');
+				common.finish();
+			}
+		}, 'Json');
+		
+	});
+</script>
+</html>

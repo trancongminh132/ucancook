@@ -1,0 +1,53 @@
+<div id="main-content">
+	<h1 class="page-title">Tất cả bài viết với từ khóa: "<?php echo $this->keyword?>"</h1>
+	<div class="breadcrumbs-wrapper clearfix">
+		<ul class="breadcrumbs">
+			<li><span><a href="/blog">Trang chủ</a></span></li>
+			<li <?php if($this->page == 1 || empty($this->articles)){ echo 'class="lastcrumb"';}?>><span class="current">Tất cả bài viết với từ khóa: "<?php echo $this->keyword?>"</span></li>
+			<?php if($this->page > 1){?>
+			<li class="lastcrumb"><span class="current">Trang <?php echo $this->page?></span></li>
+			<?php }?>
+		</ul>
+	</div>
+	<div class="page-content">
+		<ul class="article-category-col-1 clearfix">
+			<?php if(!empty($this->articles)){?>
+			<?php foreach($this->articles as $article){?>
+			<li class="clearfix">
+				<div class="article-image">
+					<a title="<?php echo $article['title']?>" href="<?php echo Article::articleUrl($article);?>"><img alt="<?php echo $article['title']?>" style="width:315px;height:209px" class="img-responsive" alt="" src="<?php echo $article['picture']?>"></a>
+				</div>
+				<div class="article-content">
+					<h3>
+						<a title="<?php echo $article['title']?>" href="<?php echo Article::articleUrl($article);?>"><?php echo $article['title']?></a>
+						<span class="article-meta clearfix">
+							<span class="article-date">Ngày <?php echo date('j', $article['created_date'])?>, Tháng <?php echo date('n', $article['created_date'])?> - <?php echo date('Y', $article['created_date'])?></span>
+						</span>
+					</h3>
+					<p><?php echo $article['description']?></p>
+				</div>
+			</li>
+			<?php }}else{?>
+			<li class="clearfix">
+				Hiện không có bài viết nào
+			</li>
+			<?php }?>
+		</ul>
+		<div class="clear"></div>
+		<?php if($this->totalPage > 1){?>
+		<div class="pagination-wrapper">
+			<?php $nextPage = $this->page + 1;
+				  $prevPage = $this->page - 1;
+			?>
+			<p class="clearfix">
+				<?php if($this->totalPage > $this->page){?>
+				<span class="fl"><a href="<?php echo $this->canonicalUrl.'&page='.$nextPage;?>">← Bài viết cũ hơn</a></span>
+				<?php }?>
+				<?php if($this->page > 1){?>
+				<span class="fr"><a href="<?php echo $this->canonicalUrl.'&page='.$prevPage;?>">Bài viết mới hơn →</a></span>
+				<?php }?>
+			</p>
+		</div>
+		<?php }?>
+	</div>
+</div>

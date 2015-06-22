@@ -1,0 +1,114 @@
+<?php $params = $this->params;?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý danh mục</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/category/add-category" title="Thêm mới danh mục"></a></span>	
+		</div>
+    </div>
+    <form id="frm" name="frm" method="get" action="/adm/category/category-list">
+        <ul class="filter clearfix">            
+           	<li>
+                <label>Tên danh mục</label>
+                <input id="category_name" name="category_name" value="<?php echo $params['category_name']?>" class="large" type="text" />
+            </li>   
+            <li id="category_option">
+                <label>Loại món ăn</label>
+                 <select id="type" name="type" class="cat">
+					<option value="0">Loại danh mục</option>
+					<?php foreach(Category::$_ARRAY_TYPE_CATEGORY as $key => $type){?>
+					<option value="<?php echo $key?>" <?php if($key == $params['type']) echo 'selected="selected"';?>><?php echo $type?></option>
+					<?php }?>
+				</select>                
+            </li>                                           
+            <li class="clear">
+                <input id="submit" name="submit" value="" class="button_search" type="submit" />
+            </li>
+         </ul>
+     </form>
+    <div class="clear"></div>   
+    <?php echo $this->paging; ?>
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="8" class="firstRow"></td>
+                   </tr>
+                   <tr>                      
+                       <td width="10px" class="secondRow">ID</td>                       
+                       <td width="32%" class="secondRow">Tên danh mục</td>
+                       <td width="8%" class="secondRow">Tình trạng</td>
+                       <td width="12%" class="secondRow">Loại danh mục</td>                                  
+                       <td width="8%" class="secondRow">Show menu</td>
+                       <td width="9%" class="secondRow">Thứ tự</td>
+                       <td width="12%" class="secondRow">Cập nhật</td>
+                       <td width="20%" class="secondRow">Thao tác</td>
+                  </tr>               
+	                <?php if(!empty($this->arrCategory)){?>
+					<?php foreach($this->arrCategory as $category){
+						$statusUpdate = $category['status'] == 1?0:1;
+					?>
+                	<tr id="row_<?php echo $category['category_id']?>">
+	                    <td align="center" class="ctn"><?php echo $category['category_id']?></td>
+	                    <td class="ctn"><p class="title"><?php echo $category['category_name']?></p></td>	                    
+	                    <td class="ctn">
+	                    	<?php if($category['status'] == 0) echo '<span class="bg-red">Đã khóa</span>'; else echo '<span class="bg-green">Online</span>';?>
+	                    </td>
+	                    <td class="ctn"><?php echo Category::$_ARRAY_TYPE_CATEGORY[$category['type']];?></td>
+	                    <td class="ctn"><?php if($category['show_menu'] == 1) echo '<span class="badge bg-green">Có</span>'; else echo '<span class="badge bg-red">Không</span>';?></td>
+	                    <td class="ctn"><?php echo number_format($category['ordering'], 0, ',', '.');?></td>
+	                    <td class="ctn"><?php echo date('H:i d/m/Y', $category['updated_date']); ?></td>
+	                    <td class="ctn">	                    	
+	                    	<a href="<?php echo BASE_URL.'/adm/category/update-status-category/id/'.$category['category_id'].'/status/'.$statusUpdate?>" class="btn btn-warning btn-sm"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/<?php echo $category['status'] == 1?'b_lock':'b_unlock';?>.jpg" alt="" width="60px" height="20px"/></a>
+							<a href="<?php echo BASE_URL.'/adm/category/edit-category/id/'.$category['category_id']?>" class="b_edit" title="Cập nhật danh mục này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+							<a href="javascript:void(0)" class="btn btn-danger btn-sm" onClick="Category.deleteCategory('<?php echo $category['category_id']; ?>','<?php echo $this->id; ?>')" title="Xóa danh mục này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="40px" height="20px"/></a>
+	                    </td>
+                </tr>  
+                <?php }}else{?>
+                <tr>
+                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td valign="middle" colspan="8" class="firstRow">                  
+                </tr>
+           </tbody>
+       </table>
+    </div>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+	var Category = 
+	{
+		deleteCategory : function(id, parent)
+		{
+		    $(this).myBoxy (Boxy,{
+		        type:'confirm',
+		        message: "Bạn có chắc chắn muốn xóa danh mục này?",
+		        id : id,
+				parent: parent,
+		        callback: function() 
+		        {
+		            var boxy = Boxy.get(this);
+		            var options = boxy.options;
+		            Category.doDeleteCategory(id, parent);
+		            boxy.hide();
+		        }
+		    });
+		},
+		doDeleteCategory : function(id, parent)
+		{
+		    $.post(Settings.baseurl + '/adm/category/delete-category', {
+		        id:id, act:'del'
+		    },
+		    function(data)
+		    {	
+				$(this).myBoxy (Boxy,{
+					type: 'success',
+			        message: 'Danh mục bạn chọn đã được xóa thành công!',
+					refresh:true
+			    });		
+		    });
+		}
+	};
+</script>

@@ -1,0 +1,151 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Cập nhật thuộc tính</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên thuộc tính:</label>
+                        </div>
+                        <input name="attribute_name" type="text" class="title_text_input" value="<?php echo $this->attribute['attribute_name']?>"/>                      
+                    </div>                    
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tình trạng:</label>
+                        </div>
+                        <input type="checkbox" id="is_visible" name="is_visible" value="1" <?php echo $this->attribute['is_visible']==1?"checked":'';?>> Online 
+                    </div>                                     
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Loại nhập liệu:</label>
+                      	</div>
+                  			<select class="post_select" name="input_type" id="input_type">
+								<option value="0">Chọn loại nhập liệu</option>
+								<?php				
+									 foreach(Attribute::$_INPUT_TYPE as $type)
+									 {?>
+									 <option value="<?php echo $type;?>" <?php if($type == $this->attribute['input_type']) echo'selected';?>><?php echo $type;?></option>
+								<?php }?>
+							</select>         
+                	</div>
+                	<br/>
+                	<div class="form-group" id="manage_options" style="padding-top: 15px;padding-left:130px;display:none">
+							<label for="input_type">Thêm option</label>
+							<input type="button" name="submit" id="add_option" value="Thêm mới Option">
+							<div style="margin-top:5px;margin-bottom:10px">
+								<table style="border: 1px solid #c4cbd6;" class="attribute_option_table" id="attribute_option_table" width="100%">
+									<thead>
+										<tr style="height:30px">
+											<th style="font-size:13px;font-weight:normal">Tên option</th>
+											<th style="font-size:13px;font-weight:normal">Thứ tự</th>
+											<th style="font-size:13px;font-weight:normal">Thao tác</th>
+										</tr>
+									</thead>
+									<tbody>	
+										<?php if(($this->attribute['input_type'] == Attribute::TYPE_DROPDOWN || $this->attribute['input_type'] == Attribute::TYPE_MULTIPLE)&& !empty($this->options)):?>
+										<?php foreach($this->options as $option):?>								
+										<tr style="height:30px" class="option-row<?php echo $option['option_id']?>">
+											<td style="width:170px"><input style="width:150px" type="text" name="option[value][]" value="<?php echo $option['value']?>"></td>
+											<td style="width:70px"><input style="width:50px" type="text" name="option[position][]" value="<?php echo $option['sort_order']?>"></td>
+											<td><input type="button" onclick="remove_option(<?php echo $option['option_id']?>)" value="Xóa option"></td>
+										</tr>
+										<input type="hidden" name="option[option_id][]" value="<?php echo $option['option_id']?>" />
+										<?php endforeach;?>
+										<?php endif;?>
+									</tbody>
+								</table>
+							</div>
+						</div> 
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Bắt buộc chọn:</label>
+                      	</div>
+                  			<select class="post_select" name="is_require">
+								<option value="1" <?php if(1 == $this->attribute['is_require']) echo'selected';?>>Bắt buộc</option>
+								<option value="0" <?php if(0 == $this->attribute['is_require']) echo'selected';?>>Không bắt buộc</option>
+							</select>         
+                	</div>  
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Chọn loại món:</label>
+                        </div>
+                        <select size="30" style="width:300px;height:200px" class="" name="input_cate[]" id="input_cate" multiple="multiple">
+							<?php foreach(Dish::$_ARRAY_TYPE as $key => $type){?>
+							<option value="<?php echo $key?>" <?php echo (in_array($key, $this->attributeCatList)) ? 'selected' : '' ?>><?php echo $type['name']?></option>
+							<?php }?>
+				        </select>	
+                    </div>
+                    <div class="button_listing_input">
+                    	<input type="hidden" name="option[delete_attributes]" id="delete_attributes" value="" />
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+	inputType.select($('#input_type').val());
+	$('#add_option').click(function(data){
+		attributeOption.add();	
+	});
+
+	$('#input_type').change(function(data){
+		value = $('#input_type').val(); 
+		inputType.select(value);	
+	});
+});
+
+var inputType = 
+{
+	init : function(){
+		$('#manage_options').hide();
+	},
+	select : function(type, value){
+		// init data
+		this.init();
+		
+		switch(type)
+		{
+			case 'dropdown':
+				$('#manage_options').show();
+				$('#button_add').css("margin-top","0px");
+				break;
+			case 'multiple':
+				$('#manage_options').show();
+				$('#button_add').css("margin-top","0px");
+				break;
+			case 'text':			
+			case 'varchar':			
+				$('#button_add').css("margin-top","390px");	
+				break;		
+		}
+	}
+}
+
+var attributeOption = {
+	option_row : 2,
+	delete_options : new Array(),
+	add : function(data){
+		var html = '<tr style="height:30px" class="option-row'+ this.option_row +'"><td style="width:170px"><input style="width:150px" type="text" name="option[value][]" value=""/></td><td style="width:70px"><input style="width:50px" type="text" name="option[position][]" value="" /></td><td><input type="button" onclick="remove_option('+ this.option_row +')" value="Xóa option" /></td></tr>';
+		$('#attribute_option_table').append(html);
+		this.option_row++;
+	},
+	remove : function(id){		
+		$('.option-row'+ id).attr('style', 'display:none');
+		this.delete_options.push(id);		
+		$('#delete_attributes').val(this.delete_options.join(','));
+	}
+}
+
+function remove_option(id)
+{
+	attributeOption.remove(id);	
+}
+</script>

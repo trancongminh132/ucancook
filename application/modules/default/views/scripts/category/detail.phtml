@@ -1,0 +1,56 @@
+<div id="content-listing">
+	<div class="tree-folder">
+		<a href="/" class="icon-home"></a>
+		<?php foreach($this->path as $path){?>
+		<a href="<?php echo Category::categoryUrl($path);?>"class="icon-next"><?php echo $path['category_name'];?></a>
+		<?php }?>
+	</div>
+	<div class="list">
+	<h1 class="cate-title"><?php echo $this->category['category_name']?></h1>
+	<div style="clear:both"></div>
+	<?php foreach($this->products as $product){
+		$productUrl = Product::productUrl($product);
+		$value = Zend_Json::decode($product['attributes']);
+	?>
+	<div class="product">
+		<div class="img-pr">
+			<a href="<?php echo $productUrl;?>" title="<?php echo $product['product_name']?>"><img src="<?php echo $product['product_image']?>" width="320" height="320" alt="<?php echo $product['product_name']?>"></a>
+			<div class="sale-off"><p>-<?php echo My_Zend_Globals::getLabelSale($product['special_price'], $product['product_price'])?>%</p></div>
+		</div>
+		<div class="detail-pr">
+			<div class="box-d">
+					<h2><a style="color: #333;" href="<?php echo $productUrl;?>" title="<?php echo $product['product_name']?>"><?php echo $product['product_name']?></a></h2>
+					<?php if(!empty($this->attributes[$product['category_id']])){
+						foreach($this->attributes[$product['category_id']] as $attribute){
+						$options = isset($attribute['options'])?$attribute['options']:array();
+					?>
+					<p><?php echo $attribute['attribute_name']?>:<span>
+						<?php if($attribute['input_type'] == 'dropdown'){?> 
+						<?php foreach($options as $option){?>
+						<?php foreach($value[$attribute['attribute_id']] as $val){?>
+						<?php if($option['option_id'] == $val['value']){?>
+						<?php echo $option['value'];?>
+						<?php }}}}elseif($attribute['input_type'] == 'text'){?>
+						<?php echo ($value[$attribute['attribute_id']][$attribute['attribute_id']]['value']);?>
+						<?php }?>
+					</span></p>
+					<?php }}?>
+					<p class="pri">Giá:<span><strong> <?php echo My_Zend_Globals::numberFormat($product['product_price']);?></strong> VNĐ</span></p>
+					<p>Giá khuyến mãi:<span><i> <?php echo My_Zend_Globals::numberFormat($product['special_price']);?> VNĐ</i></span></p>
+					<a href="<?php echo $productUrl;?>" title="<?php echo $product['product_name']?>" class="view-detail">Xem chi tiết</a>
+			</div>
+			<div class="box-cd">
+				<h2>Công dụng của <?php echo $product['product_code']?></h2>
+				<?php echo $product['product_effect']?>
+			</div>
+		</div>
+	</div><!--End.product-->
+	<?php }?>
+	</div><!--End.list-->	
+</div>
+<script>
+	$('.detail-pr .box-cd p span').each(function(){
+		var html = $(this).html();
+		$(this).parent().html('<i>...</i>'+html);
+	});
+</script>

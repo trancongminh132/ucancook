@@ -1,0 +1,49 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Cập nhật coupon</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên coupon:</label>
+                        </div>
+                        <input name="coupon_name" type="text" class="title_text_input" value="<?php echo $this->coupon['coupon_name'];?>"/>                      
+                    </div>                    
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Giá:</label>
+                        </div>
+                        <input type="text" class="title_text_input auto_numberic" id="price" value="<?php echo My_Zend_Globals::numberFormat($this->coupon['price']);?>" name="price" alt=""/>		
+                    </div>                                      
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Giá trị sử dụng:</label>
+                        </div>
+                        <input type="text" class="title_text_input auto_numberic" id="value" value="<?php echo My_Zend_Globals::numberFormat($this->coupon['value']);?>" name="value" alt=""/>		
+                    </div> 
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tình trạng:</label>
+                      	</div>
+                  			<select class="post_select" name="status" id="status">
+								<option value="1" <?php if($this->coupon['status'] == 1) echo 'selected';?>>Kích hoạt</option>
+								<option value="0" <?php if($this->coupon['status'] == 0) echo 'selected';?>>Ẩn</option>
+							</select>         
+                	</div>   
+                	<div class="clear"></div>       
+                    <div class="button_listing_input clear">
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+	$('input.auto_numberic').autoNumeric();
+</script>

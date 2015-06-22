@@ -1,0 +1,31 @@
+2014-09-29T18:21:39+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:21:42+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:23:41+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:25:21+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:26:36+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:27:08+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:34:56+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T18:39:51+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - The Mysqli extension is required for this adapter but the extension is not loaded  ===============+++
+2014-09-29T19:10:47+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'd'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:11:46+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'd'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:13:07+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'd'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:13:37+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Banner::getList - Access denied for user 'd'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:15:10+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:15:30+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:15:47+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:17:40+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:20:18+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:22:27+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:22:44+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:22:54+04:00 INFO (6): (IP: 1.53.22.134) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:23:06+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:23:07+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Category::selectCategory - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:23:09+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Category::selectCategory - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T19:23:10+04:00 INFO (6): (IP: 14.169.112.56) ++++===============  Banner::getList - Access denied for user 'adm'@'localhost' (using password: YES)  ===============+++
+2014-09-29T22:54:20+07:00 INFO (6): (IP: 183.80.140.232) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-09-29T22:54:20+07:00 INFO (6): (IP: 183.80.140.232) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '4-4' for key 'PRIMARY'  ===============+++
+2014-09-29T22:54:42+07:00 INFO (6): (IP: 183.80.140.232) ++++===============  Attribute::deleteAttributeCategory - Mysqli prepare error: Unknown column 'attributeId' in 'where clause'  ===============+++
+2014-09-29T22:54:42+07:00 INFO (6): (IP: 183.80.140.232) ++++===============  Attribute::insertAttributeCategory - Mysqli statement execute error : Duplicate entry '4-4' for key 'PRIMARY'  ===============+++
+2014-09-30T00:35:52+07:00 INFO (6): (IP: 1.53.22.134) ++++===============  Config::setConfig ::Mysqli statement execute error : Column 'info_buy' cannot be null  ===============+++
+2014-09-30T00:36:06+07:00 INFO (6): (IP: 1.53.22.134) ++++===============  Config::setConfig ::Mysqli statement execute error : Column 'info_buy' cannot be null  ===============+++
+2014-09-30T00:36:19+07:00 INFO (6): (IP: 1.53.22.134) ++++===============  Config::setConfig ::Mysqli statement execute error : Column 'info_buy' cannot be null  ===============+++

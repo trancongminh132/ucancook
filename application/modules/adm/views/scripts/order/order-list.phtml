@@ -1,0 +1,92 @@
+<?php
+	$this->headLink()->appendStylesheet($this->layout()->_general['server']['path'].'/css/jquery.ui.datepicker.css');
+	$this->headScript()->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.datepicker.js');
+$params = $this->params; 
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý đơn hàng</div>
+    </div>
+    <form id="frm" name="frm" method="get" action="<?php echo $this->url(array('action' => 'order-list', 'controller' => 'order', 'module' => 'adm'), null, true); ?>">
+        <ul class="filter clearfix">            
+           	<li>
+                <label>Mã đơn hàng</label>
+                <input id="order_code" name="order_code" value="<?php echo $params['order_code']; ?>" class="large" type="text" />
+            </li>
+            <li>
+                <label>Tình trạng đơn hàng</label>
+                <select name="order_status" class="chosen">
+					<option value="all" <?php echo ($this->params['order_status'] == 'all')?'selected="selected"':''; ?>>All</option>
+					<?php foreach (ProductOrders::$listOrderStatus as $statusId => $statusName):?>
+					<option value="<?php echo $statusId?>" <?php echo ($this->params['order_status'] == $statusId && $this->params['order_status'] != 'all')?'selected="selected"':''; ?>><?php echo $statusName?></option>
+					<?php endforeach;?>
+				</select>
+            </li>
+            <li>
+				<label>Thời gian từ</label>
+				<input type="text" class="datepicker large" name="from_date" value="<?php echo $this->params['from_date']?>">			
+			</li>
+			<li>
+				<label>đến</label>
+				<input type="text" class="datepicker large" name="end_date" value="<?php echo $this->params['end_date']?>">
+			</li>                                   
+            <li class="clear">
+                <input id="submit" name="submit" value="" class="button_search" type="submit" />
+            </li>
+         </ul>
+     </form>
+    <div class="clear"></div>
+   
+    <?php echo $this->paging; ?>
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="8" class="firstRow"></td>
+                   </tr>
+                   <tr>                      
+                       <td style="width: 10px" class="secondRow">ID</td>                       
+                       <td width="10%" class="secondRow">Mã ĐH</td>
+                       <td width="20%" class="secondRow">Tên khách hàng</td>
+                       <td width="10%" class="secondRow">SĐT</td>
+                       <td width="24%" class="secondRow">Địa chỉ</td>
+                       <td width="15%" class="secondRow">Tình trạng</td>                                
+                       <td width="10%" class="secondRow">Cập nhật</td>
+                       <td width="10%" class="secondRow">Thao tác</td>
+                  </tr>               
+	                <?php if(!empty($this->listOrders)){?>
+					<?php foreach ($this->listOrders as $order){?>
+                	<tr>
+	                    <td align="center" class="ctn"><?php echo $order['order_id']; ?></td>
+	                    <td class="ctn">
+	                    	<?php echo $order['order_code']?>
+	                    </td>	                    
+	                    <td class="ctn">
+	                    	<?php echo $order['order_name'];?>
+	                    </td>
+	                    <td class="ctn"><?php echo $order['order_phone']?></td>	       
+	                    <td class="ctn"><?php echo User::generateUserAddress($order['order_address'], $order['order_district'], $order['order_city'])?></td>        
+	                    <td class="ctn"><?php echo ProductOrders::$listOrderStatus[$order['order_status']]?></td>
+	                    <td class="ctn"><?php echo date('H:i d/m/Y', $order['updated_date']); ?></td>	                  
+	                    <td class="ctn">	                    	
+							<a href="<?php echo BASE_URL.'/adm/order/detail/id/'.$order['order_id']?>" class="b_edit" title="Cập nhật đơn hàng này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="50px" height="20px"/></a> 				
+	                    </td>
+                </tr>  
+                <?php }}else{?>
+                <tr>
+                    <td class="ctn nonSearch" colspan="8">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td valign="middle" colspan="8" class="firstRow">                  
+                </tr>
+           </tbody>
+       </table>
+    </div>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+	$(function() {
+		$( ".datepicker" ).datepicker({dateFormat : 'dd-mm-yy'});
+	});
+</script>

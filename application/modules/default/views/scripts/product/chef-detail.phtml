@@ -1,0 +1,30 @@
+<section class="profile-header" id="mass-header">
+        <section class="container content clearfix">
+            <div class="row show-grid">
+                <div id="about-page" class="col-md-12">
+                    <div class="row">
+                        <div id="profile-page" class="col-md-12">
+                            <div class="col-md-6 profile-info">
+                                <h1><?php echo $this->chef['chef_name']?> </h1>
+                                <div class="user-avatar">
+                                    <img class="img-responsive" src="<?php echo $this->chef['avatar']?>" alt="Square_suzanne_lehrer">
+                                </div>
+                                <div id="bioLong">
+                                	<?php echo $this->chef['chef_description']?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                            	<?php if(!empty($this->listDish)){?>
+                            	<?php foreach($this->listDish  as $item){?>
+                                <div class="menu-image">
+                                    <?php echo $item['name'];?>
+                                    <img class="img-responsive" src="<?php echo $item['image']?>" alt="<?php echo $item['name'];?>">
+                                </div>
+                                <?php }}?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>

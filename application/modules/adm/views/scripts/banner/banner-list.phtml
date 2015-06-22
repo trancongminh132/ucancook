@@ -1,0 +1,103 @@
+<?php $params = $this->params;?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý banner</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/banner/add-banner" title="Thêm mới banner"></a></span>	
+		</div>
+    </div>
+    <div class="clear"></div>
+   
+    <?php echo $this->paging; ?>
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="8" class="firstRow"></td>
+                   </tr>
+                   <tr>                      
+                       <td style="width: 10px" class="secondRow">ID</td>                       
+                       <td width="18%" class="secondRow">Hình ảnh</td>
+                       <td width="30%" class="secondRow">Tên banner</td>
+                       <td width="17%" class="secondRow">Vị trí</td>
+                       <td width="8%" class="secondRow">Thứ tự</td>                                
+                       <td width="12%" class="secondRow">Cập nhật</td>
+                       <td width="12%" class="secondRow">Thao tác</td>
+                  </tr>               
+	                <?php if(!empty($this->banners)){?>
+					<?php foreach($this->banners as $value){?>
+                	<tr>
+	                    <td align="center" class="ctn"><?php echo $value['id']; ?></td>
+	                    <td class="ctn">
+	                    	<img style="width:100px;height:60px" class="banner_upload" src="<?php echo $value['banner_url']?>" alt="" />
+	                    </td>	                    
+	                    <td class="ctn">
+	                    	<?php echo $value['banner_name']; ?>
+	                    </td>
+	                    <td class="ctn"><?php echo Banner::$_BANNER_POSITIONS[$value['position_id']];?></td>	               
+	                    <td class="ctn">
+	                    	<?php echo number_format($value['ordering'], 0, ',', '.');?>
+	                    </td>
+	                    <td class="ctn"><?php echo date('H:i d/m/Y', $value['updated_date']); ?></td>	                  
+	                    <td class="ctn">	                    	
+							<a href="<?php echo BASE_URL.'/adm/banner/edit-banner/id/'.$value['id']?>" class="b_edit" title="Cập nhật banner này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+							<a href="javascript:void(0)" class="btn btn-danger btn-sm" onClick="Banner.deleteBanner(<?php echo $value['id']; ?>)" title="Xóa banner này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="40px" height="20px"/></a>
+	                    </td>
+                </tr>  
+                <?php }}else{?>
+                <tr>
+                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td valign="middle" colspan="8" class="firstRow">                  
+                </tr>
+           </tbody>
+       </table>
+    </div>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+	var Banner = 
+	{
+		deleteBanner : function(id)
+		{
+		    $(this).myBoxy (Boxy,{
+		        type:'confirm',
+		        message: "Bạn có chắc chắn muốn xóa banner này?",
+		        id : id,
+		        callback: function() 
+		        {
+		            var boxy = Boxy.get(this);
+		            var options = boxy.options;
+		            Banner.doDeleteBanner(id);
+		            boxy.hide();
+		        }
+		    });
+		},
+		doDeleteBanner : function(id)
+		{
+		    $.post(Settings.baseurl + '/adm/banner/delete-banner', {
+		        id:id
+		    },
+		    function(data)
+		    {	
+			    if(data == 1)
+			    {
+					$(this).myBoxy (Boxy,{
+						type: 'success',
+				        message: 'Banner bạn chọn đã được xóa thành công!',
+						afterHide:function(){location.reload()}
+				    });
+			    }else{
+			    	$(this).myBoxy (Boxy,{
+						type: 'alert',
+				        message: 'Thao tác thất bại. Bạn vui lòng thử lại sau!',
+						afterHide:function(){location.reload()}
+				    });
+				}		
+		    });
+		}
+	};
+
+</script>

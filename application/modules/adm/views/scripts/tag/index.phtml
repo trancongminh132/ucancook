@@ -1,0 +1,51 @@
+<?php
+$params = $this->params;
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý từ khóa</div>
+        <?php if(Role::isAllowed(Permission::TAG_ADD)):?>
+        <div class="addLink"><a class="add" title="Tạo tên mới" href="<?php echo $this->url(array('action' => 'create', 'controller' => 'tag', 'module' => 'adm'), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_add.jpg" alt="Thêm tag mới" /></a></div>
+        <?php endif; ?>
+    </div>
+    <form id="frm" name="frm" method="get" action="<?php echo $this->url(array('action' => 'index', 'controller' => 'tag', 'module' => 'adm'), null, true); ?>">
+		<ul class="filter clearfix">			
+			<li class="expand"><label>Tên</label> <input id="tag_name" name="tag_name" value="<?php echo $params['tag_name']; ?>"
+				class="large" type="text" />
+			</li>			
+			<li class="clear"><input id="submit" name="submit" value=""	class="button_search" type="submit" /></li>
+		</ul>
+	</form>
+                                    <div class="clear"></div>                                    
+    <?php echo $this->paging; ?>
+                                                    <div class="table_member">
+                                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                            <tbody>                                                               
+                                    <tr>
+                                        <td align="center" width="1%" class="secondRow"><input id="checkAll" type="checkbox" value=""></td>
+                                        <td width="30%" class="secondRow">Name</td>                                       
+                                        <td width="16%" class="secondRow">Alias</td>                                                                               
+                                        <td width="8%" class="secondRow">Chức năng</td>                                        
+                                    </tr>
+                <?php if (!empty($this->tags)): ?>
+                <?php foreach ($this->tags as $tag): ?>
+				<tr>
+					<td align="center" class="ctn"><input type="checkbox" value="<?php echo $tag['id'];?>" name="id"></td>					
+					<td class="ctn"><?php echo $tag['tag_name']; ?></td>
+					<td class="ctn"><?php echo $tag['tag_alias']; ?></td>				
+					<td class="ctn">
+						<a title="Sửa tag" class="action" href="<?php echo $this->url(array('action' => 'edit', 'controller' => 'tag', 'module' => 'adm', 'id' => $tag['id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_edit.jpg" alt="Sửa tag" /></a>                        
+                        <a title="Xóa tag" class="action" onclick="return confirm('Xoa tag nay ha?')" href="<?php echo $this->url(array('action' => 'delete', 'controller' => 'tag', 'module' => 'adm', 'id' => $tag['id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_del.jpg" alt="Xóa tag" /></a>                        
+					</td>
+				</tr>
+				<?php endforeach; ?>
+                <?php else: ?>
+                                                                                    <tr>
+                                                                                        <td class="ctn nonSearch" colspan="4">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                                                                                    </tr>
+                <?php endif; ?>                                                                                    
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+    <?php echo $this->paging; ?>
+</div>

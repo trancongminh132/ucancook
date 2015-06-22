@@ -1,0 +1,52 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Cập nhật người dùng</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Email người dùng:</label>
+                        </div>
+                        <input type="text" class="title_text_input" value="<?php echo $this->userDetail['email']?>" name="email"/>                      
+                    </div> 
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên người dùng:</label>
+                        </div>
+                        <input name="full_name" type="text" class="title_text_input" value="<?php echo $this->userDetail['display_name']?>"/>                      
+                    </div>                    
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Số di động:</label>
+                        </div>
+                        <input type="text" class="title_text_input" name="mobile" value="<?php echo $this->userDetail['mobile']?>" /> 
+                    </div>                                     
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Địa chỉ:</label>
+                      	</div>
+                  		 <textarea style="width:300px" rows="3" class="span12 m-wrap" name="address"><?php echo $this->userDetail['address']?></textarea>
+                    </div>              	 
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Giới tính:</label>
+                      	</div>
+                  		<select class="post_select" name="gender">
+							<option value="">Chọn giới tính</option>
+							<option value="1" <?php echo $this->userDetail['gender'] == 1?'selected="selected"':"";?>>Male</option>
+							<option value="0" <?php echo $this->userDetail['gender'] == 0?'selected="selected"':"";?>>Female</option>
+						</select>         
+                	</div>  
+                    <div class="button_listing_input" style="padding-top: 25px">
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>

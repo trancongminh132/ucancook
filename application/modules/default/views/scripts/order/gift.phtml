@@ -1,0 +1,198 @@
+<?php 
+	require_once APPLICATION_PATH.'/configs/cities.php';
+	global $_CITIES, $_DISTRICTS;
+?>
+<div id="gift">
+	<div class="container clearfix">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="inline breadcrumbs">
+					<li><a title="Trang chủ Ucancook.vn" href="/">Trang chủ</a></li>
+					<li>Phiếu quà tặng</li>
+				</ul>
+				<img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/banner_gifts.jpg" alt="Header@2x">
+			</div>
+		</div>
+		<div class="row gift-content-container clearfix">
+			<div class="col-md-8 col-md-offset-1">
+				<div class="row clearfix">
+					<div class="gift-title col-md-12">
+						<h1>Phiếu quà tặng</h1>
+						<p>Bạn có người thân, bạn bè yêu thích nấu ăn?
+							<br>Hãy gửi tặng họ một phiếu quà tặng từ Ucancook.
+							<br>Chúng tôi sẽ chuẩn bị các công thức chế biến món ăn và giao những nguyên liệu tươi, sạch đến tận cửa nhà cho họ.</p>
+					</div>
+				</div>
+				<form class="simple-form">
+					<div class="gift-step clearfix">
+						<h3>1. Chọn mệnh giá</h3>
+						<div class="gift-card-items">
+							<?php foreach($this->listCoupon as $item){?>
+							<div class="gift-card-item">
+								<input type="radio" value="<?php echo $item['id']?>" name="" class="hide radio_coupon">
+								<label>
+									<span class="gift-item-price"><?php echo My_Zend_Globals::numberFormat($item['value']);?> VNĐ</span>
+									<span class="gift-item-label">Phiếu quà tặng</span>
+								</label>
+							</div>
+							<?php }?>
+						</div>
+					</div>
+					<div class="gift-step clearfix gift-step-2" style="display:none">
+						<h3>2. Phương thức giao hàng</h3>
+						<div class="gift-card-items">
+							<div class="gift-card-item">
+								<input type="radio" value="email" class="hide" checked>
+								<label>
+									<span class="inner-label">Gửi qua Email</span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="gift-step clearfix gift-step-3" style="display:none">
+						<h3>3. Thông tin liên hệ</h3>
+						<div class="row">
+							<div class="input col-md-6">
+								<label><abbr title="required">*</abbr> Họ tên người gửi</label>
+								<input type="text" size="30" name="sender_name" id="sender_name">
+							</div>
+							<div class="input col-md-6">
+								<label><abbr title="required">*</abbr> Họ tên người nhận</label>
+								<input type="text" size="30" name="receiver_name" id="receiver_name">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input col-md-6">
+								<label>Nội dung</label>
+								<textarea rows="10" name="note" id="note" cols="40"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input col-md-6">
+								<label><abbr title="required">*</abbr> Email người nhận</label>
+								<input type="email" size="30" name="receiver_email" id="receiver_email">
+							</div>
+						</div>			
+						<div class="row">
+							<a id="add_to_basket" class="button fr">Thêm vào giỏ hàng</a>
+						</div>
+					</div>
+					<div id="gift-errors" class="block-error" style="display: none;font-size: .95em;color: #ff1f1f;">
+						<ul style="list-style-type: square;">
+							<li id="error-sender-name" style="display:none">Vui lòng nhập tên người gửi</li>
+							<li id="error-receiver-name" style="display:none">Vui lòng nhập tên người nhận</li>
+							<li id="error-receiver-email" style="display:none">Vui lòng nhập email người nhận</li>
+							<li id="error-receiver-email-invalid" style="display:none">Email người gửi không hợp lệ</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-3 hidden-xs hidden-sm">
+				<div id="zip-checker" class="gift-left-offset">
+					<div class="zip-checker-inner">
+						<h3 class="zip-checker-header">Nơi giao hàng</h3>
+						<form class="simple_form">
+							<div class="row clearfix">
+								<div class="input col-md-6">
+									<select name="district" id="district" style="width: 100%;color:#666">
+										<option value="">Chọn quận/huyện</option>
+										<?php foreach($_DISTRICTS[29] as $key => $district){?>
+										<option value="<?php echo $key;?>"><?php echo $district['district_name']?></option>
+										<?php }?>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<a style="width:55px" class="button btn_check_district">Kiểm tra</a>
+								</div>
+							</div>
+						</form>
+						<div class="zip-code-checker-status" style="display:none">Tuyệt vời, chúng tôi có giao hàng đến đây</div>
+					</div>
+				</div>
+				<div class="gift-left-offset popover-gift" id="gift-helper" style="display:block">
+					<div class="arrow-left"></div>
+					<h3 class="gift-helper-title">Bạn có sử dụng dịch vụ giao hàng định kỳ?</h3>
+					<p class="gift-helper-body">Nếu có sử dụng dịch vụ giao hàng định kỳ thì không áp dụng thẻ quà tặng vì Dịch vụ giao hàng định kỳ đã có giảm giá rồi.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var couponId = 0;
+	$('.btn_check_district').click(function(){
+		var district = $('#district').val();
+		if(district == '')
+			return;
+		$('.zip-code-checker-status').show();
+	});
+	$('.gift-card-item').click(function()
+	{
+		$('.radio_coupon').prop('checked', false);
+		$('.radio_coupon', $(this)).prop('checked', true);
+		$('.gift-step-2').show();
+		$('.gift-step-3').show();
+		couponId = $('.radio_coupon', $(this)).val();
+	});
+	$('#add_to_basket').click(function()
+	{
+		var error = 0;
+		$('#gift-errors').hide();
+		var senderName = $('#sender_name').val();
+		var receiverName = $('#receiver_name').val();
+		var receiverEmail = $('#receiver_email').val();
+		var note = $('#note').val();
+
+		if($.trim(senderName) == '') 
+		{
+			error = 1;
+            $("#error-sender-name").show();
+        }else{
+        	$("#error-sender-name").hide();
+        }
+
+		if($.trim(receiverName) == '') 
+		{
+			error = 1;
+            $("#error-receiver-name").show();
+        }else{
+        	$("#error-receiver-name").hide();
+        }
+
+		if($.trim(receiverEmail) == '') 
+		{
+			error = 1;
+            $("#error-receiver-email").show();
+        }else{
+        	$("#error-receiver-email").hide();
+        }
+
+		if(!common.validateEmail(receiverEmail)){
+			error = 1;
+        	$("#error-receiver-email-invalid").show();
+        }else{
+        	$("#error-receiver-email-invalid").hide();
+        }
+		
+        if(error)
+        {
+            $('#gift-errors').show();
+            return;
+        }else
+        {
+        	$('#gift-errors').hide();
+        	var moreInfo = [];
+        		moreInfo.push(senderName);
+        		moreInfo.push(receiverName);
+        		moreInfo.push(receiverEmail);
+        		moreInfo.push(note);
+        	cart.addToCart(cart.typeGift, couponId, 1, moreInfo);
+        	common.setFlashMessage('Phiếu quà tặng đã được thêm vào giỏ hàng thành công');
+        	$('#sender_name').val('');
+        	$('#receiver_name').val('');
+        	$('#receiver_email').val('');
+        	$('#note').val('');
+        	cart.incrementCountCart(1);
+		}
+	});
+</script>

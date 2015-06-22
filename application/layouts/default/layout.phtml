@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headMeta(); ?>
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<meta name="msapplication-navbutton-color" content="#dd4800" />
+	<meta name="application-name" content="ucancook.vn" />
+	<meta name="msapplication-starturl" content="http://www.ucancook.vn/" />
+	<meta name="msapplication-window" content="width=1024;height=768"/>
+	<meta property="fb:app_id" content="344527302396637"/>
+	<meta name="author" content="">
+	<?php $imageSrc = isset($this->thumbImageSrc) ? $this->thumbImageSrc : $this->layout()->_general['static']['path'] . '/images/logo.png';?>
+    <link rel="image_src" href="<?php echo $imageSrc ?>" />
+    <?php if(isset($this->canonicalUrl) && !empty($this->canonicalUrl)):?>
+    <link rel="canonical" href="<?php echo $this->canonicalUrl ?>" />
+    <?php endif; ?>
+	<link rel="shortcut icon" href="<?php echo $this->layout()->_general['static']['path'];?>/images/favicon.ico">
+	<link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700,800">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/base.css" rel="stylesheet">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/layout.css" rel="stylesheet">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/bootstrap.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+	 	var Settings = {domain: "<?php echo DOMAIN;?>", baseurl: "<?php echo BASE_URL?>"};
+	 	var Account = {	UID: "<?php echo LOGIN_UID ?>"};
+	</script>
+    <script src="<?php echo $this->layout()->_general['static']['path'];?>/js/jquery.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/bootstrap.min.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/global.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/jquery.cookie.js"></script>
+</head>
+<body>
+	<div id="loading" style="display:none;position:fixed;top:0;left:0;z-index:99999;background:rgba(255,255,255,0.6);width:100%;height:100%;cursor:wait"></div>
+	<?php include_once 'header.phtml';?>	
+	<?php echo $this->layout()->content?>
+	<?php include_once 'footer.phtml';?>
+	<!-- Modal -->
+	<div id="popup-refer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content modal-notice">
+				<div class="modal-header">
+					<h2>Refer Friend</h2>
+					<a aria-hidden="true" data-dismiss="modal" class="close" title="Đóng lại">×</a>
+				</div>
+				<div class="modal-body">
+					<div class="inside">
+						<p class="text-center"><a href="javascript:void(0)"><img class="img-responsive" src="<?php echo $this->layout()->_general['static']['path'];?>/images/banner_refer_friend.png" alt="Refer"></a></p>
+					</div>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+	<!-- End Modal -->
+	<script>
+		$('#dropdown-cart').on('click', function(event) {
+			event.stopPropagation();
+		});
+		$('.dropdown-cart-close').on('click', function(event) {
+			$('.nav-cart').removeClass('open');
+		});
+		$('.nav-collapse').click(function() {
+			$('.nav-collapse-bar').toggle( "show" );
+		});
+		$('#popover-nav-action').click(function() {
+			$('.popover-nav').toggle('blind');
+		});
+		$('.nav-cart-basket').click(function(){
+			cart.bindQuickCart();
+		});
+	</script>
+</body>
+</html>

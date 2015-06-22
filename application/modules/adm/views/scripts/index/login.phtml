@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex, nofollow" />	
+<title>Admin Dashboard Ucancook.vn</title>
+<link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->layout()->_general['server']['path'];?>/images/favicon.ico" />
+<?php 
+    echo $this->headLink()    	
+		 ->prependStylesheet($this->layout()->_general['server']['path'].'/css/backend_123mua.1.0.1.css');
+?>
+</head>
+<body id="login">
+<form id="frm" name="frm" method="post" action="<?php echo BASE_URL;?>/adm/index/login">
+<div class="login">
+	<div class="top_login">
+		<div class="ltop_login"></div>
+		<div class="rtop_login"></div>
+	</div>
+	<div class="login_inside">
+		<h2>Đăng nhập vào hệ thống Admin</h2>
+		<?php if($this->error_code):?>
+        <div class="error">
+        	<?php if($this->error_code==1):?>                      	
+        	Mật khẩu hoặc tài khoản không đúng
+        	<?php endif;?>                      	
+        </div>
+        <?php endif;?>
+		<div class="group_listing_input">			
+			<div class="listing_input">
+				<div class="post_label_container">
+					<label class="postLabel">Email:</label>
+				</div>
+				<input id="u" name="email" type="text" value="" class="login_text_input" />
+			</div>
+			<div class="listing_input">
+				<div class="post_label_container">
+					<label class="postLabel">Mật khẩu:</label>
+				</div>
+				<input id="p" name="password" type="password" value="" class="login_text_input" />
+			</div>
+			<?php if($this->show_captcha==1):?>
+            <div class="listing_input" style="height:auto;">
+				<div class="post_label_container">
+					<label class="postLabel">Mã xác nhận:</label>
+				</div>
+				<input id="verifycode" name="verifycode" type="text" maxlength="6" class="login_text_input" />
+				<input type="hidden" value="<?php echo $this->token;?>" name="captcha_token" />							
+                <p class="key"><img id="sVerifyImg" name="sVerifyImg" src="<?php echo $this->api_passport['captchaurl'];?>?token=<?php echo $this->token;?>&type=img" width="200px" height="48px" alt="" border="0"/></p>
+			</div>
+			<?php endif;?>
+			<div class="text_remember"><input name="" type="checkbox" value="" class="nonbdr" />&nbsp;<a href="#">Ghi nhớ đăng nhập</a>  |  <a href="<?php echo $this->api_passport['forgoturl'];?>">Quên mật khẩu</a></div>
+			<div class="button_listing_input"><input class="button_login" value="" name="submit" type="submit" /></div>
+		</div>
+		<div class="copyright">Copyright © 2014 ucancook.vn - Website thương mại điện tử</div>
+	</div>
+	<div class="bottom_login">
+		<div class="lbottom_login"></div>
+		<div class="rbottom_login"></div>
+	</div>
+</div>
+</form>
+</body>
+</html>

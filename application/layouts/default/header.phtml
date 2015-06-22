@@ -1,0 +1,117 @@
+<header class="header-main">
+	<div class="top-header">
+		<div class="container clearfix">
+			<div class="row">
+				<div class="col-md-7">
+					<a class="visible-sm visible-xs nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					<span class="hidden-sm hidden-xs referral-offer"><strong>MIỄN PHÍ GIAO HÀNG</strong> CHO ĐƠN HÀNG TRÊN 500.000 VNĐ <a href="<?php echo BASE_URL.'/thuc-don';?>">Mua ngay.</a></span>
+				</div>
+				<div class="col-md-5">
+					<ul class="header-ntr nav-collapse-bar clearfix">
+						<li class="visible-sm visible-xs"><a href="tel:<?php echo PHONE_NUMBER;?>"><?php echo PHONE_NUMBER;?></a>
+						</li>
+						<li class="visible-sm visible-xs"><a href="help@ucancook.com">help@ucancook.com</a>
+						</li>
+						<li class="visible-sm visible-xs"><a href="/cach-thuc-van-hanh.html#delivery-zones">Khu vực giao hàng</a>
+						</li>
+						<li class="hidden-sm hidden-xs"><a id="popover-nav-action" href="javascript:void(0)">Trợ giúp</a>
+							<div class="popover-nav header-help-container">
+								<div class="arrow-top"></div>
+								<div class="popover-nav-inner header-help-inner">
+									<a class="header-help-section" href="tel:<?php echo PHONE_NUMBER;?>">
+										<i class="header-help-icon icon-phone-gray"></i>
+										<h4 class="header-help-phone">Xin gọi: <br><?php echo PHONE_NUMBER;?></h4><span class="span">Thứ 2 - Thứ 6 9am-10pm<br>Thứ 7 &amp; Chủ nhật nghỉ</span>
+									</a>
+									<a target="_blank" class="header-help-section" href="javascript:void(0)">
+										<i class="header-help-icon icon-email-gray"></i>
+										<h4 class="header-help-email">help@ucancook.vn</h4>
+									</a>
+									<a target="_blank" class="header-help-section" href="javascript:void(0)">
+										<i class="header-help-icon icon-faq-gray"></i>
+										<h4>Câu hỏi thường gặp</h4>
+									</a>
+									<a class="header-help-section header-help-section-last" href="javascript:void(0)">
+										<i class="header-help-icon icon-delivery-gray"></i>
+										<h4>Khu vực giao hàng</h4>
+									</a>
+								</div>
+							</div>
+						</li>
+						<?php if(LOGIN_UID > 0){?>
+						<li><a href="/gioi-thieu-ban-be.html">Tài khoản</a></li>
+						<li><a href="<?php echo BASE_URL.'/logout.html';?>">Thoát</a></li>
+						<?php }else{?>
+						<li>
+							<a href="<?php echo BASE_URL.'/login.html';?>">Đăng nhập</a>
+						</li>
+						<?php }?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="nav-container">
+		<div class="container clearfix">
+			<nav class="navbar">
+				<a class="logo" href="/">Trang chủ</a>
+				<ul class="nav-main">
+					<li><a class="nav-main-link" href="<?php echo BASE_URL?>/thuc-don">Thực đơn</a></li>
+					<li><a class="nav-main-link" href="<?php echo BASE_URL?>/nguyen-lieu.html">Nguyên liệu</a></li>
+					<li><a class="nav-main-link" href="<?php echo BASE_URL?>/cach-thuc-van-hanh.html">Cách thức vận hành</a></li>
+					<li><a class="nav-main-link" href="<?php echo BASE_URL?>/phieu-qua-tang.html">Phiếu quà tặng</a></li>
+				</ul>
+				<div class="nav-cart-container dropdown">
+					<div class="nav-cart">
+						<div class="nav-cart-welcome nav-cart-inner">
+							<?php if(LOGIN_UID > 0){?>
+							<div class="mobile-hidden">Xin chào, <a href="/gioi-thieu-ban-be.html" class="nav-cart-account-link">đầu bếp</a></div>
+							<div class="mobile-visible" style="display: none !important;"><a href="/user/info" class="nav-cart-account-link">Tài khoản</a></div>
+							<?php }else{?>
+							<a class="nav-cart-account-link" href="<?php echo BASE_URL?>/register.html">Đăng ký</a>
+							<?php }?>
+						</div>
+						<?php 	
+							$totalItem = 0;
+							if(isset($_COOKIE['ucancook_cart']))
+							{
+								$cookieCart = $_COOKIE['ucancook_cart'];
+								if(!empty($cookieCart)){
+									$cookieCart = explode(';', $cookieCart);
+									foreach ($cookieCart as $cookieItem){
+										if(!empty($cookieItem)){
+											$cookieItemTmp = explode(',', $cookieItem);
+											$totalItem += $cookieItemTmp[2];    			
+										}
+									}
+								}
+							}
+						?>
+						<div class="nav-cart-basket nav-cart-inner" id="dLabel" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a class="nav-cart-basket-link" style="width: 80px" href="<?php echo BASE_URL.'/gio-hang.html';?>"><i class="cart-icon"></i>Giỏ hàng<?php if(!empty($totalItem)){?><span class="label-cart-count"><?php echo $totalItem?></span><?php }?></a>
+						</div>
+						<div id="dropdown-cart" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+							<div class="dropdown-cart-inner">
+								<div class="dropdown-cart-container-top">
+									<a href="javascript:void(0)" class="dropdown-cart-close">×</a>
+									<h3 class="dropdown-cart-title">Giỏ hàng của bạn</h3>
+									<ul class="cart-items">
+										<li class="loading-mini"><span></span></li>
+									</ul>
+								</div>
+								<div class="dropdown-cart-container-bottom">				
+									<span class="cart-subtotal">Tổng cộng <span class="total_price_cart_popup"></span> VNĐ</span>
+									<a class="cart-checkout-button" href="<?php echo BASE_URL?>/gio-hang.html">Thanh toán</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+</header>
+<div class="flash-global flash-block" style="display:none;line-height: 1.5em;padding: 1.85em;text-align: center;margin-bottom: 0;font-size: 1.5em;background-color: #333;color: #f5f5f5;border: 0;font-weight: 200;"><a class="close" href="javascript:void(0)" id="flash-block-close" style="float: right;position: relative;right: 0;top: -15px;color: #f5f5f5;border-bottom: 0;font-weight: 200;font-size: 1.2em;filter: alpha(opacity=100);opacity: 1;line-height: inherit;text-shadow: none;">×</a><span class="flash_message"></span>!</div>

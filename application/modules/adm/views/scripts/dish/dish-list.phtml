@@ -1,0 +1,157 @@
+<?php $params = $this->filters;?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý món ăn</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/dish/add-dish" title="Thêm mới món ăn"></a></span>	
+		</div>
+    </div>
+    <form id="frm" name="frm" method="get" action="/adm/dish/dish-list">
+        <ul class="filter clearfix">            
+           	<li>
+                <label>Tên món ăn</label>
+                <input id="dish_name" name="dish_name" value="<?php echo $params['dish_name']?>" class="large" type="text" />
+            </li>   
+            <li id="category_option">
+                <label>Loại món ăn</label>
+                 <select id="type" name="type" class="cat">
+					<option value="0">Loại món ăn</option>
+					<?php foreach(Dish::$_ARRAY_TYPE as $key => $type){?>
+					<option value="<?php echo $key?>" <?php if($key == $params['type']) echo 'selected="selected"';?>><?php echo $type['name']?></option>
+					<?php }?>
+				</select>                
+            </li>                   
+            <li>
+                <label>Đầu bếp nấu</label>
+                <select id="chef_id" name="chef_id" class="cat">
+                    <option value="">Đầu bếp nấu</option>
+                    <?php foreach($this->chefs as $chef){?>
+					<option value="<?php echo $chef['id']?>" <?php if($chef['id'] == $params['chef_id']) echo 'selected="selected"';?>><?php echo $chef['chef_name']?></option>
+					<?php }?>
+                </select>
+            </li>           
+            <li>
+                <label>Limit</label>
+                   <select class="cat" name="limit">
+                     	<option value="30" <?php if(30 == $params['limit']) echo 'selected="selected"';?>>30</option>
+                        <option value="50" <?php if(50 == $params['limit']) echo 'selected="selected"';?>>50</option>
+                    	<option value="100" <?php if(100 == $params['limit']) echo 'selected="selected"';?>>100</option>
+                   </select>
+             </li>                               
+              <li class="clear">
+                <input id="submit" name="submit" value="" class="button_search" type="submit" />
+             </li>
+         </ul>
+     </form>
+    <div class="clear"></div>
+    <?php echo $this->paging; ?>
+   <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                    <tr>
+                       <td valign="middle" colspan="9" class="firstRow"></td>
+                    </tr>
+                    <tr>                      
+                        <td style="width: 10px" class="secondRow">ID</td>         
+						<td width="7%" class="secondRow">Hình ảnh</td>					   
+                        <td width="26%" class="secondRow">Tên món</td>
+                        <td width="12%" class="secondRow">Giá</td>
+                        <td width="10%" class="secondRow">Loại món</td>
+                        <td width="9%" class="secondRow">Đầu bếp</td>
+                        <td width="8%" class="secondRow">Tình trạng</td>	          
+					    <td width="11%" class="secondRow">Cập nhật</td>						   
+                        <td width="16%" class="secondRow">Thao tác</td>
+                    </tr>   
+                    <?php
+                    if (is_array($this->dishes) && !empty($this->dishes)) {
+                        foreach ($this->dishes as $key => $value) {
+                        	$statusUpdate = $value['status'] == 1?0:1;
+                    ?>
+	                    <tr>
+		                    <td align="center" class="ctn"><?php echo $value['id']; ?></td>
+		                    <td class="ctn"><img src="<?php echo My_Zend_Globals::getThumbImage($value['image'], 'thumb');?>" style="width:70px;height:70px"></td>	                    
+		                    <td class="ctn">
+		                    	<?php echo $value['name']?>
+		                    </td>	                    
+		                    <td class="ctn">
+		                    	<?php echo number_format($value['price'], 0, ',', '.');?>
+		                    </td>
+		                    <td class="ctn"><?php echo Dish::$_ARRAY_TYPE[$value['type']]['name'];?></td>	               
+		                    <td class="ctn"><?php echo $value['chef_name'];?></td>              
+		                    <td class="ctn"><?php if($value['status'] == 0) echo '<span class="badge bg-red">Đã khóa</span>'; else echo '<span class="badge bg-green">Online</span>';?></td>
+		                    <td class="ctn"><?php echo date('H:i d/m/Y', $value['updated_date']); ?></td>	    
+		                    <td class="ctn">	                    	
+		                    	<a href="<?php echo BASE_URL.'/adm/dish/update-status-dish/id/'.$value['id'].'/status/'.$statusUpdate?>" class="btn btn-warning btn-sm"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/<?php echo $value['status'] == 1?'b_lock':'b_unlock';?>.jpg" alt="" width="60px" height="20px"/></a>
+								<a href="<?php echo BASE_URL.'/adm/dish/edit-dish/id/'.$value['id']?>" class="b_edit" title="Cập nhật thuộc tính này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="60px" height="20px"/></a> 
+								<a href="javascript:void(0)" class="btn btn-danger btn-sm delete_dish" title="Xóa món ăn này" rel="<?php echo $value['id'];?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="60px" height="20px"/></a>
+		                    </td>
+	                </tr>  
+	                <?php }}else{?>
+	                <tr>
+	                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+	                </tr>
+	                <?php } ?>            	                	
+                    <tr>
+						<td valign="middle" colspan="9" class="firstRow"></td>                 
+					</tr>
+           </tbody>
+       </table>
+    </div>
+    <?php echo $this->paging; ?>
+ </div>
+<script>
+	$(document).ready(function()
+	{
+		//$(".input-date").datepicker({ dateFormat: 'dd-mm-yy' });
+		$('.delete_dish').click(function()
+		{
+			var obj = $(this);
+			var postId = $(this).attr('rel');
+			
+			$(this).myBoxy (Boxy,{
+				type: 'confirm',
+				message: 'Bạn chắc chắn muốn xóa món ăn này?',
+				callback: function() 
+				{
+					var boxy = Boxy.get($(".popup"));
+						boxy.hide();
+
+					$(this).myBoxy (Boxy,{
+			            title: 'Loading',
+			            type: 'loading',
+			            message: '<img src="'+Settings.imgurl+'/loading_more.gif" alt="Loading" style="margin-bottom:5px;margin-left:10px;" />'
+			        });
+							
+					$.ajax({
+						type: "POST",
+						url: Settings.baseurl + '/adm/dish/delete-dish',
+						data:{id:postId},
+						dataType:'json',
+						success: function(data)
+						{   
+							var boxy = Boxy.get($(".popup"));
+								boxy.hide();
+							
+							if(data.error == 0)
+							{
+								$(this).myBoxy (Boxy,{
+									type: 'success',
+									message: 'Bạn đã xóa món ăn thành công.'
+								});    
+								obj.parent().parent().remove();
+							}
+							else
+							{
+								$(this).myBoxy (Boxy,{
+									type:'alert',
+									message: 'Thao tác thất bại. Bạn vui lòng thử lại sau.'
+								});
+							}
+						}
+					});
+				}
+			});
+		});
+	});
+</script>  <!--End Content-->  
+</div>

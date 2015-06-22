@@ -1,0 +1,70 @@
+<section id="mass-header">
+		<section class="container content clearfix">
+			<div class="account-page">
+				<div class="row nav-secondary-container">
+					<div class="col-md-12">
+						<h1 class="nav-secondary-title">Tài khoản</h1>
+						<nav class="nav-secondary" id="standard-nav">
+							<a href="/gioi-thieu-ban-be.html">Giới thiệu bạn bè</a>
+							<a class="active" class="" href="/khau-vi-cua-toi.html">Khẩu vị của bạn</a>
+							<a class="" href="/dia-chi-dat-hang.html">Địa chỉ đặt hàng</a>
+							<a class="" href="/thong-tin-ca-nhan.html">Email &amp; Mật khẩu</a>
+						</nav>
+					</div>
+				</div>
+				<div class="account-content taste-profile">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="sidebar">
+                                <p>Cho chúng tôi biết khẩu vị của bạn để chúng tôi có thể gợi ý các món ăn phù hợp với bạn nhất! Cung cấp cho chúng tôi bất kỳ thông tin gì về:</p>
+                                <ul>
+                                    <li>Các chất gây dị ứng cho bạn</li>
+                                    <li>Các hương vị bạn không thích</li>
+                                    <li>Các món bạn đang ăn kiêng</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-8 taste-profile-options">
+                            <h2><span><span>Loại bỏ </span> những nguyên liệu này</span> ra khỏi thực đơn của tôi:</h2>
+                            <?php $total = count(Dish::$_ARRAY_TASTE);?>
+                            <?php for($i = 0; $i <= $total; $i+=2){?>
+                            <div class="row ingredient-row clearfix">
+                            	<?php for($j = 1; $j <= 2; $j++){
+                            		$key= $i+$j;
+                            	?>
+                            	<?php if(isset(Dish::$_ARRAY_TASTE[$key])){?>
+                                <div class="col-md-6 ingredient-block <?php if(in_array(Dish::$_ARRAY_TASTE[$key]['id'], $this->taste)) echo 'selected';?>">
+                                    <div class="selected-copy">Chúng tôi sẽ không gửi cho bạn <?php echo Dish::$_ARRAY_TASTE[$key]['name'];?>.</div>
+                                    <img class="img-responsive" alt="<?php echo Dish::$_ARRAY_TASTE[$key]['name'];?>" src="<?php echo $this->layout()->_general['static']['path'];?>/images/<?php echo Dish::$_ARRAY_TASTE[$key]['image'];?>">
+                                    <p><img src="<?php echo $this->layout()->_general['static']['path'];?>/images/pref_selected.png" class="pref-selected" alt="Pref-selected"><?php echo Dish::$_ARRAY_TASTE[$key]['name'];?></p>
+                                	<input type="hidden" class="taste_id" value="<?php echo Dish::$_ARRAY_TASTE[$key]['id']?>">
+                                </div>
+                                <?php }}?>
+                            </div>
+                            <?php }?>
+                     </div>
+                </div>
+        	</div>
+		</div>
+	</section>
+</section>
+<script>
+	$('.ingredient-block').click(function(){
+		$(this).toggleClass("selected");
+		var tasteId = $('.taste_id', $(this)).val();
+		var status = 1;
+		if(!$(this).hasClass("selected"))
+			status = 2;
+		common.progress();
+		
+		$.ajax({
+			type: "POST",
+			url: Settings.baseurl + '/ajax/togglenointerest',
+			data:{id:tasteId, status:status},
+			dataType:'json',
+			success: function(data){    
+				common.finish();
+			}
+		});
+	});
+</script>

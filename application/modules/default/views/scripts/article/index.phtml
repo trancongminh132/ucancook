@@ -1,0 +1,93 @@
+<div id="main-content">
+			<div class="top-slider">
+				<ul class="clearfix">
+					<?php foreach($this->hotArticles as $article){?>
+					<li>
+						<div class="pic"><img class="img-responsive" src="<?php echo $article['picture']?>" alt="<?php echo $article['title']?>"></div>
+						<div class="desc">
+							<h2><a title="<?php echo $article['title']?>" href="<?php echo Article::articleUrl($article);?>"><?php echo $article['title']?></a><span>Ngày <?php echo date('j', $article['created_date']);?>, <?php echo date('n-Y', $article['created_date']);?></span></h2>
+							<p><?php echo $article['description']?></p>
+						</div>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+			<div class="clear"></div>
+			<ul class="news-block-columns-2 clearfix">
+				<?php foreach($this->block['block_homepage_1']['articles'] as $article){?>
+				<?php $url = Article::articleUrl($article);?>
+				<li class="clearfix">
+					<div class="news-image-container">
+						<a title="<?php echo $article['title']?>" href="<?php echo $url?>"><img class="img-responsive" alt="<?php echo $article['title'];?>" src="<?php echo $article['picture']?>"></a>
+						<div class="news-image-title">
+							<a href="<?php echo Category::categoryNewsUrl($this->block['block_homepage_1']['category']);?>"><?php echo $this->block['block_homepage_1']['category']['category_name']?></a>	
+						</div>
+					</div>
+					<h3 class="news-title"><a title="<?php echo $article['title']?>" href="<?php echo $url?>"><?php echo My_Zend_Globals::cutString($article['title'], 0, 50);?></a><span>Ngày <?php echo date('j', $article['created_date']);?>, <?php echo date('n-Y', $article['created_date']);?></span></h3>
+					<p><?php echo My_Zend_Globals::cutString($article['description'], 0, 110);?></p>
+				</li>
+				<?php }?>
+			</ul>
+			<div class="title-block">
+				<h3>The Pantry</h3>
+			</div>
+			<ul class="news-block-columns-5 clearfix">
+				<?php foreach($this->block['block_homepage_2']['articles'] as $article){?>
+				<?php $url = Article::articleUrl($article);?>
+				<li class="news-block-col-5">
+					<div class="news-image-container">
+						<a title="<?php echo $article['title']?>" href="<?php echo $url?>">
+							<img class="img-responsive" alt="<?php echo $article['title'];?>" src="<?php echo $article['picture']?>">
+						</a>
+					</div>
+					<h3 class="news-title-lower"><a title="<?php echo $article['title']?>" href="<?php echo $url?>"><?php echo My_Zend_Globals::cutString($article['title'], 0, 50);?></a><span>Ngày <?php echo date('j', $article['created_date']);?>, <?php echo date('n-Y', $article['created_date']);?></span></h3>
+				</li>
+				<?php }?>
+			</ul>
+			<ul class="shop-block-columns-2 clearfix">
+				<li class="shop-block-col-2">
+					<div class="title-block">
+						<h3>Healthy Eating</h3>
+					</div>
+					<div class="slider-news clearfix">
+						<ul class="slides">
+							<li style="display:list-item;">
+					<ul class="shop-block-list">
+						<?php foreach($this->block['block_homepage_3']['articles'] as $article){?>
+						<?php $url = Article::articleUrl($article);?>
+						<li class="clearfix">
+							<div class="shop-block-img-wrapper">
+								<a title="<?php echo $article['title']?>" href="<?php echo $url?>"><img class="img-responsive" alt="<?php echo $article['title'];?>" src="<?php echo $this->layout()->_general['static']['path'];?>/images/news.jpg"></a>
+							</div>
+							<h4><a title="<?php echo $article['title']?>" href="<?php echo $url?>"><?php echo My_Zend_Globals::cutString($article['title'], 0, 50);?></a><span>Ngày <?php echo date('j', $article['created_date']);?>, <?php echo date('n-Y', $article['created_date']);?></span></h4>
+						</li>	
+						<?php }?>			
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li class="shop-block-col-2">
+		<div class="title-block">
+			<h3>Featured</h3>
+		</div>
+		<div class="slider-news clearfix">
+			<ul class="slides">
+				<li style="display:list-item;">
+						<ul class="shop-block-list">
+							<?php foreach($this->block['block_homepage_4']['articles'] as $article){?>
+							<?php $url = Article::articleUrl($article);?>
+							<li class="clearfix">
+								<div class="shop-block-img-wrapper">
+									<a title="<?php echo $article['title']?>" href="<?php echo $url?>"><img class="img-responsive" alt="<?php echo $article['title'];?>" src="<?php echo $this->layout()->_general['static']['path'];?>/images/news.jpg"></a>
+								</div>
+								<h4><a title="<?php echo $article['title']?>" href="<?php echo $url?>"><?php echo My_Zend_Globals::cutString($article['title'], 0, 50);?></a><span>Ngày <?php echo date('j', $article['created_date']);?>, <?php echo date('n-Y', $article['created_date']);?></span></h4>
+							</li>	
+							<?php }?>							
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,98 @@
+<script>
+	/* init facebook */
+	(function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) return;
+	    js = d.createElement(s); js.id = id;
+	    js.src = "//connect.facebook.net/vi_VN/all.js#xfbml=1&appId=344527302396637";
+	    fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+</script>
+<section id="mass-header">
+	<section class="container content clearfix">
+		<div class="account-page">
+			<div class="row nav-secondary-container">
+				<div class="col-md-12">
+					<h1 class="nav-secondary-title">Tài khoản</h1>
+					<nav class="nav-secondary" id="standard-nav">
+						<a class="active" href="/gioi-thieu-ban-be.html">Giới thiệu bạn bè</a>
+						<a class="" href="/khau-vi-cua-toi.html">Khẩu vị của bạn</a>
+						<a class="" href="/dia-chi-dat-hang.html">Địa chỉ đặt hàng</a>
+						<a class="" href="/thong-tin-ca-nhan.html">Email &amp; Mật khẩu</a>
+					</nav>
+				</div>
+			</div>
+			<div class="account-content referrals">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="title-bar">Nhận <span>1 món ăn miễn phí</span> vào lần đặt hàng sau cho <br>mỗi <span>2 món</span> bạn gửi cho bạn của bạn.</h3>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div id="referral-links">
+							<p>Chia sẽ liên kết mời bạn bè của bạn:
+							</p>
+							<ul>
+								<li class="fb-invite wall post_my_wall"><a href="javascript:void(0);">Đăng lời mời lên tường của bạn</a></li>
+								<li class="fb-invite message invite_my_friend"><a href="javascript:void(0);">Mời bạn bè trên Facebook</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-8">					
+						<h4 style="margin-top:32px;">Đơn hàng của bạn</h4>
+						<div class="table-responsive">
+							<table cellspacing="0" cellpadding="0">
+								<thead>
+									<tr>
+										<th>Mã ĐH</th>
+										<th>Tình trạng</th>
+				                        <th>Loại thanh toán</th> 
+				                        <th>Giá trị</th>                               
+				                        <th>Ngày đặt hàng</th>
+									</tr>
+								</thead>
+								<tbody>
+									 <?php if(!empty($this->listOrders)){?>
+									<?php foreach ($this->listOrders as $order){?>
+									<tr style="font-size:0.75em">
+					                    <td class="ctn"><?php echo $order['order_code']?></td>
+					                    <td class="ctn"><?php echo ProductOrders::$listOrderStatus[$order['order_status']]?></td>	                    
+					                    <td class="ctn">
+					                    	<?php echo ProductOrders::$_paymentType[$order['payment_type']];?>
+					                    </td>
+					                    <td class="ctn"><?php echo My_Zend_Globals::numberFormat($order['amount_total']);?> VNĐ</td>	       					                 
+					                    <td class="ctn"><?php echo date('H:i d/m/Y', $order['created_date']); ?></td>	                  				                    
+				                </tr>  
+									<?php }}else{?>
+					                <tr>
+					                    <td colspan="6" style="text-align:center;font-size:0.75em">Hiện không có đơn hàng nào.</td>
+					                </tr>
+					                <?php } ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</section>
+<script>
+	$('.post_my_wall').click(function(){
+		FB.ui({
+			method: 'feed',
+		  	link: 'http://www.ucancook.vn/gioi-thieu-ban-be.html',
+		  	caption: 'Với Ucancook, ai cũng sẽ là 1 đầu bếp đúng nghĩa',
+		  	picture:'http://ucancook.vn/default/images/logo.png',
+		}, function(response){});				
+	});
+	$('.invite_my_friend').click(function(){
+		FB.ui({
+          	method: 'send',
+          	name: '<?php echo $this->dish['name']?>',
+          	link: '<?php echo $this->dish['url']?>',
+          	picture:'<?php echo $this->dish['image']?>',
+        });
+	});
+</script>

@@ -1,0 +1,86 @@
+<?php
+	echo $this->headScript()
+    	->appendFile($this->layout()->_general['static']['path'].'/js/upload.js');
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Cập nhật banner</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên banner:</label>
+                        </div>
+                        <input name="banner_name" type="text" class="title_text_input" value="<?php echo $this->banner['banner_name'];?>"/>                      
+                    </div>                    
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Liên kết:</label>
+                        </div>
+                        <input type="text" class="title_text_input" id="link" value="<?php echo $this->banner['link'];?>" name="link"/>		
+                    </div>                                     
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Vị trí banner:</label>
+                      	</div>
+                  			<select class="post_select" name="position_id" id="position_id">
+								<option value="0">Chọn vị trí banner</option>
+								<?php				
+									 foreach(Banner::$_BANNER_POSITIONS as $key => $position)
+									 {?>
+									 <option value="<?php echo $key;?>" <?php if($key == $this->banner['position_id']) echo 'selected';?>><?php echo $position;?></option>
+								<?php }?>
+							</select>         
+                	</div>         
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Thứ tự:</label>
+                      	</div>
+                  			<select class="post_select" name="ordering">
+								<?php for($i=1;$i<=100;$i++){?>
+								<option value="<?php echo $i?>" <?php if($i == $this->banner['ordering']) echo 'selected';?>><?php echo $i?></option>
+								<?php }?>
+							</select>         
+                	</div>  
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Upload banner:</label>
+                        </div>
+                        <div id="tinyMceUploadImage"></div>
+                        <p class="help-block" style="padding-left:130px;padding-top: 10px">
+                            <img style="width:200px;height:150px" class="banner_upload" src="<?php echo $this->banner['banner_url']?>" alt="" />
+                            	<input type="hidden" id="banner_url" name="banner_url" value="<?php echo $this->banner['banner_url']?>"/>
+                        </p>
+                    </div>
+                    <div class="button_listing_input">
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+callbackUploadBanner = function(resp){
+	switch(resp.error_code){
+	case 0:		
+		var photoSrc = resp.data.photo_src;	
+		$('.banner_upload').attr('src', photoSrc)
+		$('#banner_url').val(photoSrc);
+		break;
+}
+};
+$('#tinyMceUploadImage').photoUpload(
+{
+	prefix: 'quick_',
+	maxNumID: 1,			
+	ajaxFile: Settings.uploadurl,
+	file_types: "jpg,png",
+	callback: callbackUploadBanner,				
+});
+</script>

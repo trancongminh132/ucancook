@@ -1,0 +1,44 @@
+.boxy-wrapper{position:absolute}
+.boxy-wrapper.fixed{position:fixed}
+.boxy-wrapper a{outline:0}
+/* Modal */
+.boxy-modal-blackout{position:absolute;background-color:#5699d6;left:0;top:0}
+/* Border */
+.boxy-wrapper{empty-cells:show}
+.boxy-wrapper .boxy-top-left,
+.boxy-wrapper .boxy-top-right,
+.boxy-wrapper .boxy-bottom-right,
+.boxy-wrapper .boxy-bottom-left{width:4px;height:4px;padding:0}
+:root .boxy-wrapper .boxy-top-left{background:url('../images/boxy-nw.png')}
+:root .boxy-wrapper .boxy-top-right{background:url('../images/boxy-ne.png')}
+:root .boxy-wrapper .boxy-bottom-right{background:url('../images/boxy-se.png')}
+:root .boxy-wrapper .boxy-bottom-left{background:url('../images/boxy-sw.png')}
+/* IE6-8 hacks for the border. IE7+8 should support this natively but fails in conjuction with modal blackout bg. */
+/* NB: these must be absolute paths or URLs to your images */
+.boxy-wrapper .boxy-top-left{
+#filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-nw.png');
+-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-nw.png')"
+}
+.boxy-wrapper .boxy-top-right{
+#filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-ne.png');
+-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-ne.png')"
+}
+.boxy-wrapper .boxy-bottom-right{
+#filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-se.png');
+-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-se.png')"
+}
+.boxy-wrapper .boxy-bottom-left{
+#filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-sw.png');
+-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.123mua.vn/a/images/boxy-sw.png')"
+}
+.boxy-wrapper .boxy-top,
+.boxy-wrapper .boxy-bottom{height:4px;background-color:#5699d6;padding:0}
+.boxy-wrapper .boxy-left,
+.boxy-wrapper .boxy-right{width:4px;background-color:#5699d6;padding:0}
+/* Title bar */
+.boxy-wrapper .title-bar{display:none}
+.boxy-wrapper .title-bar.dragging{cursor:move}
+.boxy-wrapper .title-bar .close{position:absolute;top:3px;right:6px;background:url(../images/icon_close.jpg);width:62px;height:20px;line-height:1;text-indent:-9999px}
+/* Content Region */
+.boxy-inner{overflow:hidden;background-color:white;padding:0}
+.boxy-content{padding:0}

@@ -1,0 +1,110 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Danh sách coupon</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/coupon/add-coupon" title="Thêm mới coupon"></a></span>	
+		</div>
+    </div>
+    <?php echo $this->paging; ?>
+    <form method="post">
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="7" class="firstRow"></td>
+                   </tr>
+                   <tr>
+                       <td class="secondRow">ID</td>   
+                       <td class="secondRow">Tên coupon</td>                       
+                       <td class="secondRow">Trạng thái</td>
+                       <td class="secondRow">Mệnh giá</td>
+                       <td class="secondRow">Giá</td>
+                       <td class="secondRow">Cập nhật</td>
+                       <td width="12%" class="secondRow">Thao tác</td>
+                  </tr>
+                <?php 
+                if (!empty($this->coupons)):
+					 foreach ($this->coupons as $item):					  
+                	 $color = null;
+                	 if($item['status'] == 1) {
+                		$color = 'style="background:#FFFFCC;"';
+                	 } else {
+                		$color = 'style="background:#F2F2F2;"';
+                	 }
+                ?>
+                <tr <?php echo $color .' id="record-' . $item['id']. '"'?>>
+                     <td align="left" class="ctn"><?php echo $item['id']?></td>
+                     <td class="ctn"><span id="coupon-<?php echo $item['id']?>"><?php echo $item['coupon_name']?></span></td>
+                     <td align="right" class="ctn"><?php echo (($item['status'] == 1) ? 'Kích hoạt ':'Đã ẩn');?></td>
+                     <td align="left" class="ctn"><?php echo My_Zend_Globals::numberFormat($item['value'])?></td>
+                     <td class="ctn"><?php echo My_Zend_Globals::numberFormat($item['price'])?></td>
+                     <td class="ctn">
+                     	<?php echo date('H:i d/m/Y', $item['updated_date'])?>
+                     </td>
+                     <td class="ctn">	                    	
+						<a href="<?php echo BASE_URL.'/adm/coupon/edit-coupon/id/'.$item['id']?>" class="b_edit" title="Cập nhật coupon này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+						<a href="javascript:void(0)" class="btn btn-danger btn-sm" onClick="Coupon.deleteCoupon(<?php echo $item['id']; ?>)" title="Xóa coupon này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="40px" height="20px"/></a>
+	                 </td>
+                 </tr>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <tr>
+                   <td class="ctn nonSearch" colspan="7">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php endif; ?>
+                <tr>
+                  <td valign="middle" colspan="7" class="firstRow"></td>
+                </tr>
+            </tbody>
+        </table>       
+    </div>    
+     </form>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+	$(function() {
+		$( ".datepicker" ).datepicker({dateFormat : 'dd-mm-yy'});
+	});
+
+	var Coupon = 
+	{
+		deleteCoupon : function(id)
+		{
+		    $(this).myBoxy (Boxy,{
+		        type:'confirm',
+		        message: "Bạn có chắc chắn muốn xóa coupon này?",
+		        id : id,
+		        callback: function() 
+		        {
+		            var boxy = Boxy.get(this);
+		            var options = boxy.options;
+		            Coupon.doDeleteCoupon(id);
+		            boxy.hide();
+		        }
+		    });
+		},
+		doDeleteCoupon : function(id)
+		{
+		    $.post(Settings.baseurl + '/adm/coupon/delete-coupon', {
+		        id:id
+		    },
+		    function(data)
+		    {	
+			    if(data == 1)
+			    {
+					$(this).myBoxy (Boxy,{
+						type: 'success',
+				        message: 'Coupon bạn chọn đã được xóa thành công!',
+						afterHide:function(){location.reload()}
+				    });
+			    }else{
+			    	$(this).myBoxy (Boxy,{
+						type: 'alert',
+				        message: 'Thao tác thất bại. Bạn vui lòng thử lại sau!',
+						afterHide:function(){location.reload()}
+				    });
+				}		
+		    });
+		}
+	};
+</script>

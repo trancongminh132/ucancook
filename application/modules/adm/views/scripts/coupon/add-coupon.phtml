@@ -1,0 +1,49 @@
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Thêm mới coupon</div>
+    </div>
+    <div class="clear"></div>
+    <div class="">
+        <div class="fdefault posting">
+            <form action="" method="post">
+                <h3 class="n1">Thông tin cơ bản</h3>
+                <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tên coupon:</label>
+                        </div>
+                        <input name="coupon_name" type="text" class="title_text_input" />                      
+                    </div>                    
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Giá:</label>
+                        </div>
+                        <input type="text" class="title_text_input auto_numberic" id="price" value="" name="price" alt=""/>		
+                    </div>                                      
+                	<div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Giá trị sử dụng:</label>
+                        </div>
+                        <input type="text" class="title_text_input auto_numberic" id="value" value="" name="value" alt=""/>		
+                    </div> 
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Tình trạng:</label>
+                      	</div>
+                  			<select class="post_select" name="status" id="status">
+								<option value="1">Kích hoạt</option>
+								<option value="0">Ẩn</option>
+							</select>         
+                	</div>   
+                	<div class="clear"></div>       
+                    <div class="button_listing_input clear">
+	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+	                </div>
+                </div>                     
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+	$('input.auto_numberic').autoNumeric();
+</script>

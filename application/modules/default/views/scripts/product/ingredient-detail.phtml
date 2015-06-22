@@ -1,0 +1,77 @@
+<?php 
+	echo $this->headLink()
+		->appendStylesheet($this->layout()->_general['server']['path'].'/css/jquery.fancybox.css');
+	echo $this->headScript()
+		->appendFile($this->layout()->_general['server']['path'].'/js/jquery.fancybox.pack.js');
+?>
+<div id="how-it-works" class="category">
+	<div class="container container-panels clearfix">
+		<div class="row clearfix">
+			<div class="col-md-12">
+				<ul class="inline breadcrumbs">
+					<li><a title="Trang chủ Ucanncook.vn" href="/">Trang chủ</a></li>
+					<li><a title="Nguyên liệu" href="/nguyen-lieu.html">Nguyên liệu</a></li>
+					<li><a title="<?php echo $this->category['category_name']?>" href="/nguyen-lieu.html?category_id=?<?php echo $this->category['category_id']?>"><?php echo $this->category['category_name']?></a></li>
+					<li><?php echo $this->data['name'] ?></li>
+				</ul>
+				<h1 class="title-category"><?php echo $this->category['category_name']?></h1>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="detail-inside clearfix">
+				<div class="col-md-4 col-xs-12 left-detail">
+					<div class="pic-detail col-xs-12"><img class="img-responsive" src="<?php echo $this->data['image']?>"></div>
+					<p class="center hidden-xs hidden-sm"><a class="func-zoom fancybox" href="<?php echo $this->data['image']?>" data-fancybox-group="gallery" title="<?php echo $this->data['name']?>">Phóng to</a></p>
+				</div>
+				<div class="col-md-8 col-xs-12 right-detail">
+					<div class="sum-detail col-md-8 col-xs-12">
+						<h1><?php echo $this->data['name'] ?></h1>
+						<?php echo $this->data['summary'] ?>
+					</div>
+					<div class="order-detail-box col-md-4 col-xs-12">
+						<div class="inside clear">
+							<div class="price clearfix"><span class="price-inner"><?php echo My_Zend_Globals::numberFormat($this->data['price'])?> VND</span><span class="sl"><?php echo Ingredient::$_ARRAY_UNIT[$this->data['unit_price']]['name'];?></span></div>
+							<div class="quality"><a class="mic decrement" href="javascript:void(0)">-</a><span class="c-mic buy_quantity">1</span><a class="mic increment" href="javascript:void(0)">+</a></div>
+							<a class="btn-order buy_ingredient_detail" href="javascript:void(0)">Đặt hàng</a>
+						</div>
+					</div>
+					<?php if(!empty($this->data['description'])){?>
+					<div class="clear"></div>
+					<div class="detail-info col-md-12 col-xs-12">
+						<h2 class="lstitle">Thông tin chi tiết</h2>
+						<?php echo $this->data['description'] ?>
+					</div>
+					<?php }?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var id = <?php echo intval($this->data['id']);?>;
+	$(document).ready(function() {
+		$('.fancybox').fancybox();
+		$('.increment').click(function(){
+			var parent = $(this).parent();
+			var quantity = parseInt($('.buy_quantity', parent).html());
+			if(quantity == 100)
+				return;
+			$('.buy_quantity', parent).html(quantity+1)
+		});
+		$('.decrement').click(function(){
+			var parent = $(this).parent();
+			var quantity = parseInt($('.buy_quantity', parent).html());
+			if(quantity == 1)
+				return;
+			$('.buy_quantity', parent).html(quantity-1)
+		});
+		$('.buy_ingredient_detail').click(function()
+		{
+			common.progress();
+			var quantity = $('.buy_quantity', $(this).parent()).html();
+			cart.addToCart(cart.typeIngredient, id, quantity);
+			common.setFlashMessage('Nguyên liệu bạn chọn đã được thêm vào giỏ hàng thành công');
+			cart.incrementCountCart(quantity);
+		});
+	});
+</script>

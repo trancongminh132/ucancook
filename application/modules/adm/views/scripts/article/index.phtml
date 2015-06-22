@@ -1,0 +1,164 @@
+<?php
+$params = $this->params;
+?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý bài viết</div>
+        <?php if(Role::isAllowed(Permission::ARTICLE_ADD)):?>
+        <div class="addLink"><a title="Tạo tủ hàng" href="<?php echo $this->url(array('action' => 'create', 'controller' => 'article', 'module' => 'adm'), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_add.jpg" alt="Tạo bài viết" /></a></div>
+        <?php endif; ?>
+    </div>
+    <form id="frm" name="frm" method="get" action="<?php echo $this->url(array('action' => 'index', 'controller' => 'article', 'module' => 'adm'), null, true); ?>">
+		<ul class="filter clearfix">
+			<li class="expand"><label>Danh mục</label> <select id="category_id"
+				name="category_id" class="cat">
+					<option value="">Danh mục</option>
+					<?php
+                    foreach ($this->categoryTree as $parent) {
+                        echo '<optgroup label="' . $parent['category_name'] . '" class="first">';
+                        if ($parent['sub']) {
+                            foreach ($parent['sub'] as $sub) {
+                                if ($sub['category_id'] == $params['category_id'])
+                                    echo '<option value="' . $sub['category_id'] . '" selected="selected" class="second" >' . $sub['category_name'] . '</option>';
+                                else
+                                    echo '<option value="' . $sub['category_id'] . '" class="second" >' . $sub['category_name'] . '</option>';
+                            }
+                        }
+                        echo '</optgroup>';
+                    }
+                    ?>
+			</select>
+			</li>
+			<li class="expand"><label>Tên bài viết</label> <input id="title" name="title" value="<?php echo $params['title']; ?>"
+				class="large" type="text" />
+			</li>
+			<li class="expand"><label>Tình trạng sản phẩm</label> <select id="status"
+				name="status" class="cat">
+					<option value="-1">Tất cả</option>
+					<option value="0" class="second"
+					<?php echo (isset($params['status']) && $params['status'] == 0) ? 'selected="selected"' : ''; ?>>Ẩn</option>
+					<option value="1" class="second"
+					<?php echo ($params['status'] == 1) ? 'selected="selected"' : ''; ?>>Hiển
+						thị</option>
+			</select>
+			</li>
+			<li class="expand clear"><label>Ngày đăng (từ)</label> <select
+				id="created_date_day_from" name="created_date_day_from" class="dd">
+					<option value="">Ngày</option>
+					<?php for ($i = 1; $i < 32; $i++): ?>
+					<option value="<?php echo $i; ?>"
+					<?php echo ($i == (int) $params['created_date_day_from']) ? 'selected="selected"' : ''; ?>>
+						<?php echo $i; ?>
+					</option>
+					<?php endfor; ?>
+			</select> <select id="created_date_month_from"
+				name="created_date_month_from" class="mm">
+					<option value="">Tháng</option>
+					<?php for ($i = 1; $i < 13; $i++): ?>
+					<option value="<?php echo $i; ?>"
+					<?php echo ($i == (int) $params['created_date_month_from']) ? 'selected="selected"' : ''; ?>>
+						<?php echo $i; ?>
+					</option>
+					<?php endfor; ?>
+			</select> <select id="created_date_year_from"
+				name="created_date_year_from" class="yyyy">
+					<option value="">Năm</option>
+					<?php for ($i = 2010; $i < 2050; $i++): ?>
+					<option value="<?php echo $i; ?>"
+					<?php echo ($i == (int) $params['created_date_year_from']) ? 'selected="selected"' : ''; ?>>
+						<?php echo $i; ?>
+					</option>
+					<?php endfor; ?>
+			</select>
+			</li>
+			<li class="expand"><label>Ngày đăng (đến)</label> <select
+				id="created_date_day_to" name="created_date_day_to" class="dd">
+					<option value="">Ngày</option>
+					<?php for ($i = 1; $i < 32; $i++): ?>
+					<option value="<?php echo $i; ?>"
+					<?php echo ($i == (int) $params['created_date_day_to']) ? 'selected="selected"' : ''; ?>>
+						<?php echo $i; ?>
+					</option>
+					<?php endfor; ?>
+			</select> <select id="created_date_month_to"
+				name="created_date_month_to" class="mm">
+					<option value="">Tháng</option>
+					<?php for ($i = 1; $i < 13; $i++): ?>
+					<option value="<?php echo $i; ?>"
+					<?php echo ($i == (int) $params['created_date_month_to']) ? 'selected="selected"' : ''; ?>>
+						<?php echo $i; ?>
+					</option>
+					<?php endfor; ?>
+			</select> <select id="created_date_year_to"
+				name="created_date_year_to" class="yyyy">
+					<option value="">Năm</option>
+					<?php for ($i = 2010; $i < 2050; $i++): ?>
+					<option value="<?php echo $i; ?>"
+					<?php echo ($i == (int) $params['created_date_year_to']) ? 'selected="selected"' : ''; ?>>
+						<?php echo $i; ?>
+					</option>
+					<?php endfor; ?>
+			</select>
+			</li>			
+			<li class="clear"><input id="submit" name="submit" value=""	class="button_search" type="submit" />
+			</li>
+		</ul>
+	</form>
+                                    <div class="clear"></div>                                    
+    <?php echo $this->paging; ?>
+                                                    <div class="table_member">
+                                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                            <tbody>                                                               
+                                    <tr>
+                                        <td align="center" width="1%" class="secondRow"><input id="checkAll" type="checkbox" value=""></td>
+                                        <td width="30%" class="secondRow">Bài viết</td>                                       
+                                        <td width="16%" class="secondRow">Danh mục</td>                                        
+                                        <td width="7%" class="secondRow">Hình ảnh</td>
+                                        <td width="16%" class="secondRow">Trạng thái</td>
+                                        <td width="11%" class="secondRow">Lượt xem</td>
+                                        <td width="11%" class="secondRow">Cập nhật</td>
+                                        <td width="8%" class="secondRow">Chức năng</td>                                        
+                                    </tr>
+                <?php if (!empty($this->articles) > 0): ?>
+                <?php foreach ($this->articles as $article): ?>
+				<tr>
+					<td align="center" class="ctn"><input type="checkbox"
+						value="<?php echo $article['article_id'];?>" name="article_id"></td>
+					<td class="ctn"><p class="title">
+							<a class="tooltip" target="_blank"
+								href="<?php echo $this->url(array('action' => 'detail', 'controller' => 'article', 'module' => 'adm', 'article_id' => $article['article_id']), null, true); ?>"><?php echo $article['title']; ?></a>
+						</p></td>
+					<td class="ctn"><?php echo $article['category_name']; ?></td>
+					<td class="ctn"><img style="width:70px;height:70px" src="<?php echo My_Zend_Globals::getThumbImage($article['picture'], 'thumb'); ?>"/></td>
+					<td class="ctn"><?php echo $article['status'] == 1 ? 'Hiển thị' : 'Ẩn'; ?></td>
+					<td class="ctn" align="center"><?php echo $article['views']; ?></td>
+					<td class="ctn"><?php echo date('H:i d/m/Y', $article['updated_date']); ?></td>
+					<td class="ctn">
+                                            
+                                            <?php if(Role::isAllowed(Permission::ARTICLE_EDIT)):?>
+						<a title="Sửa bài viết" class="action" href="<?php echo $this->url(array('action' => 'edit', 'controller' => 'article', 'module' => 'adm', 'article_id' => $article['article_id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_edit.jpg" alt="Sửa bài viết" /></a>
+                                            <?php endif;?>
+                                                <?php if(Role::isAllowed(Permission::ARTICLE_DELETE)):?>
+                        <a title="Xóa bài viết" class="action" onclick="return confirm('Xoa bai nay ha?')" href="<?php echo $this->url(array('action' => 'delete', 'controller' => 'article', 'module' => 'adm', 'article_id' => $article['article_id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_del.jpg" alt="Xóa bài viết" /></a>
+                                                <?php endif;?>
+                        <a title="Xem bài viết" class="action" target="_blank" href="<?php echo Article::articleUrl($article); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_viewModule.gif" alt="Xem bài viết" /></a>
+                        <?php if(Role::isAllowed(Permission::ARTICLE_ADD)):?>
+                        <a title="Thêm bài viết vào block" class="action" href="<?php echo $this->url(array('action' => 'addtoblock', 'controller' => 'article', 'module' => 'adm', 'article_id' => $article['article_id']), null, true); ?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/icon_bestchoice.png" alt="Thêm vào blocks" /></a>
+                        <?php endif;?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+                <?php else: ?>
+                                                                                    <tr>
+                                                                                        <td class="ctn nonSearch" colspan="8">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                                                                                    </tr>
+                <?php endif; ?>
+                                                                                    <tr>
+                                                                                        <td valign="middle" colspan="9" class="firstRow">
+                                                                            </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+    <?php echo $this->paging; ?>
+</div>

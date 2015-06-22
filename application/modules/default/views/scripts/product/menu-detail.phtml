@@ -1,0 +1,319 @@
+<?php 
+	echo $this->headScript()
+			->appendFile($this->layout()->_general['server']['path'].'/js/menu.js');
+?>
+<?php $value = $this->value;?>
+<section class="menu-container">
+	<div id="menu">
+		<div class="menu-option-selector menu-option-selector-view">
+			<div class="container clearfix">
+				<div class="row">
+					<div class="col-md-6">
+						<i class="icon-geo"></i> Xem thực đơn ở <strong>TP Hồ Chí Minh</strong>
+						<i class="icon-dropdown-dark"></i>
+					</div>
+					<div class="col-md-6 menu-option-selector-border-left">
+						<i class="icon-calendar"></i> Giao hàng ngày <strong><?php echo My_Zend_Globals::getDayNameVietNamese($this->deliveryDate)?>, <?php echo date('d/m', $this->deliveryDate);?></strong>
+						<i class="icon-dropdown-dark"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="menu-option-selector menu-option-selector-edit">
+			<div class="container relative menu-option-selector-edit-container clearfix">
+				<div class="row">
+					<div class="col-md-6 menu-option-selector-border-none">
+						<div class="menu-option-selector-msg menu-option-selector-border-bottom" style="display:none">
+							<div class="flash-success">
+								<i class="icon-check-green"></i>Mã khu vực đã được thay đổi thành công. Tiếp theo, mời chọn ngày giao hàng.
+							</div>
+						</div>
+						<div class="bold">
+							<span class="label-round label-dark">1</span>
+							<span class="step-title">Chọn khu vực</span>
+						</div>
+						<div class="menu-option-zip-code-edit">
+							<form class="simple-form">
+								<div class="input" style="padding-bottom:10px">
+									<label for="">Bạn hãy chọn khu vực của bạn để xem có món gì nhé.</label>
+									<select name="select_zip_code">
+										<option value="29">TP Hồ Chí Minh</option>
+									</select>
+								</div>
+								<a class="button submit_zip_code" href="javascript:void(0)">Tiếp tục</a>
+							</form>
+						</div>
+					</div>
+					<div class="col-md-6 menu-option-selector-border-left">
+						<div class="bold">
+							<span class="label-round label-dark">2</span>
+							<span class="step-title">Chọn ngày giao hàng</span>
+						</div>
+						Thực đơn sẽ được thay đổi hàng tuần
+						<div class="menu-option-delivery-dates-container menu-option-step-disabled">
+							Thực đơn tuần này:
+							<ul class="menu-option-delivery-dates inline clearfix bold">
+								<?php if(!empty($this->thisWeekMenu)){?>
+								<?php foreach($this->thisWeekMenu as $item){?>
+								<?php $soldOut = '';if($item['sale_date'] < NOW && $item == 0) $soldOut = 'sold-out';?>
+								<li class="item-this-week <?php echo $soldOut; if($item['sale_date'] == $this->deliveryDate){echo ' selected';}?>">
+									<a data-date="<?php echo $item['sale_date'];?>" class="menu-option-set-delivery-date" href="javascript:void(0)">
+										<div class="menu-option-set-delivery-date-day text-center"><?php echo My_Zend_Globals::getDayNameVietNamese($item['sale_date'])?></div><span class="text-center"><?php echo date('d/m', $item['sale_date'])?></span>
+									</a>
+								</li>
+								<?php }}?>
+							</ul>
+							Thực đơn tuần tới:
+							<ul class="menu-option-delivery-dates inline clearfix bold">
+								<?php if(!empty($this->nextWeekMenu)){?>
+								<?php foreach($this->nextWeekMenu as $item){?>
+								<li class="item-next-week<?php if($item['sale_date'] == $this->deliveryDate){echo ' selected';}?>">
+									<a data-date="<?php echo $item['sale_date'];?>" class="menu-option-set-delivery-date" href="javascript:void(0)">
+										<div class="menu-option-set-delivery-date-day text-center"><?php echo My_Zend_Globals::getDayNameVietNamese($item['sale_date'])?></div><span class="text-center"><?php echo date('d/m', $item['sale_date'])?></span>
+									</a>
+								</li>
+								<?php }}?>
+							</ul>			
+							<?php if(!empty($this->nextTwoWeekMenu)){?>			
+							Thực đơn các tuần sắp tới:
+							<ul class="menu-option-delivery-dates inline clearfix bold">
+								<?php foreach($this->nextTwoWeekMenu as $item){?>
+								<li class="item-next-week<?php if($item['sale_date'] == $this->deliveryDate){echo ' selected';}?>">
+									<a data-date="<?php echo $item['sale_date'];?>" class="menu-option-set-delivery-date" href="javascript:void(0)">
+										<div class="menu-option-set-delivery-date-day text-center"><?php echo My_Zend_Globals::getDayNameVietNamese($item['sale_date'])?></div><span class="text-center"><?php echo date('d/m', $item['sale_date'])?></span>
+									</a>
+								</li>
+								<?php }?>
+							</ul>
+							<?php }?>
+							<ul class="menu-option-delivery-dates inline clearfix bold">
+								<?php if(!empty($this->nextThreeWeekMenu)){?>
+								<?php foreach($this->nextThreeWeekMenu as $item){?>
+								<li class="item-next-week<?php if($item['sale_date'] == $this->deliveryDate){echo ' selected';}?>">
+									<a data-date="<?php echo $item['sale_date'];?>" class="menu-option-set-delivery-date" href="javascript:void(0)">
+										<div class="menu-option-set-delivery-date-day text-center"><?php echo My_Zend_Globals::getDayNameVietNamese($item['sale_date'])?></div><span class="text-center"><?php echo date('d/m', $item['sale_date'])?></span>
+									</a>
+								</li>
+								<?php }}?>
+							</ul>
+						</div>
+						<a rel="<?php echo $this->deliveryDate;?>" class="button" id="menu-option-delivery-date-submit" href="javascript:void(0)">Đồng ý</a>
+					</div>
+				</div>
+				<a class="button button-gray button-sticky" href="javascript:void(0)">Close</a>
+			</div>
+		</div>
+		
+		<div class="menu-content-container">
+			<div id="menu-sidebar">
+				<div class="menu-item-container">
+					<h3 class="hidden-sm hidden-xs">Thực đơn</h3>
+					<button id="menu-sidebar-view-menu" class="visible-sm visible-xs collapsed" data-toggle="collapse" data-target="#collapse-01" aria-expanded="true" aria-controls="demo">+ Xem thực đơn</button>
+					<ul id="collapse-01" class="menu-items collapse">
+						<ul class="menu-item-filters">
+							<?php foreach($this->arrayType as $type){?>
+							<li class="menu-item-filter"><label><input type="checkbox" name="filter-type-dish" class="filter_type_dish" value="<?php echo $type?>" checked><?php echo Dish::$_ARRAY_TYPE_MAIN[$type]['name'];?></label></li>
+							<?php }?>
+						</ul>
+						<?php foreach($this->dayMenu as $item){
+						?>
+						<li class="menu-item<?php echo $item['id'] == $this->dish['id']?' selected':'';?> menu-item-type-<?php echo $item['type'];?> menu-item-dish-list">
+							<a <?php echo $item['id'] == $this->dish['id']?'':'href="'.Dish::dishUrl($item).'"';?> title="<?php echo $item['name'];?>" class="<?php echo $item['id'] == $this->dish['id']?'':'menu-item-link';?>"><img alt="" class="img-responsive menu-sidebar-item-image" src="<?php echo My_Zend_Globals::getThumbImage($item['image'])?>"></a>
+							<div class="menu-item-info" style="display:none">
+								<?php $attrSpec = $this->attributes[Attribute::ATTR_SPEC];
+									  $optionAttr = $attrSpec['options'];
+									  $optionAttr = My_Zend_Globals::myArrayFlip($optionAttr, 'option_id');
+									  $valueAttr = Zend_Json::decode($item['attributes']);
+									  $valueSpec = $valueAttr[$attrSpec['attribute_id']][$attrSpec['attribute_id']]['value'];
+								?>
+								<div class="arrow"></div>
+								<ul class="recipe-tags">
+									<?php foreach($valueSpec as $val){?>
+									<li class="recipe-tag"><?php echo $optionAttr[$val]['value'];?></li>
+									<?php }?>								
+								</ul>
+								<h1 class="menu-item-title"><?php echo $item['name'];?></h1>
+							</div>
+						</li>
+						<?php }?>
+					</ul>
+				</div>
+			</div>
+			<div id="menu-content">
+				<div class="white-panel">
+					<div class="container clearfix">
+						<div class="row">
+							<div class="recipe-title-bar-container">
+								<div class="container recipe-title-bar" data-spy="affix" data-offset-top="192">
+									<div class="col-md-7 recipe-title">
+										<h1 class="menu-main-recipe-title"><?php echo $this->dish['name']?></h1>
+										<p class="recipe-price">
+											<span class="bold"><?php echo My_Zend_Globals::numberFormat($this->dish['price'])?> VNĐ /</span><span class="light">1 phần</span> 					
+										</p>
+									</div>
+									<div class="text-right menu-button-group-wrapper col-md-5">
+										<div class="menu-button-group-container fr">
+											<div class="menu-button-group">
+												<form class="simple-form">
+													<div class="quantity-container">
+														<span class="qty-label">SL: </span>
+														<select name="quantity" class="select quantity">
+															<?php for($i = 1; $i<10;$i++){?>
+															<option value="<?php echo $i?>"><?php echo $i?> phần</option>
+															<?php }?>
+														</select>
+													</div>
+													<?php if(isset($_COOKIE['zip_code'])){?>
+													<?php 	
+														$checkExist = false;
+														if(isset($_COOKIE['ucancook_cart']))
+														{
+															$cookieCart = $_COOKIE['ucancook_cart'];
+															if(!empty($cookieCart)){
+																$cookieCart = explode(';', $cookieCart);
+																foreach ($cookieCart as $cookieItem){
+																	if(!empty($cookieItem)){
+																		$cookieItemTmp = explode(',', $cookieItem);
+																		if($this->dish['id'] == $cookieItemTmp[0] && $cookieItemTmp[1] == TYPE_DISH)
+																			$checkExist = true;
+																	}
+																}
+															}
+														}
+													?>
+													<?php if($checkExist){?>
+														<a class="button primary" style="background-color:#80a827" href="javascript:void(0)" rel="<?php echo $this->dish['id'];?>">Đã đặt</a>
+													<?php }else{?>
+														<a class="button primary order_now" href="javascript:void(0)" rel="<?php echo $this->dish['id'];?>">Đặt ngay</a>
+													<?php }}else{?>
+													<a class="button primary choose_zip_code" href="javascript:void(0)">Kiểm tra</a>
+													<?php }?>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-12 menu-main-image-container">
+									<img class="img-responsive" src="<?php echo $this->dish['image']?>">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12" style="padding-bottom:20px">
+								<div class="col-md-9">
+									<h2 class="title-name"><strong>Câu chuyện</strong> về món ăn</h2>
+									<p class="summary">
+										<?php echo $this->dish['description']?>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="green-panel">
+					<div class="container clearfix">
+						<div class="row">
+							<div class="col-md-9">
+								<div class="col-md-6">
+									<h2 class="title-name">Chúng tôi<strong> gửi cho bạn</strong></h2>
+									<ul class="inline ingredients">
+										<?php foreach($this->listIngredient as $item){?>
+										<li class="text-center ingredient">
+											<div class="ingredient-image-container">
+												<div class="ingredient-image-background">
+													<img class="ingredient-image" src="<?php echo My_Zend_Globals::getThumbImage($item['image'], 'thumb');?>">
+												</div>
+												<?php echo $item['name']?>
+											</div>
+										</li>
+										<?php }?>
+									</ul>
+								</div>
+								<div class="col-md-6">
+									<?php $spice = $this->attributes[Attribute::ATTR_SPICE];
+										  $options = $spice['options'];
+										  $options = My_Zend_Globals::myArrayFlip($options, 'option_id');
+										  $valueSpice = $value[$spice['attribute_id']][$spice['attribute_id']]['value'];
+									?>
+									<h2 class="title-name">Gia vị <strong>cần</strong></h2>
+									<ul class="list-item-default clearfix">
+										<?php foreach($valueSpice as $val){?>
+										<li><?php echo $options[$val]['value'];?></li>
+										<?php }?>
+									</ul>
+									<?php $tool = $this->attributes[Attribute::ATTR_TOOL];
+										  $options = $tool['options'];
+										  $options = My_Zend_Globals::myArrayFlip($options, 'option_id');
+										  $valueTool = $value[$tool['attribute_id']][$tool['attribute_id']]['value'];
+									?>
+									<h2 class="title-name">Dụng cụ <strong>sẽ dùng</strong></h2>
+									<ul class="list-item-default clearfix">
+										<?php foreach($valueTool as $val){?>
+										<li><?php echo $options[$val]['value'];?></li>
+										<?php }?>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="recipe-meta-container">
+									<div class="recipe-meta">
+										<?php foreach($this->attributes as $attribute){
+											$options = isset($attribute['options'])?$attribute['options']:array();?>
+										<?php if(!in_array($attribute['attribute_id'], array(Attribute::ATTR_SPICE, Attribute::ATTR_TOOL))){?>
+										<h4><?php echo $attribute['attribute_name']?></h4>
+											<?php if(!empty($options) && $attribute['input_type'] == 'dropdown'){?> 
+											<?php foreach($options as $option){?>
+											<?php foreach($value[$attribute['attribute_id']] as $val){?>
+											<?php if($option['option_id'] == $val['value']){?>
+											<?php echo $option['value'];?>
+											<?php }}}}elseif(!empty($options) && $attribute['input_type'] == 'multiple'){
+												$valueAttr = array();
+												$valueAttr = $value[$attribute['attribute_id']][$attribute['attribute_id']]['value'];
+												$options = My_Zend_Globals::myArrayFlip($options, 'option_id');
+												foreach($valueAttr as $val){
+													echo $options[$val]['value'].'<br/>';
+												}}elseif($attribute['input_type'] == 'text'){?>
+											<?php echo $value[$attribute['attribute_id']][$attribute['attribute_id']]['value'];?>
+											<?php }}}?>
+									</div>
+								</div>
+								<div class="chef-container col-md-12">
+									<img src="<?php echo $this->chef['avatar'];?>" class="chef-bio-image" alt="<?php echo $this->chef['chef_name']?>">
+									<h4><?php echo $this->chef['chef_name']?></h4>
+									<a class="chef-bio-link" href="<?php echo Chef::chefUrl($this->chef)?>">Xem giới thiệu</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="white-panel manifestio-panel hidden-sm hidden-xs">
+					<div class="container clearfix">
+						<div class="row">
+							<div class="col-md-12">
+								<h2 class="title-name"><strong>TIÊU CHÍ CỦA CHÚNG TÔI</strong></h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<h3>Tiết kiệm thời gian</h3>
+								<p>Nhiệm vụ của chúng tôi là giúp bạn tiết kiệm thời gian cho việc suy nghĩ về các món ăn hàng ngày và thời gian phải đi chợ, siêu thị mua sắm trong lúc cần tập trung cho công việc chuyên môn. Các món ăn luôn được chúng tôi chọn lọc và chuẩn bị sẵn sàng giúp bạn có thể thực hiện việc nấu nướng nhanh, gọn và hiệu quả nhất.</p>
+							</div>
+							<div class="col-md-4">
+								<h3>Đảm bảo dinh dưỡng</h3>
+								<p>Để đảm bảo dưỡng chất phục vụ cho công việc mỗi ngày, các bạn phải có đầy đủ tinh bột, chất đạm, chất sơ cùng các loại vitamin khác. Trong quá trình chuẩn bị các món ăn chúng tôi đã nghiên cứu kỹ các yếu tố này để đảm bảo bạn có đủ dưỡng chất cần thiết để có một sức khỏe hoàn hảo.</p>
+							</div>
+							<div class="col-md-4">
+								<h3>Chất lượng cao</h3>
+								<p>Thực phẩm đươc cung cấp cho các bạn đều từ những nguồn hàng có uy tín. Nhiều nguồn hàng được nhập khẩu hoặc từ những nhà cung cấp có uy tín trên thị trường Việt Nam. Bạn có thể hoàn toàn yên tâm khi sử dụng những nguồn thực phẩm này nhé.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

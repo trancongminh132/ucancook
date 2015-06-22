@@ -1,0 +1,210 @@
+<section id="mass-header">
+	<section class="container content clearfix">
+		<div class="account-page">
+			<div class="row nav-secondary-container">
+				<div class="col-md-12">
+					<h1 class="nav-secondary-title">Tài khoản</h1>
+					<nav class="nav-secondary" id="standard-nav">
+						<a href="/gioi-thieu-ban-be.html">Giới thiệu bạn bè</a>
+						<a class="" href="/khau-vi-cua-toi.html">Khẩu vị của bạn</a>
+						<a class="" href="/dia-chi-dat-hang.html">Địa chỉ đặt hàng</a>
+						<a class="active" class="" href="/thong-tin-ca-nhan.html">Email &amp; Mật khẩu</a>
+					</nav>
+				</div>
+			</div>
+			<div class="account-content email-password">
+				<div class="row clearfix">
+					<div class="col-md-4 account-side">
+						<h3>Địa chỉ email &amp; mật khẩu</h3>
+						<p>Mật khẩu đăng nhập phải có chiều dài từ 8 đến 20 ký tự và có ít nhất 1 ký tự đặc biệt (!@#$...).</p>				
+					</div>
+					<div class="col-md-7 col-md-offset-1 email-page content-side">
+						<div class="row clearfix">
+							<div class="col-md-6">
+								<form class="simple-form">
+									<label>Địa chỉ email mới</label>
+									<div>
+										<input type="email" placeholder="Địa chỉ email" id="new_email">
+									</div>
+									<label>Mật khẩu hiện tại</label>
+									<div>
+										<input type="password" size="false" placeholder="Mật khẩu hiện tại" id="current_password_email">
+									</div>
+									<div>
+										<input type="button" value="Cập nhật email" name="commit" class="button button-orange" id="update-email">
+									</div>
+								</form>
+								<ul id="passwordChangeStatus" class="errors" style="display: none;margin: 20px 0 0 60px;font-size: 16px;clear: left;float: left;color: #c00;"><li></li></ul>
+							</div>
+							<div class="col-md-6">
+								<form class="simple-form">
+									<label>Mật khẩu hiện tại</label>
+									<div>
+										<input type="password" placeholder="Mật khẩu hiện tại" id="current_password">
+									</div>
+									<label>Mật khẩu mới</label>
+									<div>
+										<input type="password" placeholder="Mật khẩu mới" id="new_password">
+									</div>
+									<label>Nhập lại mật khẩu mới</label>
+									<div>
+										<input type="password" placeholder="Nhập lại mật khẩu mới" id="confirm_new_password">
+									</div>
+									<div>
+										<input type="button" value="Thay đổi mật khẩu" name="commit" class="button button-orange" id="update-password">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</section>
+<script>
+	var validateEmail = function(email){
+		var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+		if(filter.test(email))
+	    	return true;
+		return false;
+	};
+	$('#update-password').click(function()
+	{
+		$('#passwordChangeStatus').hide();
+		var oldPass = $('#current_password').val();
+		var newPass = $('#new_password').val();
+	    var rePassW = $('#confirm_new_password').val();
+	
+	    if($.trim(oldPass) == '')
+	    {
+	        $('#passwordChangeStatus').show();
+	        $('#passwordChangeStatus li').show('Bạn chưa nhập mật khẩu hiện tại');
+	        return false;
+	    }
+	
+	    if($.trim(newPass) == '')
+	    {
+	    	$('#passwordChangeStatus').show();
+	    	$('#passwordChangeStatus li').show('Bạn chưa nhập mật khẩu mới');
+	        return false;
+	    }
+	                                                                        
+	    var specialChars = new Array('~', '!','@','#','$','%','^','&','*','(',')','-','+');
+	                                                                            
+	    var flag = false;
+	    for ( var i = 0; i < specialChars.length; i++ )
+	    {
+	        if ( newPass.indexOf(specialChars[i]) >= 0  )
+	        {
+	            flag = true;
+	        }
+	    }
+	                                                                            
+	    if ( flag == false || (newPass.length < 8) || (newPass.length > 20) )
+	    {
+	    	$('#passwordChangeStatus').show();
+	    	$('#passwordChangeStatus li').show('Mật khẩu thay đổi không hợp lệ');
+	        return false;
+	    }
+	
+	    if($.trim(rePassW) == '')
+	    {
+	    	$('#passwordChangeStatus').show();
+	    	$('#passwordChangeStatus li').show('Bạn chưa nhập mật khẩu xác nhận');
+	        return false;
+	    }
+			
+	    if(newPass != rePassW)
+	    {
+	    	$('#passwordChangeStatus').show();
+	    	$('#passwordChangeStatus li').show('Mật khẩu xác nhận không trùng khớp');
+	        return false;
+	    }
+	    common.progress();
+	    $.ajax({
+			url: Settings.baseurl + '/user/changepassword',
+			type: 'POST',
+			dataType : 'json',     
+			data:{old_pass:oldPass, new_pass:newPass, confirm_pass:rePassW},
+			success: function(data)
+			{		
+				common.finish();
+				if(data.error == 1)
+				{
+					$('#passwordChangeStatus').show();
+			    	$('#passwordChangeStatus li').show('Mật khẩu hiện tại không hợp lệ');
+			        return false;
+				}
+				else
+				{
+					alert('Bạn đã thay đổi mật khẩu thành công.');
+					$('#current_password').val('');
+					$('#new_password').val('');
+			        $('#confirm_new_password').val('');
+				}
+				
+			}
+		});
+	});
+
+	$('#update-email').click(function()
+	{
+		$('#passwordChangeStatus').hide();
+		var newEmail = $('#new_email').val();
+		var password = $('#current_password_email').val();
+	    
+	    if($.trim(newEmail) == '')
+	    {
+	        $('#passwordChangeStatus').show();
+	        $('#passwordChangeStatus li').html('Bạn chưa nhập địa chỉ email mới');
+	        return false;
+	    }
+
+	    if (!validateEmail(newEmail)) {
+	    	$('#passwordChangeStatus').show();
+		    $('#passwordChangeStatus li').html('Địa chỉ email không hợp lệ');
+            return false;
+        }
+		
+	    if($.trim(password) == '')
+	    {
+	    	$('#passwordChangeStatus').show();
+	    	$('#passwordChangeStatus li').html('Bạn chưa nhập mật khẩu');
+	        return false;
+	    }
+	         
+	    common.progress();
+	    
+	    $.ajax({
+			url: Settings.baseurl + '/user/changeemailaddress',
+			type: 'POST',
+			dataType : 'json',     
+			data:{new_email:newEmail, password:password},
+			success: function(data)
+			{		
+				common.finish();
+				if(data.error == 1)
+				{
+					$('#passwordChangeStatus').show();
+			    	$('#passwordChangeStatus li').html('Mật khẩu hiện tại không hợp lệ');
+			        return false;
+				}
+				else if(data.error == 2)
+				{
+					$('#passwordChangeStatus').show();
+			    	$('#passwordChangeStatus li').html('Địa chỉ email đã có người sử dụng');
+			        return false;
+				}
+				else	
+				{
+					alert('Bạn đãt thay đổi email thành công.');
+					$('#current_password').val('');
+					$('#new_password').val('');
+			        $('#confirm_new_password').val('');
+				}
+				
+			}
+		});
+	});
+</script>

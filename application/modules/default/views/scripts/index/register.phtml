@@ -1,0 +1,190 @@
+<?php 
+	require_once APPLICATION_PATH.'/configs/cities.php';
+	global $_CITIES, $_DISTRICTS;
+?>
+<style>
+	.error{color:red;display:none;padding-left:3px}	
+</style>
+<div class="user-session">
+	<div class="container clearfix">
+		<div class="row">
+			<h1 class="text-center user-session-header">Xin chào đầu bếp!</h1>
+		</div>
+		<div class="row">
+			<div class="user-session-container">
+				<ul class="nav-tabs nav-tabs-user-session">
+					<li class="nav-tab">
+						<a id="sign-in" href="<?php echo BASE_URL?>/login.html">Đăng nhập</a>
+					</li>
+					<li class="nav-tab active">
+						<a id="sign-up" href="<?php echo BASE_URL?>/register.html">Đăng ký</a>
+					</li>
+				</ul>
+				<div class="tab-content">					
+					<div class="sign-up tab-pane active" id="sign-up-tab">
+						<!--sign up-->
+						<div class="text-center">
+							<a class="button facebook" href="javascript:void(0)" onclick="fbLogin()">Đăng ký bằng Facebook</a>
+						</div>
+						<div class="user-session-break-container">
+							<div class="user-session-break">
+								<div class="user-session-break-content">
+									<h2>hoặc</h2>
+								</div>
+							</div>
+						</div>
+						<p class="error bar-notice notice-error" id="error-code-8">Email đã tồn tại. Vui lòng chọn email khác</p>
+						<p class="error bar-notice notice-error" id="error-code-9">Thông tin không hợp lệ</p>
+                        <p class="error bar-notice notice-error" id="error-code-10">Có lỗi trong quá trình xử lý. Vui lòng thực hiện lại thao tác</p>
+						<form class="simple-form" method="post" id="registermember">
+							<div class="input">
+								<input type="text" size="30" placeholder="Địa chỉ email" name="email" id="email">
+							</div>
+							<p class="error bar-notice notice-error" id="error-code-1">Vui lòng nhập email</p> 
+							<p class="error bar-notice notice-error" id="error-code-2">Địa chỉ email không hợp lệ</p>    
+							<div class="select" style="padding-bottom: 10px;">
+								<select name="city" id="city" style="width: 100%;color:#666" onchange="changeCity(this.value)">
+									<option value="">Chọn tỉnh/thành</option>
+									<?php foreach($_CITIES as $cityId => $city){?>
+									<option value="<?php echo $cityId;?>"><?php echo $city['city_name']?></option>
+									<?php }?>
+								</select>
+							</div>
+							<p class="error err-pass" id="error-code-3">Vui lòng chọn tỉnh/thành</p>
+							<div class="select" style="padding-bottom: 10px;">
+								<select name="district" id="district" style="width: 100%;color:#666">
+									<option value="">Chọn quận/huyện</option>
+								</select>
+							</div>
+							<div class="input">
+								<input type="password" size="30" placeholder="Mật khẩu" name="password" id="password">
+							</div>
+							<p class="error err-pass" id="error-code-4">Vui lòng nhập mật khẩu</p>
+                        	<p class="error err-pass" id="error-code-5">Mật khẩu đăng nhập phải có chiều dài từ 8 đến 20 ký tự và có ít nhất 1 ký tự đặc biệt (!@#$...)</p>
+							<div class="input">
+								<input type="password" size="30" placeholder="Nhập lại mật khẩu" name="repassword" id="repassword">
+							</div>
+							<p class="error err-repass" id="error-code-7">Mật khẩu xác nhận không đúng</p>
+                        	<p class="error err-repass" id="error-code-6">Vui lòng nhập mật khẩu xác nhận</p>          
+							<a class="button" onclick="validateRegisterForm()" style="text-align:center;width:94%;margin-bottom: 10px;padding: 10px;">Đăng ký</a>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var changeCity = function(cityId)
+	{
+		$.get(Settings.baseurl + '/order/getdistrict/city_id/'+ cityId, function(data){
+			var district = $('#district');
+			if(district.prop) {
+				var options = district.prop('options');
+			}
+			else {
+				var options = district.attr('options');
+			}
+			$('option', district).remove();
+			$.each(data, function(val, text) {
+				options[options.length] = new Option(text.district_name, val);
+			});			
+		}, 'json');
+	};
+	var fbLogin = function()
+	{
+	    PopupManager.open(Settings.baseurl + "/user/register-from-social/popup/true", 500, 450, function(){
+	        handleSuccessLogin();
+	    });
+	}
+	
+	var showRegisterError = function(errorCode)
+    {
+        hideAllErrors();
+        $("#error-code-" + errorCode).show();
+    };                                                                    
+    var hideAllErrors = function()
+    {
+        $('.error').hide();
+    };	
+	var validateRegisterForm = function()
+    {
+		common.progress();
+		var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;                                                                           	
+        var email = $('#email').val();
+        var passW = $('input[name="password"]').val();
+        var rePassW = $('input[name="repassword"]').val();
+    	var city = $('#city').val();
+    	
+        hideAllErrors();
+
+        if($.trim(email) == '')
+        {
+            $('#error-code-1').show();
+            common.finish();
+            return false;
+        }
+
+        if(!emailReg.test(email))
+        {
+            $('#error-code-2').show();
+            common.finish();
+            return false;
+        }
+
+        if($.trim(city) == '')
+        {
+            $('#error-code-3').show();
+            common.finish();
+            return false;
+        }
+        
+        if($.trim(passW) == '')
+        {
+            $('#error-code-4').show();
+            common.finish();
+            return false;
+        }
+                                                                                
+        var specialChars = new Array('~', '!','@','#','$','%','^','&','*','(',')','-','+');
+                                                                                
+        var flag = false;
+        for (var i = 0; i < specialChars.length; i++ )
+        {
+            if(passW.indexOf(specialChars[i]) >= 0  )
+            {
+                flag = true;
+            }
+        }
+                                                                                
+        if(flag == false || (passW.length < 8) || (passW.length > 20) )
+        {
+            $("#error-code-5").show();
+            common.finish();
+            return false;
+        }
+
+        if($.trim(rePassW) == '')
+        {
+            $('#error-code-6').show();
+            common.finish();
+            return false;
+        }
+
+        if(passW != rePassW)
+        {
+            $('#error-code-7').show();
+            common.finish();
+            return false;
+        } 
+
+        $('#registermember').submit();
+    };
+</script>
+<?php if($this->isPost ): ?>
+	<?php if($this->isError ): ?>
+	<script>
+		showRegisterError('<?php echo $this->isError ?>');
+	</script>
+	<?php endif; ?>
+<?php endif; ?>

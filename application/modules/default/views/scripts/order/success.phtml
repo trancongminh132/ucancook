@@ -1,0 +1,72 @@
+<?php 
+	require_once APPLICATION_PATH.'/configs/cities.php';
+	global $_DISTRICTS;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="<?php echo $this->layout()->_general['static']['path'];?>/images/favicon_u.ico">
+	<title>Ucancook.vn - Chuyên cung cấp thực phẩm chất lượng trên thị trường</title>
+	<link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700,800">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/base.css" rel="stylesheet">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/layout.css" rel="stylesheet">
+	<link href="<?php echo $this->layout()->_general['static']['path'];?>/css/bootstrap.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+	 	var Settings = {domain: "<?php echo DOMAIN;?>", baseurl: "<?php echo BASE_URL?>"};
+	 	var Account = {	UID: "<?php echo LOGIN_UID ?>"};
+	</script>
+    <script src="<?php echo $this->layout()->_general['static']['path'];?>/js/jquery.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/bootstrap.min.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/global.js"></script>
+	<script src="<?php echo $this->layout()->_general['static']['path'];?>/js/jquery.cookie.js"></script>
+	<style>
+		.field-with-errors input{border: 1px solid #ff1f1f;};
+	</style>
+</head>
+<body>
+	<div class="checkout-container clearfix">
+        <header class="header-checkout">
+            <div class="logo header-checkout-logo"></div>
+            <span class="header-checkout-lead">Thanh toán đơn hàng</span>
+            <div class="pull-right checkout-help-container">
+                <div class="checkout-help-inner">
+                    <div class="checkout-help">Trợ giúp?</div>
+                    <div class="checkout-help-options">
+                        <span class="checkout-help-option hide">
+                            <a class="checkout-help-link"><i class="icon-chat"></i>Trò chuyện trực tuyến</a>
+                        </span>
+                        <span class="checkout-help-option">
+                            <a class="checkout-help-link hidden-xs hidden-sm"><i class="icon-mail"></i>Email</a>
+                        </span>
+                        <span class="checkout-help-option"><a href="tel:<?php echo PHONE_NUMBER?>" class="checkout-help-link"><i class="icon-phone"></i><?php echo PHONE_NUMBER?></a></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+		<ol class="checkout-steps">
+            <li class="checkout-step step-done">
+                <div class="inside">
+                	<h2 class="title-done">Cảm ơn bạn đã đặt hàng thành công tại Ucancook.vn</h2>
+                	<p>Chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất để giao hàng cho bạn. Trang sẽ tự động chuyển trong vòng 10 giây.</p>
+                	<p><input class="button checkout-submit" type="button" value="Trờ về trang chủ"></p>
+                </div>
+            </li>
+        </ol>
+    </div>
+</body>
+<script>
+	setTimeout(function(){ window.location = Settings.baseurl }, 10000);
+	$('.checkout-submit').click(function(){
+		window.location = Settings.baseurl;
+	});
+</script>
+</html>

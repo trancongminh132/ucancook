@@ -1,0 +1,120 @@
+<?php $params = $this->params;?>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Quản lý thuộc tính</div>
+        <div class="addLink">
+    		<span class="action"><a class="add" href="/adm/attribute/add-attribute" title="Thêm mới thuộc tính"></a></span>	
+		</div>
+    </div>
+    <form id="frm" name="frm" method="get" action="<?php echo $this->url(array('action' => 'attribute-list', 'controller' => 'attribute', 'module' => 'adm'), null, true); ?>">
+        <ul class="filter clearfix">            
+           	<li>
+                <label>Tên thuộc tính</label>
+                <input id="attribute_name" name="attribute_name" value="<?php echo $params['attribute_name']; ?>" class="large" type="text" />
+            </li>                                  
+            <li class="clear">
+                <input id="submit" name="submit" value="" class="button_search" type="submit" />
+            </li>
+         </ul>
+     </form>
+    <div class="clear"></div>
+   
+    <?php echo $this->paging; ?>
+    <div class="table_member">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tbody>
+                   <tr>
+                       <td valign="middle" colspan="8" class="firstRow"></td>
+                   </tr>
+                   <tr>                      
+                       <td style="width: 10px" class="secondRow">ID</td>                       
+                       <td width="20%" class="secondRow">Tên thuộc tính</td>
+                       <td width="30%" class="secondRow">Danh mục</td>
+                       <td width="10%" class="secondRow">Loại</td>
+                       <td width="10%" class="secondRow">Tình trạng</td>                                
+                       <td width="10%" class="secondRow">Cập nhật</td>
+                       <td width="19%" class="secondRow">Thao tác</td>
+                  </tr>               
+	                <?php
+                    if (is_array($this->attributes) && !empty($this->attributes)) {
+                        foreach ($this->attributes as $key => &$value) {
+                        	$statusUpdate = $value['is_visible'] == 1?0:1;
+                    ?>
+                	<tr>
+	                    <td align="center" class="ctn"><?php echo $value['attribute_id']; ?></td>
+	                    <td class="ctn">
+	                    	<?php echo $value['attribute_name']; ?>
+	                    </td>	                    
+	                    <td class="ctn">
+	                    	<?php echo $value['category_name']; ?>
+	                    </td>
+	                    <td class="ctn"><?php echo $value['input_type']?></td>	               
+	                    <td class="ctn"><?php if($value['is_visible'] == 0) echo '<span class="badge bg-red">Đã khóa</span>'; else echo '<span class="badge bg-green">Online</span>';?></td>
+	                    <td class="ctn"><?php echo date('H:i d/m/Y', $value['updated_date']); ?></td>	                  
+	                    <td class="ctn">	                    	
+	                    	<a href="<?php echo BASE_URL.'/adm/attribute/update-status-attribute/id/'.$value['attribute_id'].'/status/'.$statusUpdate?>" class="btn btn-warning btn-sm"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/<?php echo $value['is_visible'] == 1?'b_lock':'b_unlock';?>.jpg" alt="" width="60px" height="20px"/></a>
+							<a href="<?php echo BASE_URL.'/adm/attribute/edit-attribute/id/'.$value['attribute_id']?>" class="b_edit" title="Cập nhật thuộc tính này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="40px" height="20px"/></a> 
+							<a href="javascript:void(0)" class="btn btn-danger btn-sm" onClick="Attribute.deleteAttribute('<?php echo $value['attribute_id']; ?>')" title="Xóa thuộc tính này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="40px" height="20px"/></a>
+	                    </td>
+                </tr>  
+                <?php }}else{?>
+                <tr>
+                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td valign="middle" colspan="8" class="firstRow">                  
+                </tr>
+           </tbody>
+       </table>
+    </div>
+    <?php echo $this->paging; ?>
+</div>
+<script>
+	var Attribute = 
+	{
+		deleteAttribute : function(id)
+		{
+		    $(this).myBoxy (Boxy,{
+		        type:'confirm',
+		        message: "Bạn có chắc chắn muốn xóa thuộc tính này?",
+		        id : id,
+		        callback: function() 
+		        {
+		            var boxy = Boxy.get(this);
+		            var options = boxy.options;
+		            Attribute.doDeleteAttribute(id);
+		            boxy.hide();
+		        }
+		    });
+		},
+		doDeleteAttribute : function(id, parent)
+		{
+		    $.post(Settings.baseurl + '/adm/attribute/delete-attribute', {
+		        id:id, act:'del'
+		    },
+		    function(data)
+		    {	
+				$(this).myBoxy (Boxy,{
+					type: 'success',
+			        message: 'Thuộc tính bạn chọn đã được xóa thành công!',
+					refresh:true
+			    });		
+		    });
+		}
+	};
+$('.search_attribute').click(function(){
+	var value = $('#attribute_name').val();
+	if(value != "")
+	{
+		window.location = Settings.baseurl+'/adm/attribute?attribute_name='+value;
+	}
+});
+$('#attribute_name').keypress(function(e){
+	var value = $(this).val();
+	if(e.keyCode == 13 && value != "")
+	{
+		window.location = Settings.baseurl+'/adm/attribute?attribute_name='+value;
+	}
+});
+</script>

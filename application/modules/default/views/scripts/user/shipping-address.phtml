@@ -1,0 +1,188 @@
+<?php 
+	require_once APPLICATION_PATH.'/configs/cities.php';
+	global $_DISTRICTS;
+?>
+<section id="mass-header">
+	<section class="container content clearfix">
+		<div class="account-page">
+			<div class="row nav-secondary-container">
+				<div class="col-md-12">
+					<h1 class="nav-secondary-title">Tài khoản</h1>
+					<nav class="nav-secondary" id="standard-nav">
+						<a href="/gioi-thieu-ban-be.html">Giới thiệu bạn bè</a>
+						<a class="" href="/khau-vi-cua-toi.html">Khẩu vị của bạn</a>
+						<a class="active" class="" href="/dia-chi-dat-hang.html">Địa chỉ đặt hàng</a>
+						<a class="" href="/thong-tin-ca-nhan.html">Email &amp; Mật khẩu</a>
+					</nav>
+				</div>
+			</div>
+			<div class="account-content shipping-address">
+				<div class="row clearfix">
+					<div class="col-md-4 account-side">
+						<h3>Giao hàng đến</h3>
+						<h4>
+							<?php echo $this->address['order_name']?>
+							<br><br>
+							<?php echo $this->address['order_email']?>
+							<br><br>
+							<?php echo User::generateUserAddress($this->address['order_address'], $this->address['order_district'], $this->address['order_city'])?>
+							<br><br>
+							<?php echo $this->address['order_phone']?>
+							<?php if(!empty($this->address['company_name'])){?>
+							<br><br>
+							<?php echo $this->address['company_name']?>
+							<?php }?>
+							</h4>
+						<a class="button primary change-address" href="javascript:void(0)">Thay đổi địa chỉ giao hàng</a>
+						<h3>Ghi chú giao hàng</h3>
+						<p>
+							<?php echo $this->address['order_note']?>
+						</p>
+					</div>
+					<div class="col-md-8 content-side" style="display:none">
+						<form class="simple-form">
+							<div class="row clearfix site-form">
+								<div style="margin-top:30px;" class="col-md-6">
+									<label class="clear">Họ tên</label>
+									<input type="text" placeholder="Họ tên" size="30" id="full_name" value="<?php if(isset($this->address['order_name'])) echo $this->address['order_name'];?>">
+									<label class="clear">Email</label>
+									<input type="text" size="30" placeholder="Địa chỉ email" id="email_order" value="<?php if(isset($this->address['order_email'])) echo $this->address['order_email'];?>">
+									<label>Ghi chú giao hàng</label>
+									<textarea class="text optional span12" id="note_order" maxlength="100" name="note_order" placeholder="Ghi chú đơn hàng" rows="5" cols="35"><?php if(isset($this->address['order_note']) && !empty($this->address['order_note'])) echo $this->address['order_note'];?></textarea>
+									<div class="pull-right">
+										<div class="checkout-section block-error" style="display: none;color:red;padding-bottom:9px">
+										    <ul id="checkout-shipping-address-errors">
+										    	<li id="error_full_name">Bạn chưa nhập họ tên</li>
+										    	<li id="error_email_order">Bạn chưa nhập địa chỉ email</li>
+										    	<li id="error_order_phone">Bạn chưa nhập số điện thoại</li>
+										    	<li id="error_address">Bạn chưa nhập địa chỉ</li>
+										    	<li id="error_check_district">Bạn chưa chọn quận/huyện</li>
+										    </ul>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="row clearfix">
+										<div class="col-md-11">
+											<input type="checkbox" value="1" id="toggleShippingCompany" class="toggleShippingCompany" <?php if(isset($this->address['company_name']) && !empty($this->address['company_name'])) echo 'checked';?>>
+											<label for="toggleShippingCompany" style="display:inline">Địa chỉ làm việc?</label>
+										</div>
+									</div>
+									<div class="shippingCompany" style="<?php if(isset($this->address['company_name']) && !empty($this->address['company_name'])) echo 'display:block'; else echo 'display:none'?>">
+						              	<label for="user_address_company">Tên công ty</label>
+						              	<input type="text" id="company_name" value="<?php if(isset($this->address['company_name']) && !empty($this->address['company_name'])) echo $this->address['company_name'];?>">
+						            </div>
+									<label>Số điện thoại</label>
+									<input type="text" size="30" placeholder="Số điện thoại" id="order_phone" value="<?php if(isset($this->address['order_phone'])) echo $this->address['order_phone'];?>">
+									<label>Địa chỉ</label>
+									<input type="text" size="30" placeholder="Địa chỉ: Số nhà, Phường, Xã" id="address" value="<?php if(isset($this->address['order_address'])) echo $this->address['order_address'];?>">
+									<label>Tỉnh/Thành</label>
+									<select id="city" name="city">
+                                    	<option value="29">TP. Hồ Chí Minh</option>									
+									</select>
+									<label>Quận/Huyện</label>
+									<select id="check_district" name="check_district">
+										<option value="">Chọn quận/huyện</option>
+										<?php foreach($_DISTRICTS[29] as $key => $district){?>
+										<option value="<?php echo $key;?>" <?php if(isset($this->address['order_district']) && $this->address['order_district'] == $key) echo 'selected';?>><?php echo $district['district_name']?></option>
+										<?php }?>
+									</select>							
+									<div class="checkout-button-row">
+										<input type="button" value="Cập nhật" name="commit" class="button primary submit_address_order">
+									</div>
+								</div>					
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</section>
+<script>
+	$('.change-address').click(function(){
+		$('.content-side').show();
+	});
+	$('.toggleShippingCompany').click(function(){
+		$('.shippingCompany').toggle();
+		$('#company_name').val('');
+	});
+
+	$('.submit_address_order').click(function()
+	{
+		$('.block-error').hide();
+		$("#error_full_name").hide();
+		$("#error_email_order").hide();
+		$("#error_order_phone").hide();
+		$("#error_address").hide();
+		$("#error_check_district").hide();
+		$("#check_district").css('border', '1px solid #cfcfcf');
+		 
+		$(this).val('Đang gửi');
+		$(this).css('opacity', 0.4);
+		$(this).css('cursor', 'auto');
+		var name = $('#full_name').val();
+		var email_order = $('#email_order').val();
+		var phone = $('#order_phone').val();
+		var order_city = $("#city").val();
+		var order_district = $("#check_district").val();
+		var address = $("#address").val();			
+		var note = $('#note_order').val();			
+		var company_name = $("#company_name").val();
+
+		var error = 0;
+		
+		if (name == '') {
+            $("#error_full_name").show();
+            error = 1;
+		}
+		if (email_order == '') {
+            $("#error_email_order").show();
+            error = 1;
+		}
+		if (phone == '') {
+            $("#error_order_phone").show();
+            error = 1;
+		}
+		if (address == ''){
+            $("#error_address").show();
+            error = 1;
+		}
+		if (order_district == '') {
+            $("#error_check_district").show();
+            error = 1;
+		}
+		
+		if(error == 0)
+		{
+			$.post(Settings.baseurl + "/ajax/insert-order-address",{
+				email_order:email_order,
+				full_name: name, 
+				order_phone: phone, 
+				order_note: note,  
+				order_address: address, 			
+				order_district: order_district, 
+				order_city: order_city, 
+				company_name:company_name
+			},function(data)
+			{
+				if(data.rs == 1)
+				{	
+					alert('Bạn đã thay đổi địa chỉ giao hàng thành công.');
+				}else{
+					alert('Thao tác thất bại. Bạn vui lòng kiểm tra lại thông tin đặt mua!');
+					common.finish();
+				}
+				common.finish();
+				location.reload();
+			}, 'Json');
+		}else
+		{
+			$('.block-error').show();
+			$(this).val('Cập nhật');
+			$(this).css('opacity', 1);
+			$(this).css('cursor', 'pointer');
+			return;
+		}			
+	});
+</script>

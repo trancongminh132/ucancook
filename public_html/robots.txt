@@ -1,0 +1,15 @@
+# robots.txt
+User-agent: Googlebot
+Disallow:/?
+User-agent: MSNBOT
+Disallow:/.?$
+User-agent: SLurp
+Disallow:/.?$
+# Begin Exclusion From Directories from robots.txt
+Disallow: /index.php/
+Disallow: /tools/calduedate
+Disallow: /ajax/
+Disallow: /images
+Disallow: /js
+Disallow: /css
+Allow: /
