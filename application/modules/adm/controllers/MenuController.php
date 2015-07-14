@@ -55,23 +55,13 @@ class Adm_MenuController extends Zend_Controller_Action
     	$request = $this->getRequest();
     	$error = 0;   	    	
     	if($request->isPost())
-    	{    
-			$dishId= $request->getParam('dish_id','');   		
+    	{
+			$dishId = $request->getParam('dish_id','');   		
     		$dishId = intval($dishId);
-			
-			$saleDate= $request->getParam('sale_date','');   		
-    		$saleDate = strtotime($saleDate);
-    		$saleDate = ProductOrders::beginDate($saleDate);    		
-			$quantity= $request->getParam('quantity','');   		    		$quantity = floatval(str_replace('.', '', $quantity));    		
-    		$data = array(	
-				'dish_id' => $dishId, 
-				'sale_date' => $saleDate, 
-				'quantity'	=> $quantity, 
-				'created_date' 	=> time(),
-    			'sale_date' 	=> $saleDate
-    		);
-    		
-    		$menuId = Menu::insert($data);
+			    		$quantity = $request->getParam('quantity','');    		$quantity = floatval(str_replace('.', '', $quantity));    		
+			$pattern = $request->getParam('recurrence_pattern','');   				$pattern = My_Zend_Globals::strip_word_html($pattern, '');						$days = $request->getParam('days','');						$start_date = $request->getParam('start_date');   	
+    		$start_date = ProductOrders::beginDate($start_date);    		    		$end_date = $request->getParam('end_date');    		$end_date = ProductOrders::endDate($end_date);    		
+			$quantity= $request->getParam('quantity','');   		    		$quantity = floatval(str_replace('.', '', $quantity));    		    		//type daily    		if ($pattern == "daily") {    			for($i = $start_date; $i <= $end_date; $i+=86400)     			{    				$data = array(    					'dish_id' => $dishId,    					'sale_date' => $i,    					'quantity'	=> $quantity,    					'created_date' 	=> time(),    				);    				    				$menuId = Menu::insert($data);    			}    		} else if ($pattern == "weekly") {    			for($i = $start_date; $i <= $end_date; $i+=86400)    			{    				$data = array(    						'dish_id' => $dishId,    						'sale_date' => $i,    						'quantity'	=> $quantity,    						'created_date' 	=> time(),    				);    			    				$menuId = Menu::insert($data);    			}    		}    		echo"done";die;
     		
     		if($menuId)
     		{

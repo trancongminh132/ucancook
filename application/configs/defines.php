@@ -11,7 +11,7 @@ define('LOGIN_URL', BASE_URL.'/adm/index/login');
 define('LOGIN_ADM_URL', BASE_URL.'/adm/index/login');
 define('LOCKED_URL', BASE_URL.'/user_locked.html');
 define('LOCKED_ADM_URL', BASE_URL.'/user_adm_locked.html');
-define('DOMAIN', 'ucancook.vn');
+define('DOMAIN', 'local-ucancook.vn');
 define('CONFIGS_PATH', 'configs_path');
 define('LOGGER_DUMP', 'logger_dump');
 define('APPLICATION_CONFIGURATION', 'appConfig');

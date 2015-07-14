@@ -1,7 +1,5 @@
 <?php
-	$this->headLink()->appendStylesheet($this->layout()->_general['server']['path'].'/css/jquery.ui.datepicker.css');
-	$this->headScript()->appendFile($this->layout()->_general['server']['path'].'/js/jquery.ui.datepicker.js'); 
-	$params = $this->filters;
+	$this->headLink()->appendStylesheet($this->layout()->_general['server']['path'].'/css/calendar.css');
 ?>
 <div id="content">
     <div class="breadcrumb clearfix">
@@ -16,27 +14,112 @@
 	}
 	?>
     <div class="clear"></div>
-    <form action="" method="post">
+    <form id="insert_menu" method="post">
 	    <div>
 	        <div class="fdefault posting">
-            	<h3 class="n1">Thông tin cơ bản</h3>
                 <div class="group_listing_input">
+                    <div class="listing_input hgauto">
+                        <div class="post_label_container">
+                            <label class="postLabel">Chọn lịch:</label>
+                        </div>
+                        <fieldset class="fs_parent">
+	                        <fieldset class="fs_top">
+						        <legend>Recurrence Pattern</legend>
+						        <div class="col_1">
+						            <div>
+						              <input id="daily" type="radio" name="recurrence_pattern" value="daily">
+						              <label for="daily">Daily</label>
+						            </div>
+						            <div>
+						              <input id="weekly" type="radio" name="recurrence_pattern" value="weekly">
+						              <label for="weekly">Weekly</label>
+						            </div>
+						            <div>
+						              <input id="monthly" type="radio" name="recurrence_pattern" value="monthly">
+						              <label for="monthly">Monthly</label>
+						            </div>
+						            <div>
+						              <input id="yearly" type="radio" name="recurrence_pattern" value="yearly">
+						              <label for="yearly">Yearly</label>
+						            </div>
+						        </div>
+						        <div class="col_2">
+						            <div>
+						              <input id="particular" type="radio" name="recurrence_pattern" value="particular">
+						              <label for="particular">Recur on: </label>
+						            </div>
+						            <div class="group_day">
+						                <div>
+						                  	<input id="monday" class="ckb_day" type="checkbox" name="days[]" value="2">
+						                  	<label for="monday">Monday</label>
+						                </div>
+						                <div>
+						                  	<input id="tuesday" class="ckb_day" type="checkbox" name="days[]" value="3">
+						                  	<label for="tuesday">Tueday</label>
+						                </div>
+						                <div>
+						                  	<input id="wednesday" class="ckb_day" type="checkbox" name="days[]" value="4">
+						                  	<label for="wednesday">Wednesday</label>
+						                </div>
+						                <div>
+						                  	<input id="thursday" class="ckb_day" type="checkbox" name="days[]" value="5">
+						                  	<label for="thursday">Thursday</label>
+						                </div>
+						                <div>
+						                  	<input id="friday" class="ckb_day" type="checkbox" name="days[]" value="6">
+						                  	<label for="friday">Friday</label>
+						                </div>
+						                <div>
+						                  	<input id="saturday" class="ckb_day" type="checkbox" name="days[]" value="7">
+						                  	<label for="saturday">Saturday</label>
+						                </div>
+						                <div>
+						                  	<input id="sunday" class="ckb_day" type="checkbox" name="days[]" value="8">
+						                  	<label for="sunday">Sunday</label>
+						                </div>
+						            </div>
+						        </div>
+						    </fieldset>
+						    <?php 
+						    	$start_date = strtotime(date('d-m-Y'). "00:00:00");
+						    	$end_date = strtotime('+ 1 year', $start_date);
+						    ?>
+	                        <fieldset class="fs_top">
+						        <legend>Range of recurrence</legend>
+						        <div class="col_3">
+						            <div style="padding-bottom:10px">
+						              	Start Date&nbsp;&nbsp;
+						              	<select name="start_date" id="start_date">
+						              		<option value="0">Chọn ngày bắt đầu</option>
+						              		<?php for($i = $start_date; $i < $end_date; $i+=86400){ ?>
+						              		<option value="<?php echo $i?>">Ngày <?php echo date('d-m-Y', $i);?></option>
+						              		<?php }?>
+						              	</select>
+						            </div>
+						            <div>
+						             	End Date&nbsp;&nbsp;&nbsp;
+						             	<select name="end_date" id="end_date">
+						             		<option value="0">Chọn ngày kết thúc</option>
+						              		<?php for($i = $start_date; $i < $end_date; $i+=86400){ ?>
+						              		<option value="<?php echo $i?>">Ngày <?php echo date('d-m-Y', $i);?></option>
+						              		<?php }?>
+						              	</select>
+						            </div>
+						           
+						        </div>
+						    </fieldset>
+						</fieldset>
+                    </div>
                     <div class="listing_input hgauto">
                         <div class="post_label_container">
                             <label class="postLabel">Chọn món ăn:</label>
                         </div>
-                        <select id="type" name="dish_id" class="cat">
+                       	<select id="dish_id" name="dish_id" class="cat" style="width:152px">
 							<option value="0">Chọn món ăn</option>
 							<?php foreach($this->dishes as $item){?>
 							<option value="<?php echo $item['id']?>"><?php echo $item['name']?></option>
 							<?php }?>
 						</select>
-                    </div>
-                    <div class="listing_input hgauto">
-                        <div class="post_label_container">
-                            <label class="postLabel">Ngày bán:</label>
-                        </div>
-                       <input type="text" class="datepicker large" name="sale_date">        
                     </div>	   
                     <div class="listing_input hgauto">
                         <div class="post_label_container">
@@ -45,7 +128,7 @@
 						<input type="text" class="large" name="quantity" id="quantity"  alt="">    
 					</div>
                     <div class="button_listing_input">
-                    	<input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
+                    	<input id="btn_submit" type="button" class="button_update" value="" name="btn_submit" />
                 	</div>	
                 </div>							                                           
 	        </div>
@@ -53,7 +136,42 @@
     </form>
 </div>
 <script>
-$(function() {
-	$( ".datepicker" ).datepicker({dateFormat : 'dd-mm-yy'});
-});
+	$('#btn_submit').click(function() {
+		var pattern = $('input:radio[name=recurrence_pattern]:checked').val();
+		if (typeof pattern == "undefined") {
+			alert("Vui lòng chọn kiểu lặp lại");return;
+		}
+		
+		var start_date = $('#start_date').val();
+		if (start_date == 0) {
+			alert("Vui lòng chọn ngày bắt đầu");return;
+		}
+		
+		var end_date = $('#end_date').val();
+		if (end_date == 0) {
+			alert("Vui lòng chọn ngày kết thúc");return;
+		}
+
+		var dish_id = $('#dish_id').val();
+		if (dish_id == 0) {
+			alert("Vui lòng chọn món ăn");return;
+		}
+
+		var quantity = $('#quantity').val();
+		if (quantity == 0) {
+			alert("Vui lòng nhập số lượng");return;
+		}
+
+		$('#insert_menu').submit();
+	});
+	$('.ckb_day').click(function(){
+		$('input:radio[name="recurrence_pattern"]').filter('[value="particular"]').attr('checked', true);
+	});
+	$('input[name="recurrence_pattern"').click(function() {
+		var val = $(this).val();
+		if(val != "particular") {
+			$('.ckb_day').removeAttr("checked");
+		}
+		
+	});
 </script>
