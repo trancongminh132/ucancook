@@ -41,6 +41,20 @@ class Dish
     	)
     );
     
+    public static $_ARRAY_TYPE_UNIT = array(
+    	1 	=> 	'Cái',
+    	2	=>	'Kg',
+    	3 	=> 	'Gram',
+    	4	=> 	'Quả',
+    	5	=> 	'Con',
+    	6	=>	'1/2 con',
+    	7	=>  'Lít',
+    	8	=> 	'Xị',
+    	9	=> 	'100 ml',
+    	10	=> 	'100 gr',
+    	11	=>  '500 ml'
+    );
+    
     public static $_ARRAY_TASTE = array(
     	1 => array(
     		'id' => 1,
@@ -115,7 +129,7 @@ class Dish
      */
     public static function init($data)
     {        
-        $fields = array('id', 'name', 'alias', 'type', 'status', 'chef_id', 'price', 'special_price', 'status', 'attributes', 'ingredient', 'image', 'multi_image', 'description', 'created_date', 'updated_date');
+        $fields = array('id', 'name', 'alias', 'type', 'status', 'chef_id', 'price', 'special_price', 'status', 'attributes', 'ingredient', 'image', 'multi_image', 'description', 'created_date', 'updated_date', 'num_dish', 'file_pdf');
 		
         $rs = array();
         
@@ -135,7 +149,7 @@ class Dish
      */
     public static function initDishIngredient($data)
     {
-    	$fields = array( 'dish_id', 'ingredient_id');
+    	$fields = array( 'dish_id', 'ingredient_id', 'quantity', 'unit');
     
     	$rs = array();
     
@@ -537,24 +551,13 @@ class Dish
     		$table = self::_TABLE_DISH_INGREDIENT;
     		//Query data from database
     		$select = $storage->select()
-			    		->from($table, 'ingredient_id')
+			    		->from($table, '*')
 			    		->where('dish_id = ?', $dishId);
     		
     		// query db
     		$list = $storage->fetchAll($select);
    			
-    		if(!empty($list))
-    		{
-    			$arrayIngredientIds = array();
-    			foreach($list as $item)
-    			{
-    				$arrayIngredientIds[] = $item['ingredient_id'];
-    			}
-    			
-    			$dataReturn = Ingredient::getMultiIngredient($arrayIngredientIds);
-    		}
-    		
-    		return  $dataReturn;
+    		return  $list;
     	}
     	catch(Exception $e)
     	{	
@@ -696,5 +699,61 @@ class Dish
     		My_Zend_Logger::log('UserTaste::getListTasteOfUser -- '. $ex->getMessage());
     		return false;
     	}
+    }
+    
+    /**
+     * 
+     * calculate ingredient in detail order
+     */
+    public function calculateIngredientInDetailOrder($listProduct)
+    {
+    	$data_return = array();
+    	foreach($listProduct as $item) {
+    		if($item['type'] == TYPE_DISH) {
+    			$ingredients = self::getIngredientInDish($item['item_id']);
+    			if(!empty($ingredients)) {
+    				$ingredients = My_Zend_Globals::myArrayFlip($ingredients, 'ingredient_id');
+    				$multiIngr = Ingredient::getMultiIngredient(array_keys($ingredients));
+    				$multiIngr = My_Zend_Globals::myArrayFlip($multiIngr, 'id');
+    				
+    				foreach($ingredients as $ingr) {
+    					if(!isset($data_return[$ingr['ingredient_id']])) {
+    						$data_return[$ingr['ingredient_id']] = array(
+    							'id'		=> $ingr['ingredient_id'],
+    							'name'		=> $multiIngr[$ingr['ingredient_id']]['name'],
+    							'unit'		=> $ingr['unit'],
+    							'quantity' 	=> $item['quantity']*$ingr['quantity'],
+    						);
+    					} else {
+    						$data_return[$ingr['ingredient_id']] = array(
+    							'id'		=> $ingr['ingredient_id'],
+    							'name'		=> $multiIngr[$ingr['ingredient_id']]['name'],
+    							'unit'		=> $ingr['unit'],
+    							'quantity' 	=> $data_return[$ingr['ingredient_id']]['quantity'] + ($item['quantity']*$ingr['quantity']),
+    						);
+    					}
+    				}
+    			}
+    		} else if($item['type'] == TYPE_INGREDIENT) {
+    			$ingredient = Ingredient::getItem($item['item_id']);
+    			if(!isset($data_return[$item['ingredient_id']])) {
+    				$data_return[$item['ingredient_id']] = array(
+    					'id'		=> $item['ingredient_id'],
+    					'name'		=> $ingredient['name'],
+    					'unit'		=> $ingredient['unit_price'],
+    					'quantity' 	=> $item['quantity'],
+    				);
+    			} else {
+    				$data_return[$item['ingredient_id']] = array(
+    					'id'		=> $item['item_id'],
+    					'name'		=> $$ingredient['name'],
+    					'unit'		=> $ingredient['unit_price'],
+    					'quantity' 	=> $data_return[$item['ingredient_id']]['quantity'] + ($item['quantity']),
+    				);
+    			}
+    		}
+    	}
+    	
+    	return $data_return;
     }
 }

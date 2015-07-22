@@ -1,0 +1,94 @@
+<?php 
+	$order = $this->orders[0];
+	include(APPLICATION_PATH . '/configs/cities.php');
+	global $_CITIES;
+?>
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<title>In đơn hàng</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+</head>
+<body style="width:700px;margin:0 auto;padding:0;text-align:center">
+<table cellspacing="0" cellpadding="0" border="0" align="center" style="background:url(images/newbg.jpg) repeat;width:700px;padding:10px 40px;font-family:Tahoma;font-size:12px">
+	<tbody>
+		<tr>
+			<td><img style="float:left;margin-right:20px" src="/a/images/logo.png" alt="123Mua.vn" style="border:0"><p style="display:block;float:left;margin-top:20px;padding-left:30px;color:#333;font-size:12px;text-align:left;border-left:1px dotted #555">Ucancook.vn - Website chuyên cung cấp thực phẩm chất lượng<br />Công ty TNHH Bếp ăn Việt Nam </p></td>
+		</tr>
+		<tr>
+			<td style="text-align:left">
+				<div style="display:block;background:#0082d8;height:5px;margin-top:10px;margin-bottom:1px;border:0"></div>
+				<div style="background-color:#fff;margin-bottom:10px;padding:20px 12px;color:#333;font-size:13px;border:1px solid #0082d8">
+					<p style="margin:0;padding:0 0 5px;margin-bottom:10px;line-height:18px;border-bottom:1px dotted #ccc"><strong style="color:#333;font-size:14px;font-weight:bold">Thông tin đơn hàng: <?php echo $order['order_code']?></strong> <a id="btn_print" style="cursor:pointer;display:block;background-image:linear-gradient(top, #fff 0%, #ebebeb 100%);background-image:-moz-linear-gradient(top, #fff 0%, #ebebeb 100%);background-image:-webkit-linear-gradient(top, #fff 0%, #ebebeb 100%);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#ebebeb');background-color:#ebebeb;width:130px;height:28px;line-height:28px;color:#666;font-size:14px;text-align:center;text-decoration:none;border:1px solid #E6E6E6;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px" onclick="printOrder()" id="print-button">In đơn hàng này</a></p>
+					<div style="background-color:#dff1ff;width:300px;padding:8px 10px;margin:0 0 10px;color:#333;border:1px solid #b7d7f0">Mã đơn hàng: <strong style="color:#ff3300;font-weight:bold"><?php echo $order['order_code']?></strong><br />Ngày đặt hàng: <strong> <?php echo date('d/m/Y H:i:s', $order['created_date'])?></strong></div>
+					<p style="margin:0;padding:0;margin-bottom:15px;line-height:18px"><strong>Thông tin người nhận</strong><br />Họ và tên: <?php echo $order['order_name']?><br />Địa chỉ giao hàng: <?php echo $order['order_address'].', '.$_DISTRICTS[$order['order_city']][$order['order_district']]['district_name'].', '.$_CITIES[$order['order_city']]['city_name'];?><br />Số điện thoại: <?php echo $order['order_phone']?><br />Email: <a href="mailto:<?php echo $order['order_email']?>" style="color:#0066cc"><?php echo $order['order_email']?></a></p>
+					<p style="margin:0;padding:0;margin-bottom:5px;line-height:18px"><strong>Chi tiết đơn hàng</strong></p>
+					<table style="margin-bottom:15px;border:1px solid #ccc;border-right:0" width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc;width:10px">STT</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Tên sản phẩm</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Loại sản phẩm</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Số lượng</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Đơn giá</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Thành tiền</td>
+						</tr>
+						<?php
+							$i = 1;
+							$totalPrice = 0;
+							
+							foreach($this->listProduct as $detail)
+							{				
+								$quantity = $detail['quantity'];
+								$totalPrice = $totalPrice + $quantity * $detail['price'];
+								?>
+								<tr>
+									<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php echo $i++;?></td>
+									<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">
+										<?php echo $detail['name'];?>
+										<?php if(!empty($detail['more_info'])){?>
+										<?php if($detail['type'] == TYPE_DISH){?>
+										<p style="margin-top:5px;font-weight:bold"> - Ngày giao: <?php echo date('d-m-Y', $detail['more_info']);?></p>
+										<?php }elseif($detail['type'] == TYPE_GIFT){?>
+										<?php $moreInfo = explode('-', $detail['more_info']);?>
+										<?php echo '<br/><b> - Người gửi: '.$moreInfo[0].'</b>';?><br/>
+										<?php echo '<b> - Người nhận: '.$moreInfo[1].'</b>';?><br/>
+										<?php echo '<b> - Email người nhận: '.$moreInfo[2].'</b>';?><br/>
+										<?php if(!empty($moreInfo[3])){?>
+										<?php echo '<b> - Ghi chú: '.$moreInfo[3].'</b>';?><br/>
+										<?php }?>
+										<?php }}?>
+									</td>
+									<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php switch($detail['type']){case TYPE_DISH: echo 'Món ăn';break;case TYPE_GIFT: echo 'Phiếu quà tặng';break;case TYPE_INGREDIENT: echo 'Nguyên liệu';break;}?></td>
+									<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php echo My_Zend_Globals::numberFormat($detail['quantity']);?></td>
+									<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php echo My_Zend_Globals::numberFormat($detail['price']);?></td>
+									<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php echo My_Zend_Globals::numberFormat($quantity * $detail['price'])?></td>
+								</tr>
+							<?php }?>
+							<?php if($pricePromotion > 0):?>
+							<tr><td align="right" style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc" colspan="5">Giảm giá</td><td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc" class="ctn"><strong style="color:#f30;font-size:12px;font-weight:bold"><?php echo My_Zend_Globals::numberFormat($pricePromotion)?> VNĐ</strong> (<?php echo ProductOrder::$promotionCode[$this->productOrder['promotion_id']]?>)</td></tr>
+							<?php endif;?>
+							<tr><td align="right" style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc" colspan="5">Tổng tiền (+20.000 phí ship)</td><td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc" class="ctn"><strong style="color:#f30;font-size:12px;font-weight:bold"><?php echo My_Zend_Globals::numberFormat($totalPrice + $this->productOrder['shipping_cost'] - $pricePromotion)?> VNĐ</strong></td></tr>
+					</table>
+					<p style="margin:0;padding:0;margin-bottom:10px;line-height:18px">Trân trọng,<br />Website Ucancook.vn</p>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:left;border-top:1px dotted #555">
+				<p style="margin:0;padding:10px 0 0 0;margin-bottom:10px;line-height:18px">Copyright © Ucancook.vn 2015. All Right Reserved.<br />21 Nguyễn Văn Tráng, Phường Bến Thành, Quận 1, Tp.HCM<br />Hotline: 098 9181 123</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<script>
+	printOrder = function()
+	{
+		document.getElementById('btn_print').remove();
+		window.print();
+	}
+</script>
+</body>
+</html>

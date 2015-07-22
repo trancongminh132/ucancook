@@ -65,7 +65,10 @@
 		                    	<?php echo $this->multiDish[$value['dish_id']]['name'];?>
 		                    </td>	                    		               
 		                    <td class="ctn"><?php echo Dish::$_ARRAY_TYPE[$this->multiDish[$value['dish_id']]['type']]['name'];?></td>	               		                   	
-		                    <td class="ctn"><?php echo date('d-m-Y', $value['sale_date']); ?></td>	    
+		                    <td class="ctn"><?php 
+		                    	$day = date('N', $value['sale_date']);
+		                    	My_Zend_Globals::verbalDate($day);
+		                    	echo date('d-m-Y', $value['sale_date']); ?></td>	    
 		                    <td class="ctn">	                    	
 								<a href="<?php echo BASE_URL.'/adm/menu/edit-menu/id/'.$value['id']?>" class="b_edit" title="Cập nhật thực đơn này"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_edit.jpg" alt="" width="60px" height="20px"/></a> 
 								<a href="javascript:void(0)" class="btn btn-danger btn-sm delete_menu" title="Xóa thực đơn này" rel="<?php echo $value['id'];?>"><img src="<?php echo $this->layout()->_general['server']['path']; ?>/images/b_del.jpg" alt="" width="60px" height="20px"/></a>

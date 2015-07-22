@@ -93,6 +93,17 @@ class Adm_DishController extends Zend_Controller_Action
     	
     	if($request->isPost())
     	{    
+    		$filePdf = "";
+    		if ($_FILES['file_pdf']['size'])
+    		{
+    			$file = $_FILES['file_pdf'];
+    		
+    			$upload = new Upload();
+    			$destFolder = array('file', date('Y'));
+    			$rsUpload = $upload->uploadFile($file, $destFolder);
+    			$filePdf = $rsUpload['url'];
+    		}
+    		
     		$dishName = $request->getParam('dish_name', '');   		
     		$dishName = My_Zend_Globals::strip_word_html($dishName,'');
     		
@@ -101,6 +112,9 @@ class Adm_DishController extends Zend_Controller_Action
 			$type= $request->getParam('type','');   		
     		$type = intval($type);
 			
+    		$num_dish= $request->getParam('num_dish','');
+    		$num_dish = intval($num_dish);
+    		
     		$status = $this->_getParam('status', 1);
     		$status = intval($status);
     		
@@ -114,7 +128,9 @@ class Adm_DishController extends Zend_Controller_Action
     		$specialPrice = floatval(str_replace('.', '', $specialPrice));
 			
 			$ingredients= $request->getParam('ingredients', array());   		
-    		
+			$quantity_ingr 	= $request->getParam('quantity_ingr');
+			$unit_ingr		= $request->getParam('unit_ingr');
+			
 			$image = $request->getParam('dish_image', '');   		
     		$image = My_Zend_Globals::strip_word_html($image,'');
 			
@@ -214,6 +230,7 @@ class Adm_DishController extends Zend_Controller_Action
 				'name' => $dishName, 
     			'alias' => $alias,
 				'type' => $type, 
+    			'num_dish' => $num_dish,
     			'chef_id' => $chefId,
 				'price'	=> $price,
 				'special_price' => $specialPrice, 							
@@ -224,7 +241,8 @@ class Adm_DishController extends Zend_Controller_Action
     			'status' => $status,
     			'ingredient' => $strIngredient,
 				'created_date' 	=> time(),
-    			'updated_date' 	=> time()
+    			'updated_date' 	=> time(),
+    			'file_pdf'		=> $filePdf,
     		);
     		
     		$dishId = Dish::insert($data);
@@ -236,9 +254,11 @@ class Adm_DishController extends Zend_Controller_Action
     			{
     				$dataInsert = array(
     					'ingredient_id' => $ingredients[$i],
-    					'dish_id' => $dishId
+    					'dish_id' 	=> $dishId,
+    					'quantity'	=> $quantity_ingr[$i],
+    					'unit'		=> $unit_ingr[$i],
 	    			);
-    						
+					
     				Dish::insertDishIngredient($dataInsert);
     			}
     			
@@ -294,6 +314,19 @@ class Adm_DishController extends Zend_Controller_Action
 		
     	if($request->isPost())
     	{
+    		$filePdf = $request->getParam('filePdf', '');
+    		$filePdf = My_Zend_Globals::strip_word_html($filePdf,'');
+    		
+    		if ($_FILES['file_pdf']['size'])
+    		{
+    			$file = $_FILES['file_pdf'];
+				
+    			$upload = new Upload();
+	    		$destFolder = array('file', date('Y'));
+	    		$rsUpload = $upload->uploadFile($file, $destFolder);
+	    		$filePdf = $rsUpload['url'];
+    		}
+    		
     		$dishName = $request->getParam('dish_name', '');   		
     		$dishName = My_Zend_Globals::strip_word_html($dishName,'');
     		
@@ -302,6 +335,9 @@ class Adm_DishController extends Zend_Controller_Action
 			$type= $request->getParam('type','');   		
     		$type = intval($type);
 			
+    		$num_dish= $request->getParam('num_dish','');
+    		$num_dish = intval($num_dish);
+    		
     		$status = $this->_getParam('status', 1);
     		$status = intval($status);
     		
@@ -314,8 +350,10 @@ class Adm_DishController extends Zend_Controller_Action
 			$specialPrice= $request->getParam('special_price','');   		
     		$specialPrice = floatval(str_replace('.', '', $specialPrice));
 			
-			$ingredients= $request->getParam('ingredients', array());   		
-    		
+			$ingredients	= $request->getParam('ingredients', array());   		
+    		$quantity_ingr 	= $request->getParam('quantity_ingr');
+    		$unit_ingr		= $request->getParam('unit_ingr');
+			
 			$image = $request->getParam('dish_image', '');   		
     		$image = My_Zend_Globals::strip_word_html($image,'');
 			
@@ -415,6 +453,7 @@ class Adm_DishController extends Zend_Controller_Action
 				'id' => $dishId,
 				'name' => $dishName,
     			'alias' => $alias,
+    			'num_dish' => $num_dish,
 				'type' => $type, 
     			'chef_id' => $chefId,
 				'price'	=> $price,
@@ -425,7 +464,8 @@ class Adm_DishController extends Zend_Controller_Action
 				'description' => $description, 
     			'status' => $status,
     			'ingredient' => $strIngredient,
-    			'updated_date' 	=> time()
+    			'updated_date' 	=> time(),
+    			'file_pdf'		=> $filePdf,
     		);
 			
     		$rs = Dish::update($data); 
@@ -438,10 +478,12 @@ class Adm_DishController extends Zend_Controller_Action
     			for($i=0; $i < $totalIngr; $i++)
     			{
     				$dataInsert = array(
-    					'ingredient_id' => $ingredients[$i],
-    					'dish_id' => $dishId
+    					'ingredient_id' => intval($ingredients[$i]),
+    					'dish_id' 	=> intval($dishId),
+    					'quantity'	=> $quantity_ingr[$i],
+    					'unit'		=> intval($unit_ingr[$i]),	
 	    			);
-    					
+    				
     				Dish::insertDishIngredient($dataInsert);
     			}
     		}
@@ -467,8 +509,8 @@ class Adm_DishController extends Zend_Controller_Action
     	$ingredients = Ingredient::getListItem(array(), 0, 1000);
     	$this->view->ingredients = $ingredients;
     	
-    	$attributeIngreList = explode(",", $dish['ingredient']);
-    	$this->view->attributeIngreList = $attributeIngreList;
+    	$ingDishList = Dish::getIngredientInDish($dish['id']);
+    	$this->view->ingDishList = $ingDishList;
     }
     
     /**
@@ -531,5 +573,31 @@ class Adm_DishController extends Zend_Controller_Action
     		$this->_redirect(BASE_URL.'/adm/dish?result=true');
     	else
     		$this->_redirect(BASE_URL.'/adm/dish?result=false');
+    }
+    
+    /**
+     *
+     * add new row ingredient
+     *
+     */
+    public function addNewIngredientAction()
+    {
+    	$ingredients = Ingredient::getListItem(array(), 0, 1000);
+    	
+    	$html = '<tr><td><select style="width:127px" class="cb_ingredient" name="ingredients[]">';
+    	$html .='<option value="0">Chọn nguyên liệu</option>';
+    	foreach($ingredients as $item) {
+			$html .='<option data-unit="'.$item['unit_price'].'" value="'.$item['id'].'">'.My_Zend_Globals::cutString($item['name'], 0, 40).'</option>';
+		}
+		$html .='</select></td><td><input type="text" name="quantity_ingr[]"></td><td><select class="cb_unit_ingr" name="unit_ingr[]">';
+		foreach (Dish::$_ARRAY_TYPE_UNIT as $key => $unit) {
+			$html .='<option value="'.$key.'">'.$unit.'</option>';
+		}
+		$html .='</select></td></tr>';
+    	
+    	$array_return = array(
+    		'html' => $html,
+    	);
+    	echo json_encode($array_return); exit;
     }
 }

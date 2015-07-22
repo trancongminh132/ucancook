@@ -64,9 +64,29 @@ class Adm_OrderController extends Zend_Controller_Action
 	
 	public function detailAction()
 	{
+		$request = $this->getRequest();
 		$orderId = $this->_getParam('id', 0);
 		if($orderId > 0)
 		{
+			if($request->isPost())
+			{
+				$params = $request->getParams();
+				$data_update = array(
+					'order_id'		=> intval($params['order_id']),
+					'order_status'	=> intval($params['order_status']),
+					'order_name'	=> $params['order_name'],
+					'order_address'	=> $params['order_address'],
+					'order_city'	=> intval($params['order_city']),
+					'order_district' => intval($params['order_district']),
+					'order_note'	=> $params['order_note'],
+					'order_email'	=> $params['order_email'],
+					'updated_date'	=> time(),	
+				);
+				
+				ProductOrders::updateProductOrders($data_update);
+				$this->_redirect('/adm/order/detail/id/'.$params['order_id']);
+			}
+			
 			$productOrder = ProductOrders::getProductOrder($orderId);
 			if(!empty($productOrder))
 			{
@@ -106,8 +126,8 @@ class Adm_OrderController extends Zend_Controller_Action
 			$this->_redirect('/adm/order');
 		}		
 		
-		$user = User::getUser($productOrder['buyer_id']);
-		$this->view->user = $user;
+		$listIngredient = Dish::calculateIngredientInDetailOrder($listProduct);
+		$this->view->listIngredient = $listIngredient;
 	}
 	
 	public function changeStatusAction()
@@ -123,5 +143,170 @@ class Adm_OrderController extends Zend_Controller_Action
 			}
 		}	
 		echo $rs; die;
+	}
+	
+	/**
+	 * 
+	 * group order
+	 */
+	public function groupOrderAction()
+	{
+		$ids = $this->_getParam('ids');
+		$ids = explode(',', $ids);
+		
+		$data_return = array();
+		
+		$orders = ProductOrders::getMultiOrder($ids);
+		if (!empty($orders)) {
+			foreach ($orders as $order) {
+				$listProduct = ProductOrders::getListProductOfOrder($order['order_id']);
+				if (!empty($listProduct)) {
+					foreach($listProduct as $item) {
+						if($item['type'] == TYPE_DISH) {
+							$ingredients = Dish::getIngredientInDish($item['item_id']);
+							if(!empty($ingredients)) {
+								$ingredients = My_Zend_Globals::myArrayFlip($ingredients, 'ingredient_id');
+								$multiIngr = Ingredient::getMultiIngredient(array_keys($ingredients));
+								$multiIngr = My_Zend_Globals::myArrayFlip($multiIngr, 'id');
+					
+								foreach($ingredients as $ingr) {
+									if(!isset($data_return[$ingr['ingredient_id']])) {
+										$data_return[$ingr['ingredient_id']] = array(
+											'id'		=> $ingr['ingredient_id'],
+											'name'		=> $multiIngr[$ingr['ingredient_id']]['name'],
+											'unit'		=> $ingr['unit'],
+											'quantity' 	=> $item['quantity']*$ingr['quantity'],
+										);
+									} else {
+										$data_return[$ingr['ingredient_id']] = array(
+											'id'		=> $ingr['ingredient_id'],
+											'name'		=> $multiIngr[$ingr['ingredient_id']]['name'],
+											'unit'		=> $ingr['unit'],
+											'quantity' 	=> $data_return[$ingr['ingredient_id']]['quantity'] + ($item['quantity']*$ingr['quantity']),
+										);
+									}
+								}
+							}
+						} else if($item['type'] == TYPE_INGREDIENT) {
+							$ingredient = Ingredient::getItem($item['item_id']);
+							if(!isset($data_return[$item['ingredient_id']])) {
+								$data_return[$item['ingredient_id']] = array(
+									'id'		=> $item['ingredient_id'],
+									'name'		=> $ingredient['name'],
+									'unit'		=> $ingredient['unit_price'],
+									'quantity' 	=> $item['quantity'],
+								);
+							} else {
+								$data_return[$item['ingredient_id']] = array(
+									'id'		=> $item['item_id'],
+									'name'		=> $$ingredient['name'],
+									'unit'		=> $ingredient['unit_price'],
+									'quantity' 	=> $data_return[$item['ingredient_id']]['quantity'] + ($item['quantity']),
+								);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		$this->view->orders = $orders;
+		$this->view->listIngredient = $data_return;
+		$this->view->ids = implode(',', $ids);
+	}
+	
+	/**
+	 * 
+	 * print function 
+	 */
+	public function printFunctionAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$type = $this->_getParam('type', 1);
+		
+		$ids = $this->_getParam('ids');
+		$ids = explode(',', $ids);
+		
+		$data_return = array();
+		
+		$orders = ProductOrders::getMultiOrder($ids);
+		if (!empty($orders)) {
+			foreach ($orders as $order) {
+				$listProduct = ProductOrders::getListProductOfOrder($order['order_id']);
+				if ($type == 2) {
+					foreach($listProduct as &$item)
+					{
+						switch($item['type'])
+						{
+							case TYPE_GIFT:
+								$coupon = Coupon::getCoupon($item['item_id']);
+								$item['name'] = 'Phiếu quà tặng '.My_Zend_Globals::numberFormat($coupon['value']);
+								break;
+							case TYPE_DISH:
+								$dish = Dish::getDish($item['item_id']);
+								$item['name'] = $dish['name'];
+								break;
+							case TYPE_INGREDIENT:
+								$ingredient = Ingredient::getItem($item['item_id']);
+								$item['name'] = $ingredient['name'];
+								break;
+						}
+					}
+				} else {
+					if (!empty($listProduct)) {
+						foreach($listProduct as $item) {
+							if($item['type'] == TYPE_DISH) {
+								$ingredients = Dish::getIngredientInDish($item['item_id']);
+								if(!empty($ingredients)) {
+									$ingredients = My_Zend_Globals::myArrayFlip($ingredients, 'ingredient_id');
+									$multiIngr = Ingredient::getMultiIngredient(array_keys($ingredients));
+									$multiIngr = My_Zend_Globals::myArrayFlip($multiIngr, 'id');
+										
+									foreach($ingredients as $ingr) {
+										if(!isset($data_return[$ingr['ingredient_id']])) {
+											$data_return[$ingr['ingredient_id']] = array(
+													'id'		=> $ingr['ingredient_id'],
+													'name'		=> $multiIngr[$ingr['ingredient_id']]['name'],
+													'unit'		=> $ingr['unit'],
+													'quantity' 	=> $item['quantity']*$ingr['quantity'],
+											);
+										} else {
+											$data_return[$ingr['ingredient_id']] = array(
+													'id'		=> $ingr['ingredient_id'],
+													'name'		=> $multiIngr[$ingr['ingredient_id']]['name'],
+													'unit'		=> $ingr['unit'],
+													'quantity' 	=> $data_return[$ingr['ingredient_id']]['quantity'] + ($item['quantity']*$ingr['quantity']),
+											);
+										}
+									}
+								}
+							} else if($item['type'] == TYPE_INGREDIENT) {
+								$ingredient = Ingredient::getItem($item['item_id']);
+								if(!isset($data_return[$item['ingredient_id']])) {
+									$data_return[$item['ingredient_id']] = array(
+											'id'		=> $item['ingredient_id'],
+											'name'		=> $ingredient['name'],
+											'unit'		=> $ingredient['unit_price'],
+											'quantity' 	=> $item['quantity'],
+									);
+								} else {
+									$data_return[$item['ingredient_id']] = array(
+											'id'		=> $item['item_id'],
+											'name'		=> $$ingredient['name'],
+											'unit'		=> $ingredient['unit_price'],
+											'quantity' 	=> $data_return[$item['ingredient_id']]['quantity'] + ($item['quantity']),
+									);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		$this->view->orders = array_values($orders);
+		$this->view->listIngredient = $data_return;
+		$this->view->listProduct = $listProduct;
+		$this->render('print-type-'.$type);
 	}
 }

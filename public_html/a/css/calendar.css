@@ -1,0 +1,54 @@
+.fs_top {
+    margin: 8px;
+    border: 1px solid silver;
+    padding: 8px; 
+    border-radius: 4px;
+    width:700px;
+    align:left;
+}
+.fs_parent{
+	margin: 8px;
+	margin-left:130px;
+    border: 1px solid silver;
+    border-radius: 4px;
+    width:700px;
+    align:left;
+}
+legend{
+    padding: 2px;
+	font-size:12px;
+	color: #666;
+	font-weight: bold;
+}
+.col_1{
+	float:left;
+	width:15%;
+	border-right: 1px solid silver;
+}
+.col_2{
+	float:left;
+	clear:both;
+	position:absolute;
+	margin-left: 14%;
+}
+
+.group_day{
+	padding-top:1px;
+	padding-left:6px;
+}
+
+.group_day div{
+	float:left;
+	width:120px;
+}
+
+.col_3 div{
+	color: #666;
+	font-size: 12px;
+	font-weight: normal;
+	vertical-align: middle;
+}
+
+.postLabel{
+	font-weight:bold !important;
+}

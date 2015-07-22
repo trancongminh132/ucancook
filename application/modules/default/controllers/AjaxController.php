@@ -264,7 +264,7 @@ class AjaxController extends Zend_Controller_Action
     
     /**
      * 
-     * 
+     * generate url checkout
      * 
      */
     public function generateurlcheckoutAction()

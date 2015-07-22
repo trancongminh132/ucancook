@@ -63,7 +63,7 @@
 	                    	<?php echo $item['name']?>
 	                    </td>
 	                    <td class="ctn"><?php echo number_format($item['price'], 0, ',', '.');?></td>
-	                    <td class="ctn"><?php echo Ingredient::$_ARRAY_UNIT[$item['unit_price']]['name']?></td>
+	                    <td class="ctn"><?php echo Dish::$_ARRAY_TYPE_UNIT[$item['unit_price']]?></td>
 	                     <td class="ctn"><?php echo Ingredient::$_ARRAY_TYPE[$item['type']]?></td>
 	                    <td class="ctn"><?php echo number_format($item['quantity'], 0, ',', '.'); ?></td>
 	                     <td class="ctn"><?php echo date('H:i d/m/Y', $item['updated_date']); ?></td>

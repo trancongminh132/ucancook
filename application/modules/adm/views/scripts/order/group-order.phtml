@@ -1,0 +1,64 @@
+<style type="text/css">
+.pageOn {
+	float: left;
+}
+.pageOn ul li{
+	float: left; display: block; margin-left:10px;
+}
+.pageOn ul li.active a{
+	color:#f15922; font-weight:bold;
+}
+.module .info_member p{
+	line-height:27px;
+}
+.module .info_member input{
+	height:20px;
+}
+</style>
+<div id="content">
+    <div class="breadcrumb clearfix">
+        <div class="title k2">Group Order | <a href="<?php echo BASE_URL?>/adm/order/order-list">Danh sách đơn hàng</a></div>
+    </div>
+<?php
+	include(APPLICATION_PATH . '/configs/cities.php');
+	global $_CITIES;
+?>
+	<div class="module clearfix clear">
+		<div class="lstitle">Danh sách nguyên liệu cho các đơn hàng:
+		<?php foreach($this->orders as $order){?>
+		<a style="margin-top: 3px;" href="/adm/order/detail/id/<?php echo $order['order_id']?>"><?php echo $order['order_code'];?></a>
+		<?php }?>
+		<a style="margin-top: 3px;font-weight:bold;cursor:pointer" title="In mục này" onclick="print_function(1, '<?php echo $this->ids?>')">In mục này</a>
+		</div>
+		<div class="table_member">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody>
+					<tr>
+						<td class="secondRow" style="text-align:center;width:10px">STT</td>
+						<td class="secondRow" style="text-align:center">Tên nguyên liệu</td>
+						<td class="secondRow" style="text-align:center">Số lượng</td>
+					</tr>
+					<?php
+					$i = 1;
+					foreach($this->listIngredient as $detail)
+					{				
+						?>
+						<tr>
+						<td class="ctn"><?php echo $i++;?></td>
+						<td class="ctn">
+							<?php echo $detail['name'];?>
+						</td>
+						<td class="ctn" style="text-align:right"><?php echo My_Zend_Globals::numberFormat($detail['quantity']);?> <?php echo Dish::$_ARRAY_TYPE_UNIT[$detail['unit']];?></td>
+					</tr>
+					<?php }
+					?>
+				</tbody>
+			</table>
+		</div>
+		</div>
+	</div>	
+<script>
+	var print_function = function(type, ids) {
+		window.location = Settings.baseurl+'/adm/order/print-function?type='+type+'&ids='+ids;
+	};
+</script>

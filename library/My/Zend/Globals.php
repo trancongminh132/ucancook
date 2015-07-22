@@ -418,6 +418,15 @@ class My_Zend_Globals
         return $alt_ip;
     }
 
+    public static function verbalDate($day)
+    {
+    	if($day == 7)
+    		$day = 'Chủ nhật ngày ';
+    	else
+    		$day = 'Thứ '.($day+1)." ngày ";
+    	echo $day;
+    }
+    
     /**
      * Removes HTML characters and potentially unsafe scripting words from a string
      * @param string $message

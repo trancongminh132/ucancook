@@ -8,6 +8,12 @@
 .pageOn ul li.active a{
 	color:#f15922; font-weight:bold;
 }
+.module .info_member p{
+	line-height:27px;
+}
+.module .info_member input{
+	height:20px;
+}
 </style>
 <div id="content">
     <div class="breadcrumb clearfix">
@@ -15,45 +21,47 @@
     </div>
 <?php
 	include(APPLICATION_PATH . '/configs/cities.php');
+	global $_CITIES;
 ?>
 	<div class="module clearfix clear">
 		<div class="lstitle">Thông tin đơn hàng</div>
 		<div style="background:#f8f8f8;padding:10px;border:1px solid #ddd;-moz-box-shadow:0 0 1px #acacac;-webkit-box-shadow:0 0 1px #acacac">
-			<div class="info_member">
-				<p><span class="label" style="width:150px;">Mã đơn hàng</span> : <?php echo $this->productOrder['order_code']?></p>
-				<p><span class="label" style="width:150px;">Ngày đặt hàng</span> : <?php echo date('d/m/Y h:i:s', $this->productOrder['created_date']);?></p>
-				<p><span class="label" style="width:150px;">Tổng tiền</span> : <?php echo My_Zend_Globals::numberFormat($this->productOrder['amount_total']);?> VNĐ</p>
-				<p><span class="label" style="width:150px;">Trạng thái đơn hàng</span> : <span id="status-order-">
-					<select id="order_status" name="order_status" tabindex="-1">
-						<?php foreach (ProductOrders::$listOrderStatus as $statusId => $statusName):?>
-						<option value="<?php echo $statusId?>" <?php echo ($this->productOrder['order_status'] == $statusId && $this->params['order_status'] != 'all')?'selected="selected"':''; ?>><?php echo $statusName?></option>
-						<?php endforeach;?>
-					</select></span>	
-					<button style="width:200px" class="btn blue" type="button" id="change_status_submit">Chuyển trạng thái đơn hàng</button>				
-				</p>
-				<p><span class="label" style="width:150px;">Hình thức thanh toán</span> : <?php echo !empty(ProductOrders::$_paymentType[$this->productOrder['payment_type']]) ? ProductOrders::$_paymentType[$this->productOrder['payment_type']] : 'COD'?></p>
-				<p><span class="label" style="width:150px;">Chú thích đơn hàng</span> : <?php echo $this->productOrder['order_note']?></p>
-				<p><span class="label" style="width:150px;">Người đặt hàng</span> : <?php echo $this->productOrder['order_name']?></p>		
-				<p><span class="label" style="width:150px;">Địa chỉ mua</span> : <?php echo $this->productOrder['order_address'];
-				
-				$districtOrder = $this->productOrder['order_district'];
-				$cityOrder = $this->productOrder['order_city'];
-				
-				if(isset($_CITIES[$cityOrder]) && isset($_DISTRICTS[$cityOrder]) &&
-						isset($_DISTRICTS[$cityOrder][$districtOrder]))
-				{
-					echo ' '.$_DISTRICTS[$cityOrder][$districtOrder]['district_name'];
-				}
-				
-				if($cityOrder > 0 && isset($_CITIES[$cityOrder]))
-				{
-					echo  ' ' . $_CITIES[$cityOrder]['city_name'];
-				}
-				?>
-				</p>
-				<p><span class="label" style="width:150px;">Email người mua</span> : <?php echo $this->user['email']?></p>
-				<p><span class="label" style="width:150px;">Số điện thoại người mua</span> : <?php echo $this->productOrder['order_phone']?></p>				
-			</div>
+			<form method="post">
+				<input type="hidden" name="order_id" value="<?php echo $this->productOrder['order_id'];?>">
+				<div class="info_member">
+					<p><span class="label" style="width:150px;">Mã đơn hàng</span> : <?php echo $this->productOrder['order_code']?></p>
+					<p><span class="label" style="width:150px;">Ngày đặt hàng</span> : <?php echo date('d/m/Y h:i:s', $this->productOrder['created_date']);?></p>
+					<p><span class="label" style="width:150px;">Tổng tiền</span> : <?php echo My_Zend_Globals::numberFormat($this->productOrder['amount_total']);?> VNĐ</p>
+					<p><span class="label" style="width:150px;">Trạng thái đơn hàng</span> : <span id="status-order-">
+						<select id="order_status" name="order_status" tabindex="-1" style="height:24px">
+							<?php foreach (ProductOrders::$listOrderStatus as $statusId => $statusName):?>
+							<option value="<?php echo $statusId?>" <?php echo ($this->productOrder['order_status'] == $statusId && $this->params['order_status'] != 'all')?'selected="selected"':''; ?>><?php echo $statusName?></option>
+							<?php endforeach;?>
+						</select></span>	
+					</p>
+					<p><span class="label" style="width:150px;">Hình thức thanh toán</span> : <?php echo !empty(ProductOrders::$_paymentType[$this->productOrder['payment_type']]) ? ProductOrders::$_paymentType[$this->productOrder['payment_type']] : 'COD'?></p>
+					<p><span class="label" style="width:150px;">Ghi chú đơn hàng</span> <textarea style="margin-left:6px;margin-bottom:5px" cols="40" rows="3" name="order_note"><?php echo $this->productOrder['order_note']?></textarea></p>
+					<p><span class="label" style="width:150px;">Người đặt hàng</span> : <input type="text" name="order_name" value="<?php echo $this->productOrder['order_name']?>"></p>		
+					<p><span class="label" style="width:150px;">Địa chỉ mua</span> : <input type="text" name="order_address" value="<?php echo $this->productOrder['order_address']?>"> 
+						<select id="order_district" name="order_district" style="height:24px">
+							<?php foreach ($_DISTRICTS[$this->productOrder['order_city']] as $districtId => $district) {?>
+							<option value="<?php echo $districtId?>" <?php echo ($this->productOrder['order_district'] == $districtId) ? 'selected="selected"' : ''; ?>><?php echo $district['district_name']?></option>
+							<?php };?>
+						</select>
+						<select id="order_city" name="order_city" style="height:24px">
+							<?php foreach ($_CITIES as $cityId => $city) {?>
+							<option value="<?php echo $cityId?>" <?php echo ($this->productOrder['order_city'] == $cityId) ? 'selected="selected"' : ''; ?>><?php echo $city['city_name']?></option>
+							<?php };?>
+						</select>
+					</p>
+					<p><span class="label" style="width:150px;">Email người mua</span> : <input type="text" name="order_email" value="<?php echo $this->productOrder['order_email']?>"></p>
+					<p><span class="label" style="width:150px;">Số điện thoại người mua</span> : <input type="text" name="order_phone" value="<?php echo $this->productOrder['order_phone']?>"></p>
+					<div style="padding-top:3px;padding-left:110px" class="button_listing_input">				
+						<button class="button_update" type="submit" id="btn_submit"></button>
+						<a id="btn_print" style="margin-top: 10px;margin-right: 586px;float: right;cursor:pointer;display:block;background-image:linear-gradient(top, #fff 0%, #ebebeb 100%);background-image:-moz-linear-gradient(top, #fff 0%, #ebebeb 100%);background-image:-webkit-linear-gradient(top, #fff 0%, #ebebeb 100%);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#ebebeb');background-color:#ebebeb;width:110px;height:28px;line-height:28px;color:#666;font-size:14px;text-align:center;text-decoration:none;border:1px solid #E6E6E6;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px" onclick="printOrder(2, <?php echo $this->productOrder['order_id']?>)" id="print-button">In đơn hàng</a>				
+					</div>
+				</div>
+			</form>
 		</div>
 		<br />
 		<div class="lstitle">Chi tiết đơn hàng</div>
@@ -61,10 +69,10 @@
 			<table width="100%" cellspacing="0" cellpadding="0" border="0">
 				<tbody>
 					<tr>
-						<td class="secondRow"  style="text-align:center">STT</td>
+						<td class="secondRow"  style="text-align:center;width:10px">STT</td>
 						<td class="secondRow" style="text-align:center">Tên Sản Phẩm</td>
 						<td class="secondRow" style="text-align:center">Loại sản phẩm</td>
-						<td class="secondRow" style="text-align:center">Số lượng khách đặt</td>
+						<td class="secondRow" style="text-align:center">Số lượng đặt</td>
 						<td class="secondRow" style="text-align:center">Đơn giá</td>
 						<td class="secondRow" style="text-align:center">Thành tiền</td>
 					</tr>
@@ -105,9 +113,36 @@
 					<?php if($pricePromotion > 0):?>
 					<tr><td colspan="5" class="ctn" style="text-align:right">Giảm giá</td><td style="text-align:right" class="ctn"><strong style="color:#F00"><?php echo My_Zend_Globals::numberFormat($pricePromotion)?> VNĐ</strong> (<?php echo ProductOrder::$promotionCode[$this->productOrder['promotion_id']]?>)</td></tr>
 					<?php endif;?>
-					<tr><td colspan="5" class="ctn" style="text-align:right">Tổng tiền</td><td style="text-align:right" class="ctn"><strong style="color:#F00"><?php echo My_Zend_Globals::numberFormat($totalPrice + $this->productOrder['shipping_cost'] - $pricePromotion)?> VNĐ</strong></td></tr>
+					<tr><td colspan="5" class="ctn" style="text-align:right">Tổng tiền (+20.000 phí ship)</td><td style="text-align:right" class="ctn"><strong style="color:#F00"><?php echo My_Zend_Globals::numberFormat($totalPrice + $this->productOrder['shipping_cost'] - $pricePromotion)?> VNĐ</strong></td></tr>
 				</tbody>
 			</table>
+		</div>
+		<div class="lstitle">Nguyên liệu cho đơn hàng này</div>
+		<div class="table_member">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody>
+					<tr>
+						<td class="secondRow" style="text-align:center;width:10px">STT</td>
+						<td class="secondRow" style="text-align:center">Tên nguyên liệu</td>
+						<td class="secondRow" style="text-align:center">Số lượng</td>
+					</tr>
+					<?php
+					$i = 1;
+					foreach($this->listIngredient as $detail)
+					{				
+						?>
+						<tr>
+						<td class="ctn"><?php echo $i++;?></td>
+						<td class="ctn">
+							<?php echo $detail['name'];?>
+						</td>
+						<td class="ctn" style="text-align:right"><?php echo My_Zend_Globals::numberFormat($detail['quantity']);?> <?php echo Dish::$_ARRAY_TYPE_UNIT[$detail['unit']];?></td>
+					</tr>
+					<?php }
+					?>
+				</tbody>
+			</table>
+		</div>
 		</div>
 	</div>	
 <script>
@@ -128,4 +163,7 @@
 			})
 		})
 	});
+	var printOrder = function(type, ids) {
+		window.location = Settings.baseurl+'/adm/order/print-function?type='+type+'&ids='+ids;
+	};
 </script>

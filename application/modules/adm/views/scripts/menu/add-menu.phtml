@@ -27,61 +27,49 @@
 						        <legend>Recurrence Pattern</legend>
 						        <div class="col_1">
 						            <div>
-						              <input id="daily" type="radio" name="recurrence_pattern" value="daily">
+						              <input id="daily" type="radio" name="recurrence_pattern" value="daily" checked>
 						              <label for="daily">Daily</label>
 						            </div>
 						            <div>
 						              <input id="weekly" type="radio" name="recurrence_pattern" value="weekly">
 						              <label for="weekly">Weekly</label>
 						            </div>
-						            <div>
-						              <input id="monthly" type="radio" name="recurrence_pattern" value="monthly">
-						              <label for="monthly">Monthly</label>
-						            </div>
-						            <div>
-						              <input id="yearly" type="radio" name="recurrence_pattern" value="yearly">
-						              <label for="yearly">Yearly</label>
-						            </div>
 						        </div>
 						        <div class="col_2">
-						            <div>
-						              <input id="particular" type="radio" name="recurrence_pattern" value="particular">
-						              <label for="particular">Recur on: </label>
-						            </div>
 						            <div class="group_day">
 						                <div>
-						                  	<input id="monday" class="ckb_day" type="checkbox" name="days[]" value="2">
+						                  	<input id="monday" class="ckb_day" type="checkbox" name="days[]" value="1" checked>
 						                  	<label for="monday">Monday</label>
 						                </div>
 						                <div>
-						                  	<input id="tuesday" class="ckb_day" type="checkbox" name="days[]" value="3">
+						                  	<input id="tuesday" class="ckb_day" type="checkbox" name="days[]" value="2" checked>
 						                  	<label for="tuesday">Tueday</label>
 						                </div>
 						                <div>
-						                  	<input id="wednesday" class="ckb_day" type="checkbox" name="days[]" value="4">
+						                  	<input id="wednesday" class="ckb_day" type="checkbox" name="days[]" value="3" checked>
 						                  	<label for="wednesday">Wednesday</label>
 						                </div>
 						                <div>
-						                  	<input id="thursday" class="ckb_day" type="checkbox" name="days[]" value="5">
+						                  	<input id="thursday" class="ckb_day" type="checkbox" name="days[]" value="4" checked>
 						                  	<label for="thursday">Thursday</label>
 						                </div>
 						                <div>
-						                  	<input id="friday" class="ckb_day" type="checkbox" name="days[]" value="6">
+						                  	<input id="friday" class="ckb_day" type="checkbox" name="days[]" value="5" checked>
 						                  	<label for="friday">Friday</label>
 						                </div>
 						                <div>
-						                  	<input id="saturday" class="ckb_day" type="checkbox" name="days[]" value="7">
+						                  	<input id="saturday" class="ckb_day" type="checkbox" name="days[]" value="6" checked>
 						                  	<label for="saturday">Saturday</label>
 						                </div>
 						                <div>
-						                  	<input id="sunday" class="ckb_day" type="checkbox" name="days[]" value="8">
+						                  	<input id="sunday" class="ckb_day" type="checkbox" name="days[]" value="7" checked>
 						                  	<label for="sunday">Sunday</label>
 						                </div>
 						            </div>
 						        </div>
 						    </fieldset>
 						    <?php 
-						    	$start_date = strtotime(date('d-m-Y'). "00:00:00");
+						    	$start_date = strtotime(date('d-m-Y'). "00:00:01");
 						    	$end_date = strtotime('+ 1 year', $start_date);
 						    ?>
 	                        <fieldset class="fs_top">
@@ -169,9 +157,10 @@
 	});
 	$('input[name="recurrence_pattern"').click(function() {
 		var val = $(this).val();
-		if(val != "particular") {
+		if(val == "weekly") {
 			$('.ckb_day').removeAttr("checked");
+		} else {
+			$('.ckb_day').attr("checked", "checked");
 		}
-		
 	});
 </script>

@@ -4,11 +4,24 @@ class ProductOrders
 	const _TABLE_PRODUCT_ORDERS = 'product_orders';
 	const _TABLE_PRODUCT_ORDER_DETAIL = 'product_order_detail';
 	 
+	const ORDER_STATUS_NEW = 1;
+	const ORDER_STATUS_DONE = 2;
+	const ORDER_STATUS_CANCEL = 3;
+	const ORDER_STATUS_PAYMENT_DONE = 4;
+	const ORDER_STATUS_TRANSIT_LOGISTIC = 5;
+	const ORDER_STATUS_PROCESSING	= 6;
+	const ORDER_STATUS_PAUSE	= 7;
+	const ORDER_STATUS_DELIVERING	= 8;
+	
 	public static $listOrderStatus = array(
-		'1'		=> 'Đơn hàng mới',
-		'2'		=> 'Đã hoàn thành',
-		'3'		=> 'Đã hủy',
-		'4'		=> 'Đã thanh toán'
+		self::ORDER_STATUS_NEW				=> 'Đơn hàng mới',
+		self::ORDER_STATUS_PROCESSING			=> 'Đang xử lý',
+		self::ORDER_STATUS_PAUSE				=> 'Đang tạm ngưng',
+		self::ORDER_STATUS_DONE				=> 'Đã hoàn tất',
+		self::ORDER_STATUS_CANCEL				=> 'Đã hủy',
+		self::ORDER_STATUS_PAYMENT_DONE		=> 'Đã thanh toán',
+		self::ORDER_STATUS_TRANSIT_LOGISTIC 	=> 'Chuyển qua Logistic',
+		self::ORDER_STATUS_DELIVERING			=> 'Đang giao hàng',
 	);
 	 
 	public static	$_paymentType 	= array(
@@ -24,7 +37,7 @@ class ProductOrders
      */
     public static function initProductOrders($data)
     {        
-        $fields = array('order_id', 'buyer_id', 'order_name', 'order_phone', 'order_city', 'order_district', 'order_note', 'order_status',
+        $fields = array('order_id', 'buyer_id', 'order_name', 'order_phone', 'order_email', 'order_city', 'order_district', 'order_note', 'order_status',
         				'order_address', 'payment_type', 'created_date', 'updated_date', 'order_code', 'amount_total', 'shipping_cost');
 		
         $rs = array();
@@ -65,7 +78,8 @@ class ProductOrders
      * Insert Product Orders
      * @param array $data
      */
-    public static function insertProductOrders($data) {
+    public static function insertProductOrders($data) 
+    {
         //Init data
         $data = self::initProductOrders($data);
 
@@ -348,7 +362,7 @@ class ProductOrders
     {
     	if(empty($time))
     		return 0;
-    	return strtotime(date('Y', $time) .'-'. date('m', $time) .'-'. date('d', $time) .' 00:00:00');
+    	return strtotime(date('Y', $time) .'-'. date('m', $time) .'-'. date('d', $time) .' 00:00:01');
     }
     
     public static function endDate($time)
@@ -358,4 +372,26 @@ class ProductOrders
     	return strtotime(date('Y', $time) .'-'. date('m', $time) .'-'. date('d', $time) .' 23:59:59');
     }
     
+    /**
+     *
+     * Get multi order info from array of order id
+     * @param array $arrayOrderIds
+     */
+    public static function getMultiOrder($arrayOrderIds)
+    {
+    	if (!is_array($arrayOrderIds) || empty($arrayOrderIds)) {
+    		return array();
+    	}
+    	 
+    	$arrayOrderIds = array_unique($arrayOrderIds);
+    	
+    	foreach ($arrayOrderIds as $idx => $orderId) {
+    		$order = self::getProductOrder($orderId);    		 
+    		if (!empty($order)) {
+    			$orders[$order['order_id']] = $order;
+    		}
+    	}
+    	
+    	return $orders;
+    }
 }?>

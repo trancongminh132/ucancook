@@ -39,13 +39,14 @@
 	.pic-active {
 		border: 2px solid #41c200;
 	}
+	.tbl_ingredient tr td{padding:3px;}
 </style>
 <div id="content">
     <div class="breadcrumb clearfix">
         <div class="title k2">Cập nhật món ăn</div>
     </div>
     <div class="clear"></div>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
 	    <div class="leftSide">
 	         <div class="widget">
 	            <div class="gallery" id="gallery">
@@ -90,6 +91,23 @@
 	                            <label class="postLabel">Tình trạng:</label>
 	                        </div>
 	                        <input type="checkbox" id="status" name="status" value="1" <?php if($this->dish['status'] == 1) echo "checked";?>> Online  
+	                    </div>
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">File hướng dẫn chế biến:</label>
+	                        </div>
+	                        <input type="file" name="file_pdf">
+	                        <input type="hidden" name="filePdf" value="<?php echo $this->dish['file_pdf'];?>">
+	                        <?php if(!empty($this->dish['file_pdf'])){?>
+	                        <span style="height:5px"></span>
+	                        <br/>Link file: <a href="<?php echo $this->dish['file_pdf']?>"><?php echo $this->dish['file_pdf']?></a>
+	                        <?php }?>
+	                    </div>
+	                    <div class="listing_input hgauto">
+	                        <div class="post_label_container">
+	                            <label class="postLabel">Số người ăn:</label>
+	                        </div>
+	                        <input type="text" id="num_dish" name="num_dish" value="<?php echo $this->escape($this->dish['num_dish']); ?>"> VD: 2,4,6 người ăn.  
 	                    </div>
 	                    <div class="listing_input hgauto">
 	                        <div class="post_label_container">
@@ -185,13 +203,64 @@
 							<div class="post_label_container">
 								<label class="postLabel">Nguyên liệu cần:</label>
 							</div>
-							<table><tr><td>													
-								<?php foreach($this->ingredients as $item){?>
-								<div class="col" style="float:left;width:150px;padding-bottom:4px"><input name="ingredients[]" type="checkbox" <?php echo (in_array($item['id'], $this->attributeIngreList)) ? 'checked' : '' ?> value="<?php echo $item['id']?>" id ="ingredient_<?php echo $item['id'] ?>" style="float:left;margin:1px 5px 0 0"> <label style="line-height:16px;float:left" for="ingredient_<?php echo $item['id']?>"><?php echo My_Zend_Globals::cutString($item['name'], 0, 40)?></label></div>
-								<?php }?>
-							</td></tr></table>
-							</div>
-	                    </div>
+							<input type="button" value="Thêm nguyên liệu" class="add_ingredient">
+							<table class="tbl_ingredient" border="0" style="margin-left:130px;margin-top:5px">
+								<thead>
+									<tr>
+										<th>Tên nguyên liệu</th>
+										<th>Số lượng</th>
+										<th>Đơn vị tính</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php if(!empty($this->ingDishList)){?>
+									<?php foreach($this->ingDishList as $ing) {?>
+									<tr>
+										<td>					
+											<select class="cb_ingredient" name="ingredients[]">
+												<option value="0">Chọn nguyên liệu</option>
+												<?php foreach($this->ingredients as $item) {?>
+												<option data-unit="<?php echo $item['unit_price']?>" <?php if($ing['ingredient_id'] == $item['id']) echo 'selected="selected"';?> value="<?php echo $item['id']?>"><?php echo My_Zend_Globals::cutString($item['name'], 0, 40)?></option>
+												<?php }?>
+											</select>								
+										</td>
+										<td>
+											<input type="text" name="quantity_ingr[]" value="<?php echo $ing['quantity']?>">
+										</td>
+										<td>
+											<select class="cb_unit_ingr" name="unit_ingr[]">
+												<?php foreach (Dish::$_ARRAY_TYPE_UNIT as $key => $unit) {?>
+												<option <?php if($ing['unit'] == $key) echo 'selected="selected"';?> value="<?php echo $key?>"><?php echo $unit?></option>
+												<?php }?>
+											</select>
+										</td>
+									</tr>
+									<?php }}else{?>
+									<tr>
+										<td>					
+											<select class="cb_ingredient" name="ingredients[]">
+												<option value="0">Chọn nguyên liệu</option>
+												<?php foreach($this->ingredients as $item) {?>
+												<option data-unit="<?php echo $item['unit_price']?>" value="<?php echo $item['id']?>"><?php echo My_Zend_Globals::cutString($item['name'], 0, 40)?></option>
+												<?php }?>
+											</select>								
+										</td>
+										<td>
+											<input type="text" name="quantity_ingr[]">
+										</td>
+										<td>
+											<select class="cb_unit_ingr" name="unit_ingr[]">
+												<?php foreach (Dish::$_ARRAY_TYPE_UNIT as $key => $unit) {?>
+												<option value="<?php echo $key?>"><?php echo $unit?></option>
+												<?php }?>
+											</select>
+										</td>
+									</tr>
+									<?php }?>
+								</tbody>
+							</table>
+						</div>
+	               	</div>
 	                </div>								
 	                <div class="line clear"></div>
 	                <h3 class="n2">Mô tả món ăn</h3>
@@ -202,9 +271,8 @@
 	                	<input type="hidden" name="dish_image" id="dish_image" value=""/>
 	                    <input id="btn_submit" type="submit" class="button_update" value="" name="btn_submit" />
 	                </div>	                           
-	        </div>
-	    </div>
-    </form>
+		</div>
+	</form>
 </div>
 <script type="text/javascript">
 var editor_tiny_url = "<?php echo $this->layout()->_general['static']['path']?>/js/tiny_mce/tiny_mce.js";
@@ -304,5 +372,25 @@ var editor_tiny_url = "<?php echo $this->layout()->_general['static']['path']?>/
 		var type = $(this).val();
 		if(type != '0')
 			window.location = Settings.baseurl+'/adm/dish/edit-dish?id='+dishId+'&type='+type;
+	});
+	var is_add = false;
+	$('.add_ingredient').click(function(){
+		if (is_add)
+			return;
+		is_add = true;
+		$.ajax({
+			type: "POST",
+			url: Settings.baseurl + '/adm/dish/add-new-ingredient',
+			dataType:'json',
+			success: function(data)
+			{
+				$('.tbl_ingredient tbody').append(data.html);
+				is_add = false;
+			}
+		});
+	});
+	$('.cb_ingredient').live('change', function(){
+		var unit = $(this).children('option:selected').data('unit');
+		$('.cb_unit_ingr', $(this).parent().parent()).val(unit);
 	});
 </script>  <!--End Content-->  

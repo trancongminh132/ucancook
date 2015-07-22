@@ -83,7 +83,8 @@ class Upload {
         try
         {
             // neu upload thanh cong
-            if ($fileData['error'] === UPLOAD_ERR_OK) {
+            if ($fileData['error'] === UPLOAD_ERR_OK) 
+            {
                 $fileSize = $fileData['size'];
 
                 $fileError = $fileData['error'];
@@ -239,67 +240,84 @@ class Upload {
         $phMagick = new phMagick($source, $source);
         return $phMagick->resize($width, $height, $exactDimentions, $background);
     }
-
-    function uploadFile() {
-        $fileData = isset($_FILES['Filedata']) ? $_FILES['Filedata'] : null;
-        $signKey = isset($_POST['signkey']) ? $_POST['signkey'] : '';
-
-        // validate
-        if (!$this->verifySignKey($signKey)) {
-            /* return array(
-              'error_code' => 6,
-              ); */
-        }
-
+	
+    function uploadFile($upload, $destFolders) 
+    {
         $rs = array();
-
-        if ($fileData || isset($_SERVER['HTTP_X_FILE_NAME'])) {
-
-            if ($fileData['error'] === UPLOAD_ERR_OK) {
-                $fileSize = $fileData['size'];
-                $fileError = $fileData['error'];
-                $fileName = $fileData['name'];
-                $fileType = $fileData['type'];
-                $arrExt = explode('.', trim($fileName));
-                $ext = strtolower($arrExt[count($arrExt) - 1]);
-                array_pop($arrExt);
-                $photoName = implode(' ', $arrExt);
-
-                if ($fileName == '')
-                    return array('error_code' => 1, 'name' => $fileName, 'size' => $fileSize);
-
-                $systemName = time() . rand();
-                $systemName = md5($systemName);
-
-                // get first character of name
-                $folders[0] = $this->media_folder;
-                $folders[1] = 'files';
-                $folders[2] = date('Y');
-
-                // check folder exist
-                if (!$this->checkSystemFolder($folders))
-                    return array('error_code' => 5, 'name' => $fileName, 'size' => $fileSize);
-
-                $folder = '';
-
-                foreach ($folders as $tmp) {
-                    $folder .= $tmp . '/';
-                }
-
-                $folder = rtrim($folder, '/');
-
-                $uploadTo = $this->upload_path . '/' . $folder . "/" . $systemName . '.' . $ext;
-
-                // upload to original file
-                if (move_uploaded_file($fileData['tmp_name'], $uploadTo)) {
-                    return array("name" => $photoName,
-                        "url" => $this->publicDomain . '/' . $folder . '/' . $systemName . '.' . $ext
-                    );
-                } else {
-                    return array('error_code' => 8, 'name' => $fileName, 'size' => $fileSize);
-                }
-            }
-        }
+		
+        if ($upload && isset($upload['tmp_name'])) 
+        {
+        	// param_name is an array identifier like "files[]",
+        	// $_FILES is a multi-dimensional array:
+        	$fileData = array(
+        		'tmp_name' => $upload['tmp_name'],
+        		'error' => $upload['error'],
+        		'name' => isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'],
+        		'size' => isset($_SERVER['HTTP_X_FILE_SIZE']) ? $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'],
+        		'type' => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'],
+        	);
+        	
+	        if ($fileData['error'] === UPLOAD_ERR_OK) 
+	        {
+	            $fileSize = $fileData['size'];
+	            	
+	            $fileError = $fileData['error'];
+	            $fileName = $fileData['name'];
+	            $fileType = $fileData['type'];
+	            $arrExt = explode('.', trim($fileName));
+	            $ext = strtolower($arrExt[count($arrExt) - 1]);
+	            $this->extenion = '.'. $ext;
+	            array_pop($arrExt);
+	            $photoName = implode(' ', $arrExt);
+	            
+	            if ($fileName == '')
+	            	return array('error_code' => 1, 'name' => $fileName, 'size' => $fileSize);
+	            
+	            $systemName = time() . rand();
+	            $systemName = md5($systemName);
+	            	
+	            $folders = array();
+	            	
+	            // init dest folders
+	            if (is_array($destFolders) && !empty($destFolders)) {
+	            	$destFolders = array_values($destFolders);
+	            	
+	           		foreach ($destFolders as $key => $folder) {
+	            		$folders[$key] = $folder;
+	            	}
+	           	} else {
+	            	$folders[0] = date('Y');
+	            	$folders[1] = strtolower($systemName[0]);
+	            	$folders[2] = strtolower($systemName[1]);
+	            }
+	            
+	            // check folder exist
+	            if (!$this->checkSystemFolder($folders)) {
+	            	return array('error_code' => 5, 'name' => $fileName, 'size' => $fileSize);
+	            }
+	            	
+	            $folder = '';
+	            	
+	            foreach ($folders as $tmp) {
+	            	$folder .= $tmp . '/';
+	            }
+	            	
+	            $folder = rtrim($folder, '/');
+	            	
+	            $uploadTo = $this->upload_path . "/" . $folder . "/" . $systemName . $this->extenion;
+	            	
+	            // upload to original file
+	            if (move_uploaded_file($fileData['tmp_name'], $uploadTo)) {
+	            	return array("name" => $photoName,
+	            			"url" => $this->publicDomain . '/uploads/' . $folder . '/' . $systemName . $this->extenion,
+	            			"path"  => $folder,
+	            			"sys_name" => $systemName,
+	            			"ext" => $this->extenion,
+	            	
+	            	);
+	            }
+	        }
+       	}
 
         return $rs;
     }
@@ -334,15 +352,14 @@ class Upload {
                     $rs = $phMagick->resize($width, $height, false, 'transparent')->getLog();
                     
                 }
-
-                //$phMagick = new phMagick($source, $source, false, 'white');
-                //$phMagick->resize($config->photo->upload->size, $config->photo->upload->size);
+				
+                $phMagick = new phMagick($source, $source, false, 'white');
+                $phMagick->resize($config->photo->upload->size, $config->photo->upload->size);
                 return true;
             }
 
             return false;
         } catch (Exception $ex) {
-            // log
             return false;
         }
     }

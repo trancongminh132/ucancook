@@ -75,8 +75,8 @@
 	                        </div>
 	                        <select class="post_select" name="unit_price">
 								<option value="0">Chọn đơn vị tính</option>
-								<?php foreach (Ingredient::$_ARRAY_UNIT as $unitId => $unit){?>								
-								<option value="<?php echo $unitId;?>" ><?php echo $unit['name']?></option>
+								<?php foreach (Dish::$_ARRAY_TYPE_UNIT as $unitId => $unit){?>								
+								<option value="<?php echo $unitId;?>" ><?php echo $unit?></option>
 								<?php }?>
 							</select>         
 	                    </div>	            

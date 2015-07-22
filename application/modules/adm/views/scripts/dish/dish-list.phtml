@@ -71,7 +71,8 @@
 		                    <td align="center" class="ctn"><?php echo $value['id']; ?></td>
 		                    <td class="ctn"><img src="<?php echo My_Zend_Globals::getThumbImage($value['image'], 'thumb');?>" style="width:70px;height:70px"></td>	                    
 		                    <td class="ctn">
-		                    	<?php echo $value['name']?>
+		                    	<?php echo $value['name']?><br/>
+		                    	Khẩu phần cho: <?php echo $value['num_dish']?> người ăn.
 		                    </td>	                    
 		                    <td class="ctn">
 		                    	<?php echo number_format($value['price'], 0, ',', '.');?>

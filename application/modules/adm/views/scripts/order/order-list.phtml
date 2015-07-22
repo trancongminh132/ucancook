@@ -40,11 +40,14 @@ $params = $this->params;
     <?php echo $this->paging; ?>
     <div class="table_member">
         <table cellspacing="0" cellpadding="0" border="0" width="100%">
-              <tbody>
-                   <tr>
-                       <td valign="middle" colspan="8" class="firstRow"></td>
-                   </tr>
-                   <tr>                      
+      		<tbody>
+            	<tr>
+                       <td valign="middle" colspan="9" class="firstRow">
+                       	 <input type="button" class="group_order" name="group_order" value="Group Order" style="height:21px;width:100px;font-weight:bold;margin-left:10px" onclick="order.btnGroupOrder()">
+                       </td>
+                </tr>
+                <tr>                  
+                   	<td style="width: 15px" class="secondRow"><input type="checkbox" class="check_all" onclick="order.toggleChecked(this.checked)"></td>             
                        <td style="width: 10px" class="secondRow">ID</td>                       
                        <td width="10%" class="secondRow">Mã ĐH</td>
                        <td width="20%" class="secondRow">Tên khách hàng</td>
@@ -57,6 +60,7 @@ $params = $this->params;
 	                <?php if(!empty($this->listOrders)){?>
 					<?php foreach ($this->listOrders as $order){?>
                 	<tr>
+                		<td align="center" class="ctn"><input type="checkbox" class="check_order" value="<?php echo $order['order_id']?>" onclick="order.toggle(this, this.checked)"></td>
 	                    <td align="center" class="ctn"><?php echo $order['order_id']; ?></td>
 	                    <td class="ctn">
 	                    	<?php echo $order['order_code']?>
@@ -74,11 +78,11 @@ $params = $this->params;
                 </tr>  
                 <?php }}else{?>
                 <tr>
-                    <td class="ctn nonSearch" colspan="8">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
+                    <td class="ctn nonSearch" colspan="9">Không tìm thấy kết quả phù hợp theo yêu cầu của bạn.</td>
                 </tr>
                 <?php } ?>
                 <tr>
-                    <td valign="middle" colspan="8" class="firstRow">                  
+                    <td valign="middle" colspan="9" class="firstRow">                  
                 </tr>
            </tbody>
        </table>
@@ -86,6 +90,62 @@ $params = $this->params;
     <?php echo $this->paging; ?>
 </div>
 <script>
+	var order = {
+		multi:0,
+		ids:[],
+		toggle : function(obj, status)
+		{
+			if (status == true) { 
+				this.multi++;
+				this.ids.push($(obj).val());
+			} else {	
+				this.multi--;
+				this.removeByElement(this.ids, $(obj).val());
+			}
+			
+			if (this.multi > 10) {
+				$(this).myBoxy (Boxy,{
+					type:'alert',
+					message: 'Bạn chỉ được chọn tối đa 10 đơn hàng để gom nhóm.'
+				});
+				this.multi--;
+				return false;
+			}
+		},
+		toggleChecked : function(status) 
+		{
+			$(".check_order").each( function() {
+				$(this).attr("checked", status);
+			});
+		},
+		removeByElement:function(arrayName, value)
+		{
+			for (var i=0; i < arrayName.length; i++ ) { 
+				if (arrayName[i]== value)
+					arrayName.splice(i, 1); 
+			} 
+		},
+		btnGroupOrder: function()
+		{
+			if (this.multi == 0) {
+				$(this).myBoxy (Boxy,{
+					type:'alert',
+					message: 'Bạn chưa chọn đơn hàng nào để gom nhóm.'
+				});
+				return false;
+			}
+			
+			if (this.multi > 10) {
+				$(this).myBoxy (Boxy,{
+					type:'alert',
+					message: 'Bạn chỉ được chọn tối đa 10 đơn hàng để gom nhóm.'
+				});
+				return false;
+			}
+			
+			window.location = Settings.baseurl+'/adm/order/group-order?ids='+this.ids.join(',');
+		},
+	}; 
 	$(function() {
 		$( ".datepicker" ).datepicker({dateFormat : 'dd-mm-yy'});
 	});

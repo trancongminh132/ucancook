@@ -228,9 +228,9 @@ class OrderController extends Zend_Controller_Action
 		
 		if(!empty($city) || !empty($district) || !empty($address)){
 			$dataAddress = array(
-				'payment_city'	 => $city,
-				'payment_district' => $district,
-				'payment_address'	 => $address
+				'payment_city'	 	=> $city,
+				'payment_district' 	=> $district,
+				'payment_address'	=> $address
 			);
 			
 			setcookie('ucancook_payment_address', Zend_Json::encode($dataAddress), time() + (86400*30), "/");
@@ -314,13 +314,13 @@ class OrderController extends Zend_Controller_Action
 					'buyer_id'		 => LOGIN_UID,
 					'order_name'	 => $orderName,
 					'order_phone'	 => $orderPhone,
+					'order_email'	 => $orderEmail,
 					'order_city'	 => $orderCity,
 					'order_district' => $orderDistrict,
 					'order_address'	 => $orderAddress,
 					'order_note'	 => $orderNote,
 					'payment_type'   => $typePayment,
-					'order_email'	 => $orderEmail,
-					'order_status'	 => 1,
+					'order_status'	 => ProductOrders::ORDER_STATUS_NEW,
 					'created_date'	 => time(),
 					'updated_date'	 => time()
 				);
@@ -347,8 +347,8 @@ class OrderController extends Zend_Controller_Action
 						
 						ProductOrders::insertProductOrderDetail($dataProduct);
 					}
-	
-					//setcookie("ucancook_cart", "", time() + 3600, "/", DOMAIN);
+					
+					setcookie("ucancook_cart", "", time() + 3600, "/", DOMAIN);
 	
 					echo Zend_Json::encode(array('rs' => 1, 'order_id' => $orderId)); exit;
 				}

@@ -280,7 +280,7 @@
                                     <input style="cursor:pointer" id="n2" type="radio" name="payment_method" value="2"><label style="cursor:pointer" class="pp-non pp-02" for="n2">Thanh toán qua bảo kim</label>
                                 </div>                              
                                 <div class="input input-radio col-md-12">
-                                    <input style="top:3px;cursor:pointer" id="n4" type="radio" name="payment_method" value="4"><label style="display: inline;font-weight:bold; cursor:pointer" for="n4">Thanh toán qua khi nhận hàng</label>
+                                    <input style="top:3px;cursor:pointer" id="n4" type="radio" name="payment_method" value="4"><label style="display: inline;font-weight:bold; cursor:pointer" for="n4">Thanh toán khi nhận hàng (COD)</label>
                                 </div>
                             </div>
                         </div>
@@ -462,7 +462,7 @@
 		var payment_address = $("#payment_address").val();			
 		var typePayment = $("#form-checkout input[type='radio']:checked").val();
 		$('#label-error').hide();
-		
+		var obj = $(this);
 		if(typeof typePayment == "undefined"){
 			$('#label-error').show().html('Bạn chưa chọn hình thức thanh toán.');
 			return false;
@@ -475,9 +475,9 @@
 			return false;
 		}
 		
-		$(this).val('Đang xử lý');
-		$(this).css('opacity', 0.4);
-		$(this).css('cursor', 'auto');
+		$(obj).val('Đang xử lý');
+		$(obj).css('opacity', 0.4);
+		$(obj).css('cursor', 'auto');
 		common.progress();
 		
 		$.post(Settings.baseurl + "/order/insert-order",{
@@ -506,9 +506,9 @@
 					window.location = Settings.baseurl+'/order/success?order_id='+data.order_id;
 				}
 			}else{
-				$(this).val('Thanh toán');
-				$(this).css('opacity', 1);
-				$(this).css('cursor', 'pointer');
+				$(obj).val('Thanh toán');
+				$(obj).css('opacity', 1);
+				$(obj).css('cursor', 'pointer');
 				alert('Thao tác thất bại. Bạn vui lòng kiểm tra lại thông tin đặt mua!');
 				common.finish();
 			}

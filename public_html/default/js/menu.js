@@ -74,5 +74,6 @@ $(function($)
 		cart.addToCart(cart.typeDish, id, quantity, moreInfo);
 		common.setFlashMessage('Món ăn bạn chọn đã được thêm vào giỏ hàng thành công');
 		cart.incrementCountCart(quantity);
+		common.finish();
 	});
 });

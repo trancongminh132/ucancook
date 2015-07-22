@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<title>In Group Order</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+</head>
+<body style="width:700px;margin:0 auto;padding:0;text-align:center" id="body">
+<table cellspacing="0" cellpadding="0" border="0" align="center" style="background:url(images/newbg.jpg) repeat;width:700px;padding:10px 40px;font-family:Tahoma;font-size:12px">
+	<tbody>
+		<tr>
+			<td><img style="float:left;margin-right:20px" src="/a/images/logo.png" alt="123Mua.vn" style="border:0"><p style="display:block;float:left;margin-top:20px;padding-left:30px;color:#333;font-size:12px;text-align:left;border-left:1px dotted #555">Ucancook.vn - Website chuyên cung cấp thực phẩm chất lượng<br />Công ty TNHH Bếp ăn Việt Nam </p></td>
+		</tr>
+		<tr>
+			<td style="text-align:left">
+				<div style="display:block;background:#0082d8;height:5px;margin-top:10px;margin-bottom:1px;border:0"></div>
+				<div style="background-color:#fff;margin-bottom:10px;padding:20px 12px;color:#333;font-size:13px;border:1px solid #0082d8">
+					<p style="margin:0;padding:0 0 5px;margin-bottom:10px;line-height:18px;border-bottom:1px dotted #ccc"><strong style="color:#333;font-size:14px;font-weight:bold">Phiếu Group Order <a id="btn_print" style="cursor:pointer;display:block;background-image:linear-gradient(top, #fff 0%, #ebebeb 100%);background-image:-moz-linear-gradient(top, #fff 0%, #ebebeb 100%);background-image:-webkit-linear-gradient(top, #fff 0%, #ebebeb 100%);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#ebebeb');background-color:#ebebeb;width:110px;height:28px;line-height:28px;color:#666;font-size:14px;text-align:center;text-decoration:none;border:1px solid #E6E6E6;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px" onclick="printOrder()" id="print-button">In phiếu này</a></strong></p>
+					<p>Phiếu này gồm các đơn hàng:</p>
+					<div style="background-color:#dff1ff;width:300px;padding:8px 10px;margin:0 0 10px;color:#333;border:1px solid #b7d7f0">
+						<?php foreach($this->orders as $order){?>
+						Đơn hàng: <?php echo $order['order_code'];?><br />
+						<?php }?>
+					</div>
+					<p style="margin:0;padding:0;margin-bottom:5px;line-height:18px"><strong>Chi tiết Group Order</strong></p>
+					<table style="margin-bottom:15px;border:1px solid #ccc;border-right:0" width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">STT</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Tên nguyên liệu</td>
+							<td style="background-color:#eee;padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">Số lượng</td>
+						</tr>
+						<?php
+						$i = 1;
+						foreach($this->listIngredient as $detail)
+						{				
+							?>
+							<tr>
+								<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php echo $i++;?></td>
+								<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">
+									<?php echo $detail['name'];?>
+								</td>
+								<td style="padding:4px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc"><?php echo My_Zend_Globals::numberFormat($detail['quantity']);?> <?php echo Dish::$_ARRAY_TYPE_UNIT[$detail['unit']];?></td>
+						</tr>
+						<?php }?>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:left;border-top:1px dotted #555">
+				<p style="margin:0;padding:10px 0 0 0;margin-bottom:10px;line-height:18px">Copyright © Ucancook.vn 2015. All Right Reserved.<br />21 Nguyễn Văn Tráng, Phường Bến Thành, Quận 1, Tp.HCM<br />Hotline: 098 9181 123</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<script>
+	printOrder = function()
+	{
+		document.getElementById('btn_print').remove();
+		window.print();
+	}
+</script>
+</body>
+</html>
